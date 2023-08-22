@@ -6,6 +6,7 @@ const router = useRouter()
 
 const message = inject("message")
 const onClick = () => {
+  message.value = 'hello veu.js'
   router.push({ name: "hello" })
 }
 </script>
