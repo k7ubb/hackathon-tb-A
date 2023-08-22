@@ -1,7 +1,7 @@
 <script setup>
 import { ref, reactive } from "vue"
 
-const title = "Sample5"
+const title = "Rakus"
 const message = ref("")
 const list = reactive([])
 
@@ -9,6 +9,7 @@ const addItem = () => {
   list.push(message.value)
   message.value = ""
 }
+
 </script>
 
 <template>
