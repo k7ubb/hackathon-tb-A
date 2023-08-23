@@ -24,7 +24,7 @@ onMounted(() => {
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
-  socket.emit("publishEvent", userName.value + "さん:" + chatContent.value)
+  socket.emit("publishEvent", userName.value + "さん: " + chatContent.value)
   // 入力欄を初期化
   chatContent.value = "";
 }
@@ -94,7 +94,7 @@ const registerSocketEvent = () => {
       </div>
       <div class="mt-5" v-if="chatList.length !== 0">
         <ul>
-          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i">{{ chat }}</li>
+          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i" :class="chat.startsWith( userName ) ? 'bold-text' : ''">{{ chat }}</li>
         </ul>
       </div>
     </div>
@@ -126,5 +126,10 @@ const registerSocketEvent = () => {
 .button-exit {
   color: #000;
   margin-top: 8px;
+}
+
+.bold-text {
+  /* とりあえず太字で... */
+  font-weight: bold;
 }
 </style>
