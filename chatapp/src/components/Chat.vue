@@ -13,6 +13,10 @@ const socket = io()
 // #region reactive variable
 const chatContent = ref("")
 const chatList = reactive([])
+
+const lastPublishTime = ref(0)
+const publishInterval = 5000 // 5分
+
 // #endregion
 
 // #region lifecycle
@@ -24,9 +28,18 @@ onMounted(() => {
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
+  const currentTime = Date.now()
+  // 任意時間で連投できないようにする
+  if(currentTime-lastPublishTime.value < publishInterval){
+    alert('5秒に一度しか送信はできません．お待ち下さい')
+    return
+  }
   socket.emit("publishEvent", userName.value + "さん: " + chatContent.value)
   // 入力欄を初期化
-  chatContent.value = "";
+  chatContent.value = ""
+
+  // lastUserName = userName.value
+  lastPublishTime.value = currentTime
 }
 
 // 退室メッセージをサーバに送信する
@@ -77,6 +90,12 @@ const registerSocketEvent = () => {
   socket.on("publishEvent", (data) => {
     onReceivePublish(data)
   })
+
+  // エラーの実行
+  // 現状， 連続投稿の場合の処理に使用
+  socket.on("error", (data) => {
+    alert(data) // エラーメッセージをアラートとして表示
+  })
 }
 // #endregion
 </script>
@@ -94,7 +113,7 @@ const registerSocketEvent = () => {
       </div>
       <div class="mt-5" v-if="chatList.length !== 0">
         <ul>
-          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i" :class="chat.startsWith( userName ) ? 'bold-text' : ''">{{ chat }}</li>
+          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i" :class="chat.startsWith( userName ) ? 'my-message' : ''">{{ chat }}</li>
         </ul>
       </div>
     </div>
@@ -128,7 +147,7 @@ const registerSocketEvent = () => {
   margin-top: 8px;
 }
 
-.bold-text {
+.my-message {
   /* とりあえず太字で... */
   font-weight: bold;
 }
