@@ -104,28 +104,6 @@ const registerSocketEvent = () => {
 // #endregion
 </script>
 
-<!-- <template>
-  <div class="mx-auto my-5 px-4">
-    <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
-    <div class="mt-10">
-      <p>ログインユーザ：{{ userName }}さん</p>
-      <textarea variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
-      <div class="mt-5">
-        <button class="button-normal" @click="onPublish">投稿</button>
-        <button class="button-normal util-ml-8px" @click="onMemo">メモ</button>
-
-      </div>
-      <div class="mt-5" v-if="chatList.length !== 0">
-        <ul>
-          <li class="item mt-4" v-for="(chat, i) in chatList" :key="i" :class="chat.startsWith( userName ) ? 'my-message' : ''">{{ chat }}</li>
-        </ul>
-      </div>
-    </div>
-    <router-link to="/" class="link">
-      <button type="button" class="button-normal button-exit" @click="onExit">退室する</button>
-    </router-link>
-  </div>
-</template> -->
 <template>
   <div class="mx-auto my-5 px-4">
     <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
