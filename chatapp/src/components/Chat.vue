@@ -14,6 +14,8 @@ const socket = io()
 const chatContent = ref("")
 const chatList = reactive([])
 
+const memoList = reactive([]) // メモのリスト
+
 const lastPublishTime = ref(0)
 const publishInterval = 5000 // 5分
 
@@ -50,7 +52,9 @@ const onExit = () => {
 // メモを画面上に表示する
 const onMemo = () => {
   // メモの内容を表示
-  chatList.push(userName.value + "さんのメモ:" + chatContent.value)
+  // chatList.push(userName.value + "さんのメモ:" + chatContent.value)
+  // メモの内容を表示
+  memoList.push(userName.value + "さんのメモ:" + chatContent.value)
   // 入力欄を初期化
   chatContent.value = ""
 }
@@ -100,7 +104,7 @@ const registerSocketEvent = () => {
 // #endregion
 </script>
 
-<template>
+<!-- <template>
   <div class="mx-auto my-5 px-4">
     <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
     <div class="mt-10">
@@ -121,9 +125,57 @@ const registerSocketEvent = () => {
       <button type="button" class="button-normal button-exit" @click="onExit">退室する</button>
     </router-link>
   </div>
+</template> -->
+<template>
+  <div class="mx-auto my-5 px-4">
+    <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
+    <div class="'input-section mt-10'">
+      <p class="login-user">ログインユーザ：{{ userName }}さん</p>
+      <textarea variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
+      <div class="mt-5">
+        <button class="button-normal" @click="onPublish">投稿</button>
+        <button class="button-normal util-ml-8px" @click="onMemo">メモ</button>
+      </div>
+    </div>
+    <div class="chat-memo-container mt-10">
+      <div class="chat-section">
+        <div class="mt-5" v-if="chatList.length !== 0">
+          <ul>
+            <li class="item mt-4" v-for="(chat, i) in chatList" :key="i" :class="chat.startsWith( userName ) ? 'my-message' : ''">{{ chat }}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="memo-section">
+        <h3>メモ一覧</h3>
+        <ul>
+          <li v-for="(memo, i) in memoList" :key="i">{{ memo }}</li>
+        </ul>
+      </div>
+    </div>
+    <router-link to="/" class="link">
+      <button type="button" class="button-normal button-exit" @click="onExit">退室する</button>
+    </router-link>
+  </div>
 </template>
 
 <style scoped>
+.login-user {
+  margin-top: 20px; /* この値を調整して、希望の間隔に設定します */
+}
+.chat-memo-container {
+  display: flex;
+  justify-content: space-between; /* 両コンテンツの間にスペースを追加 */
+}
+.chat-section {
+  width: 70%; /* チャット画面の幅を設定 */
+  overflow: auto; /* 必要に応じてスクロールを有効にする */
+}
+
+.memo-section {
+  width: 30%; /* メモ画面の幅を設定 */
+  overflow: auto; /* 必要に応じてスクロールを有効にする */
+  margin-left: 10px; /* チャット欄とメモ欄の間にマージンを追加 */
+}
 .link {
   text-decoration: none;
 }
