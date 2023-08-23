@@ -148,7 +148,17 @@ const registerSocketEvent = () => {
 }
 
 .my-message {
-  /* とりあえず太字で... */
   font-weight: bold;
+  color: #333333;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ホバー時の効果も見やすいものに調整 */
+.my-message:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.05);
 }
 </style>
