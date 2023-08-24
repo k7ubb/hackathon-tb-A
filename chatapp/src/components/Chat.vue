@@ -130,7 +130,7 @@ const registerSocketEvent = () => {
       <div class="memo-section">
         <h3>メモ一覧</h3>
         <ul>
-          <li v-for="(memo, i) in memoList" :key="i">{{ memo }}</li>
+          <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">{{ memo }}</li>
         </ul>
       </div>
     </div>
@@ -139,30 +139,7 @@ const registerSocketEvent = () => {
     </router-link>
   </div>
 </template>
-//////
-<!-- <script>
-export default {
-  // ... 他のコンポーネントオプション ...
 
-  computed: {
-    reversedChatList() {
-      // chatListを逆順にした新しい配列を返す
-      return this.chatList.slice().reverse();
-    },
-  },
-
-  methods: {
-    onPublish() {
-      // 新しいメッセージをchatListの最初に追加
-      this.chatList.unshift(this.chatContent);
-      // chatContentをクリア
-      this.chatContent = "";
-    },
-    // ...
-  },
-};
-</script> -->
-////////
 <style scoped>
 .login-user {
   margin-top: 20px; /* この値を調整して、希望の間隔に設定します */
