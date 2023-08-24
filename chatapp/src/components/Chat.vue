@@ -130,7 +130,10 @@ const registerSocketEvent = () => {
       <div class="memo-section">
         <h3>メモ一覧</h3>
         <ul>
-          <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">{{ memo }}</li>
+          <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
+            <!-- memo を pre タグ内で表示 -->
+            <pre>{{ memo }}</pre>
+          </li>
         </ul>
       </div>
     </div>
