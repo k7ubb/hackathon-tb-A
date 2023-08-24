@@ -119,7 +119,7 @@ const registerSocketEvent = () => {
       <div class="chat-section">
         <div class="mt-5" v-if="chatList.length !== 0">
           <ul>
-            <li class="item mt-4" v-for="(chat, i) in chatList" :key="i" :class="chat.startsWith(userName) ? 'my-message' : ''">
+            <li class="item mt-4" v-for="(chat, i) in chatList.slice().reverse()" :key="i" :class="chat.startsWith(userName) ? 'my-message' : ''">
               <!-- chat を pre タグ内で表示 -->
               <pre>{{ chat }}</pre>
             </li>
@@ -140,7 +140,7 @@ const registerSocketEvent = () => {
   </div>
 </template>
 //////
-<script>
+<!-- <script>
 export default {
   // ... 他のコンポーネントオプション ...
 
@@ -161,7 +161,7 @@ export default {
     // ...
   },
 };
-</script>
+</script> -->
 ////////
 <style scoped>
 .login-user {
