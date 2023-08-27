@@ -36,7 +36,13 @@ const onPublish = () => {
     alert('5秒に一度しか送信はできません．お待ち下さい')
     return
   }
-  socket.emit("publishEvent", userName.value + "さん: " + chatContent.value)
+  let data = {
+    username: userName.value,
+    message: chatContent.value,
+    date: "13:24:00"
+  }
+//  socket.emit("publishEvent", userName.value + "さん: 13：21：00 " + chatContent.value)
+  socket.emit("publishEvent", JSON.stringify(data))
   // 入力欄を初期化
   chatContent.value = ""
 
@@ -53,7 +59,6 @@ const onExit = () => {
 const onMemo = () => {
   // メモの内容を表示
   // chatList.push(userName.value + "さんのメモ:" + chatContent.value)
-  // メモの内容を表示
   memoList.push(userName.value + "さんのメモ:" + chatContent.value)
   // 入力欄を初期化
   chatContent.value = ""
@@ -63,17 +68,20 @@ const onMemo = () => {
 // #region socket event handler
 // サーバから受信した入室メッセージ画面上に表示する
 const onReceiveEnter = (data) => {
-  chatList.push(data)
+//  chatList.push(data)
+  chatList.push({type:"enter_message", message:data})
 }
 
 // サーバから受信した退室メッセージを受け取り画面上に表示する
 const onReceiveExit = (data) => {
-  chatList.push(data)
+//  chatList.push(data)
+  chatList.push({type:"leave_message", message:data})
 }
 
 // サーバから受信した投稿メッセージを画面上に表示する
 const onReceivePublish = (data) => {
-  chatList.push(data)
+  let chatdata = JSON.parse(data)
+  chatList.push(chatdata)
 }
 // #endregion
 
@@ -120,9 +128,9 @@ const registerSocketEvent = () => {
       <div class="chat-section">
         <div class="mt-5" v-if="chatList.length !== 0">
           <ul>
-            <li class="item mt-4" v-for="(chat, i) in chatList.slice().reverse()" :key="i" :class="chat.startsWith(userName) ? 'my-message' : ''">
+            <li class="item mt-4" v-for="(chat, i) in chatList.slice().reverse()" :key="i">
               <!-- chat を pre タグ内で表示 -->
-              <pre>{{ chat }}</pre>
+              <pre>{{ chat.username + "さん :" + chat.message }}</pre>
             </li>
             <!-- <li class="item mt-4" v-for="(chat, i) in chatList" :key="i" :class="chat.startsWith( userName ) ? 'my-message' : ''">{{ chat }}</li> -->
           </ul>
