@@ -17,6 +17,9 @@ const chatList = reactive([])
 const memoList = reactive([]) // メモのリスト
 
 const lastPublishTime = ref(0)
+const show_order = ref(true)
+
+// constants
 const publishInterval = 5000 // 5分
 
 // #endregion
@@ -37,14 +40,14 @@ const onPublish = () => {
     return
   }
   let data = {
+    type: "message",
     username: userName.value,
     message: chatContent.value,
     //Date()で現在の時刻をミリ秒単位で所得➡ミリ秒単位を1000で割って秒に変換➡Math.floorで小数点以下切り下げ➡整数値➡UNIX時間所得
     unixtime: Math.floor(Date.now() ),
-    }
+  }
 
-
-//  socket.emit("publishEvent", userName.value + "さん: 13：21：00 " + chatContent.value)
+  //  socket.emit("publishEvent", userName.value + "さん: 13：21：00 " + chatContent.value)
   socket.emit("publishEvent", JSON.stringify(data))
   // 入力欄を初期化
   chatContent.value = ""
@@ -122,19 +125,21 @@ const registerSocketEvent = () => {
     <div class="'input-section mt-10'">
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
       <!-- Enter キーが押されたときに投稿可能 -->
-      <textarea  @keydown.enter="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
+      <textarea @keydown.enter="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
       <div class="mt-5">
           <button class="button-normal" @click="onPublish">投稿</button>
           <button class="button-normal util-ml-8px" @click="onMemo">メモ</button>
+          <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
       </div>
     </div>
     <div class="chat-memo-container mt-10">
       <div class="chat-section">
         <div class="mt-5" v-if="chatList.length !== 0">
           <ul>
-            <li class="item mt-4" v-for="(chat, i) in chatList.slice().reverse()" :key="i">
+            <li class="item mt-4" v-for="(chat, i) in show_order? chatList.slice().reverse() : chatList.slice()" :key="i">
               <!-- chat を pre タグ内で表示 -->
-              <pre>{{ chat.username + "さん :" + chat.message +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]"}}</pre>
+              <pre v-if="chat.type=='message'">{{ chat.username + "さん :" + chat.message +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]"}}</pre>
+              <pre v-else>{{ chat.message }}</pre>
             </li>
             <!-- <li class="item mt-4" v-for="(chat, i) in chatList" :key="i" :class="chat.startsWith( userName ) ? 'my-message' : ''">{{ chat }}</li> -->
           </ul>
@@ -204,6 +209,11 @@ const registerSocketEvent = () => {
   border-radius: 10px;
   padding: 10px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 表示順切り替えのチェックボックスが隣とくっつくので、仮の処理 */
+label{
+  margin-left: 8px;
 }
 
 /* ホバー時の効果も見やすいものに調整 */
