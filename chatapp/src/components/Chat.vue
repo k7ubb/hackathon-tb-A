@@ -39,8 +39,11 @@ const onPublish = () => {
   let data = {
     username: userName.value,
     message: chatContent.value,
-    date: "13:24:00"
-  }
+    //Date()で現在の時刻をミリ秒単位で所得➡ミリ秒単位を1000で割って秒に変換➡Math.floorで小数点以下切り下げ➡整数値➡UNIX時間所得
+    unixtime: Math.floor(Date.now() ),
+    }
+
+
 //  socket.emit("publishEvent", userName.value + "さん: 13：21：00 " + chatContent.value)
   socket.emit("publishEvent", JSON.stringify(data))
   // 入力欄を初期化
@@ -49,6 +52,7 @@ const onPublish = () => {
   // lastUserName = userName.value
   lastPublishTime.value = currentTime
 }
+
 
 // 退室メッセージをサーバに送信する
 const onExit = () => {
@@ -130,7 +134,7 @@ const registerSocketEvent = () => {
           <ul>
             <li class="item mt-4" v-for="(chat, i) in chatList.slice().reverse()" :key="i">
               <!-- chat を pre タグ内で表示 -->
-              <pre>{{ chat.username + "さん :" + chat.message }}</pre>
+              <pre>{{ chat.username + "さん :" + chat.message +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]"}}</pre>
             </li>
             <!-- <li class="item mt-4" v-for="(chat, i) in chatList" :key="i" :class="chat.startsWith( userName ) ? 'my-message' : ''">{{ chat }}</li> -->
           </ul>
