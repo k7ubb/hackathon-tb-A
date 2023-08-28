@@ -20,7 +20,7 @@ const lastPublishTime = ref(0)
 const show_order = ref(true)
 
 // constants
-const publishInterval = 5000 // 5分
+const publishInterval = 5 // とりあえずめっちゃ短く
 
 // #endregion
 
@@ -47,7 +47,6 @@ const onPublish = () => {
     unixtime: Math.floor(Date.now() ),
   }
 
-  //  socket.emit("publishEvent", userName.value + "さん: 13：21：00 " + chatContent.value)
   socket.emit("publishEvent", JSON.stringify(data))
   // 入力欄を初期化
   chatContent.value = ""
@@ -65,12 +64,22 @@ const onExit = () => {
 // メモを画面上に表示する
 const onMemo = () => {
   // メモの内容を表示
-  // chatList.push(userName.value + "さんのメモ:" + chatContent.value)
   memoList.push(userName.value + "さんのメモ:" + chatContent.value)
   // 入力欄を初期化
   chatContent.value = ""
 }
 // #endregion
+
+// Enterで改行, Shift+Enterで送信
+const onKeyDown = (event) => {
+  if (event.keyCode === 13) {
+    if (event.shiftKey) {
+    } else {
+      event.preventDefault()  // デフォルトの改行挿入を防ぐ
+      onPublish()
+    }
+  }
+}
 
 // #region socket event handler
 // サーバから受信した入室メッセージ画面上に表示する
@@ -126,6 +135,9 @@ const registerSocketEvent = () => {
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
       <!-- Enter キーが押されたときに投稿可能 -->
       <textarea @keydown.enter="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
+      <!-- 提案の手法 onKeyDownを使用 -->
+      <!-- <textarea @keydown="onKeyDown" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea> -->
+      <textarea @keydown="onKeyDown" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
       <div class="mt-5">
           <button class="button-normal" @click="onPublish">投稿</button>
           <button class="button-normal util-ml-8px" @click="onMemo">メモ</button>
@@ -136,12 +148,10 @@ const registerSocketEvent = () => {
       <div class="chat-section">
         <div class="mt-5" v-if="chatList.length !== 0">
           <ul>
-            <li class="item mt-4" v-for="(chat, i) in show_order? chatList.slice().reverse() : chatList.slice()" :key="i">
-              <!-- chat を pre タグ内で表示 -->
-              <pre v-if="chat.type=='message'">{{ chat.username + "さん :" + chat.message +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]"}}</pre>
+            <li class="item mt-4" v-for="(chat, i) in show_order? chatList.slice().reverse() : chatList.slice()" :key="i" :class="{ 'my-message': (chat.type === 'message' && chat.username === userName) }">
+              <pre v-if="chat.type=='message'">{{ chat.username + "さん: " + chat.message +" ["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]"}}</pre>
               <pre v-else>{{ chat.message }}</pre>
             </li>
-            <!-- <li class="item mt-4" v-for="(chat, i) in chatList" :key="i" :class="chat.startsWith( userName ) ? 'my-message' : ''">{{ chat }}</li> -->
           </ul>
         </div>
       </div>
@@ -149,7 +159,6 @@ const registerSocketEvent = () => {
         <h3>メモ一覧</h3>
         <ul>
           <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
-            <!-- memo を pre タグ内で表示 -->
             <pre>{{ memo }}</pre>
           </li>
         </ul>
@@ -163,21 +172,21 @@ const registerSocketEvent = () => {
 
 <style scoped>
 .login-user {
-  margin-top: 20px; /* この値を調整して、希望の間隔に設定します */
+  margin-top: 20px;
 }
 .chat-memo-container {
   display: flex;
-  justify-content: space-between; /* 両コンテンツの間にスペースを追加 */
+  justify-content: space-between;
 }
 .chat-section {
-  width: 70%; /* チャット画面の幅を設定 */
-  overflow: auto; /* 必要に応じてスクロールを有効にする */
+  width: 70%;
+  overflow: auto;
 }
 
 .memo-section {
-  width: 30%; /* メモ画面の幅を設定 */
-  overflow: auto; /* 必要に応じてスクロールを有効にする */
-  margin-left: 10px; /* チャット欄とメモ欄の間にマージンを追加 */
+  width: 30%;
+  overflow: auto;
+  margin-left: 10px;
 }
 .link {
   text-decoration: none;
