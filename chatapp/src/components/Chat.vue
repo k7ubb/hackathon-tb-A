@@ -137,7 +137,6 @@ const registerSocketEvent = () => {
       <textarea @keydown.enter="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
       <!-- 提案の手法 onKeyDownを使用 -->
       <!-- <textarea @keydown="onKeyDown" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea> -->
-      <textarea @keydown="onKeyDown" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
       <div class="mt-5">
           <button class="button-normal" @click="onPublish">投稿</button>
           <button class="button-normal util-ml-8px" @click="onMemo">メモ</button>
