@@ -53,8 +53,13 @@ const onPublish = () => {
     return
   }
 
+  if(chat){
+    chat_type = "report_message";
+  }
+
   socket.emit("publishEvent", JSON.stringify({
     type: "message",
+    message_type: chat_type,
     username: userName.value,
     message: chatContent.value,
     unixtime: Date.now()
@@ -65,6 +70,30 @@ const onPublish = () => {
   // 入力欄を初期化
   chatContent.value = ''
 }
+
+// 報告ボタン
+const onReport = () => {
+  chatContent.value = "aaaaaaa";
+  chat_type = "report_message";
+}
+
+// 連絡ボタン
+const onContact = () => {
+  chatContent.value = "bbbbbbbb";
+  chat_type = "contact_message";
+}
+
+// 相談ボタン
+const onConsultation = () => {
+  chatContent.value = "ccccccccc";
+  chat_type = "consult_message";
+}
+
+// 確認ボタン
+const onConfirmation = () => {
+
+}
+
 
 // メモを画面上に表示する
 const onMemo = () => {
@@ -139,6 +168,12 @@ const registerSocketEvent = () => {
     <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
     <div class="'input-section mt-10'">
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
+      <div>
+        <button class="button-normal" @click="onReport">報告</button>
+        <button class="button-normal" @click="onContact">連絡</button>
+        <button class="button-normal" @click="onConsultation">相談</button>
+        <button class="button-normal" @click="onConfirmation">確認</button>
+      </div>
       <!-- Enter キーが押されたときに投稿可能 -->
       <textarea @keydown.enter.exact="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
       <div class="mt-5">
