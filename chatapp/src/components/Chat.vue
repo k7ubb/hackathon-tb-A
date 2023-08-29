@@ -24,6 +24,15 @@ const publishInterval = 5 // とりあえずめっちゃ短く
 
 // #endregion
 
+const resetTextarea = () => {
+  chatContent.value = '';
+  // 一時的な遅延を持って初期化
+  setTimeout(() => {
+    chatContent.value = '';
+  }, 0);
+}
+
+
 // #region lifecycle
 onMounted(() => {
   registerSocketEvent()
@@ -42,7 +51,8 @@ const onPublish = () => {
   // 空での投稿時
   if(chatContent.value.trim() === ""){
     alert('メッセージを入力してください。');
-    chatContent.value = chatContent.value.trim();
+    // chatContent.value = chatContent.value.trim();
+    resetTextarea();
     return;
   }
   if(chatContent.value.includes('\n')){
@@ -59,7 +69,9 @@ const onPublish = () => {
 
   socket.emit("publishEvent", JSON.stringify(data))
   // 入力欄を初期化
-  chatContent.value = ""
+  // chatContent.value = ""
+  resetTextarea();
+
 
   // lastUserName = userName.value
   lastPublishTime.value = currentTime
@@ -77,6 +89,7 @@ const onMemo = () => {
   memoList.push(userName.value + "さんのメモ:" + chatContent.value)
   // 入力欄を初期化
   chatContent.value = ""
+  resetTextarea();
 }
 // #endregion
 
