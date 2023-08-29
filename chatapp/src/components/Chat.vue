@@ -1,6 +1,7 @@
 <script setup>
 import { inject, ref, reactive, onMounted } from "vue"
 import io from "socket.io-client"
+import "../styles/chat.css"
 
 // constants
 const publishInterval = 5
@@ -173,65 +174,3 @@ const registerSocketEvent = () => {
     </router-link>
   </div>
 </template>
-
-<style scoped>
-.login-user {
-  margin-top: 20px; /* この値を調整して、希望の間隔に設定します */
-}
-.chat-memo-container {
-  display: flex;
-  justify-content: space-between; /* 両コンテンツの間にスペースを追加 */
-}
-.chat-section {
-  width: 70%; /* チャット画面の幅を設定 */
-  overflow: auto; /* 必要に応じてスクロールを有効にする */
-}
-
-.memo-section {
-  width: 30%; /* メモ画面の幅を設定 */
-  overflow: auto; /* 必要に応じてスクロールを有効にする */
-  margin-left: 10px; /* チャット欄とメモ欄の間にマージンを追加 */
-}
-.link {
-  text-decoration: none;
-}
-
-.area {
-  width: 500px;
-  border: 1px solid #000;
-  margin-top: 8px;
-}
-
-.item {
-  display: block;
-}
-
-.util-ml-8px {
-  margin-left: 8px;
-}
-
-.button-exit {
-  color: #000;
-  margin-top: 8px;
-}
-
-.my-message {
-  font-weight: bold;
-  color: #333333;
-  background-color: #f0f0f0;
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* 表示順切り替えのチェックボックスが隣とくっつくので、仮の処理 */
-label{
-  margin-left: 8px;
-}
-
-/* ホバー時の効果も見やすいものに調整 */
-.my-message:hover {
-  background-color: #e0e0e0;
-  transform: scale(1.05);
-}
-</style>
