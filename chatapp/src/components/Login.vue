@@ -5,6 +5,7 @@ import io from "socket.io-client"
 
 // #region global state
 const userName = inject("userName")
+
 // #endregion
 
 // #region local variable
@@ -24,9 +25,14 @@ const onEnter = () => {
     alert("ユーザー名を入力してください。")
     return
   }
+
   // 入室メッセージを送信
-  socket.emit("enterEvent", userName.value+"さんが入室しました。")
-  // 全体で使用するnameに入力されたユーザー名を格納
+  socket.emit("enterEvent", JSON.stringify({
+    type: "enter_message",
+    username: userName.value,
+    message: userName.value + "さんが入室しました",
+    unixtime: Date.now()
+  }))
   
   // チャット画面へ遷移
   router.push({ name: "chat" })
