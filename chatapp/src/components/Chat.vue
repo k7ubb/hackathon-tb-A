@@ -140,7 +140,7 @@ const registerSocketEvent = () => {
     <div class="'input-section mt-10'">
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
       <!-- Enter キーが押されたときに投稿可能 -->
-      <textarea @keydown.enter="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
+      <textarea @keydown.enter.exact="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
       <div class="mt-5">
           <button class="button-normal" @click="onPublish">投稿</button>
           <button class="button-normal util-ml-8px" @click="onMemo">メモ</button>
