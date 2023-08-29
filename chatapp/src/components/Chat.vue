@@ -31,6 +31,7 @@ onMounted(() => {
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
+  const currentTime = Date.now()
   event.preventDefault()
 
   try{
@@ -58,7 +59,7 @@ const onPublish = () => {
     unixtime: Date.now()
   }))
 
-  lastPublishTime.value = Date.now()
+  lastPublishTime.value = currentTime
 
   // 入力欄を初期化
   chatContent.value = ''
