@@ -39,6 +39,16 @@ const onPublish = () => {
     alert('5秒に一度しか送信はできません．お待ち下さい')
     return
   }
+  // 空での投稿時
+  if(chatContent.value.trim() === ""){
+    alert('メッセージを入力してください。');
+    chatContent.value = chatContent.value.trim();
+    return;
+  }
+  if(chatContent.value.includes('\n')){
+    alert('不正な改行があります。');
+    return;
+  }
   let data = {
     type: "message",
     username: userName.value,
