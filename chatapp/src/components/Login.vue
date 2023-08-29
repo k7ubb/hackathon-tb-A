@@ -2,6 +2,7 @@
 import { inject, ref } from "vue"
 import { useRouter } from "vue-router"
 import io from "socket.io-client"
+import "../styles/login.css"
 
 // #region global state
 const userName = inject("userName")
@@ -50,11 +51,3 @@ const onEnter = () => {
     <button type="button" @click="onEnter" class="button-normal">入室する</button>
   </div>
 </template>
-
-<style scoped>
-.user-name-text {
-  width: 200px;
-  border: 1px solid #888;
-  margin-bottom: 16px;
-}
-</style>
