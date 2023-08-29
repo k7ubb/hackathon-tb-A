@@ -13,8 +13,7 @@ export default (io, socket) => {
 
   // 投稿メッセージを送信する
   socket.on("publishEvent", (data) => {
-//    const user = data.split("さん: ")[0] // メッセージからユーザー名を取得
-    const user = JSON.parse(data).username // ユーザー名を取得
+    const user = JSON.parse(data).username
     if (user === lastUser) {
       socket.emit("error", "連続して投稿することはできません。")
       return

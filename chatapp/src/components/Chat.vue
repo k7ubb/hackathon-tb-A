@@ -2,6 +2,9 @@
 import { inject, ref, reactive, onMounted } from "vue"
 import io from "socket.io-client"
 
+// constants
+const publishInterval = 5
+
 // #region global state
 const userName = inject("userName")
 // #endregion
@@ -13,25 +16,11 @@ const socket = io()
 // #region reactive variable
 const chatContent = ref("")
 const chatList = reactive([])
-
-const memoList = reactive([]) // メモのリスト
+const memoList = reactive([])
 
 const lastPublishTime = ref(0)
 const show_order = ref(true)
-
-// constants
-const publishInterval = 5 // とりあえずめっちゃ短く
-
 // #endregion
-
-const resetTextarea = () => {
-  chatContent.value = '';
-  // 一時的な遅延を持って初期化
-  setTimeout(() => {
-    chatContent.value = '';
-  }, 0);
-}
-
 
 // #region lifecycle
 onMounted(() => {
@@ -42,85 +31,77 @@ onMounted(() => {
 // #region browser event handler
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
-  const currentTime = Date.now()
-  // 任意時間で連投できないようにする
-  if(currentTime-lastPublishTime.value < publishInterval){
-    alert('5秒に一度しか送信はできません．お待ち下さい')
+  event.preventDefault()
+
+  try{
+    // 任意時間で連投できないようにする
+    if(currentTime - lastPublishTime.value < publishInterval){
+      throw new Error('5秒に一度しか送信はできません．お待ち下さい')
+    }
+    // 空での投稿時
+    if(chatContent.value.trim() === ""){
+      throw new Error('メッセージを入力してください。')
+    }
+    if(chatContent.value.includes('\n')){
+      throw new Error('不正な改行があります。')
+    }
+  }
+  catch(e) {
+    alert(e.message)
     return
   }
-  // 空での投稿時
-  if(chatContent.value.trim() === ""){
-    alert('メッセージを入力してください。');
-    // chatContent.value = chatContent.value.trim();
-    resetTextarea();
-    return;
-  }
-  if(chatContent.value.includes('\n')){
-    alert('不正な改行があります。');
-    return;
-  }
-  let data = {
+
+  socket.emit("publishEvent", JSON.stringify({
     type: "message",
     username: userName.value,
     message: chatContent.value,
-    //Date()で現在の時刻をミリ秒単位で所得➡ミリ秒単位を1000で割って秒に変換➡Math.floorで小数点以下切り下げ➡整数値➡UNIX時間所得
-    unixtime: Math.floor(Date.now() ),
-  }
+    unixtime: Date.now()
+  }))
 
-  socket.emit("publishEvent", JSON.stringify(data))
+  lastPublishTime.value = Date.now()
+
   // 入力欄を初期化
-  // chatContent.value = ""
-  resetTextarea();
-
-
-  // lastUserName = userName.value
-  lastPublishTime.value = currentTime
-}
-
-
-// 退室メッセージをサーバに送信する
-const onExit = () => {
-  socket.emit("exitEvent", userName.value+"さんが退室しました。")
+  chatContent.value = ''
 }
 
 // メモを画面上に表示する
 const onMemo = () => {
-  // メモの内容を表示
-  memoList.push(userName.value + "さんのメモ:" + chatContent.value)
+  memoList.push({
+    type: "memo",
+    username: userName.value,
+    message: chatContent.value,
+    unixtime: Date.now()
+  });
+
   // 入力欄を初期化
-  chatContent.value = ""
-  resetTextarea();
+  chatContent.value = ''
+}
+
+// 退室メッセージをサーバに送信する
+const onExit = () => {
+  socket.emit("exitEvent", JSON.stringify({
+    type: "leave_message",
+    username: userName.value,
+    message: userName.value + "さんが退室しました",
+    unixtime: Date.now()
+  }))
 }
 // #endregion
-
-// Enterで改行, Shift+Enterで送信
-const onKeyDown = (event) => {
-  if (event.keyCode === 13) {
-    if (event.shiftKey) {
-    } else {
-      event.preventDefault()  // デフォルトの改行挿入を防ぐ
-      onPublish()
-    }
-  }
-}
 
 // #region socket event handler
 // サーバから受信した入室メッセージ画面上に表示する
 const onReceiveEnter = (data) => {
-//  chatList.push(data)
-  chatList.push({type:"enter_message", message:data})
+  chatList.push(JSON.parse(data))
 }
 
 // サーバから受信した退室メッセージを受け取り画面上に表示する
 const onReceiveExit = (data) => {
-//  chatList.push(data)
-  chatList.push({type:"leave_message", message:data})
+  chatList.push(JSON.parse(data))
 }
 
 // サーバから受信した投稿メッセージを画面上に表示する
 const onReceivePublish = (data) => {
-  let chatdata = JSON.parse(data)
-  chatList.push(chatdata)
+  chatList.push(JSON.parse(data))
 }
 // #endregion
 
@@ -158,8 +139,6 @@ const registerSocketEvent = () => {
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
       <!-- Enter キーが押されたときに投稿可能 -->
       <textarea @keydown.enter="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
-      <!-- 提案の手法 onKeyDownを使用 -->
-      <!-- <textarea @keydown="onKeyDown" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea> -->
       <div class="mt-5">
           <button class="button-normal" @click="onPublish">投稿</button>
           <button class="button-normal util-ml-8px" @click="onMemo">メモ</button>
@@ -171,8 +150,9 @@ const registerSocketEvent = () => {
         <div class="mt-5" v-if="chatList.length !== 0">
           <ul>
             <li class="item mt-4" v-for="(chat, i) in show_order? chatList.slice().reverse() : chatList.slice()" :key="i" :class="{ 'my-message': (chat.type === 'message' && chat.username === userName) }">
-              <pre v-if="chat.type=='message'">{{ chat.username + "さん: " + chat.message +" ["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]"}}</pre>
-              <pre v-else>{{ chat.message }}</pre>
+              <!-- chat を pre タグ内で表示 -->
+              <pre class="{ chat.type }" v-if="chat.type=='message'">{{ chat.username + "さん :" + chat.message +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]"}}</pre>
+              <pre class="{ chat.type }"  v-else>{{ chat.message }}</pre>
             </li>
           </ul>
         </div>
@@ -181,6 +161,7 @@ const registerSocketEvent = () => {
         <h3>メモ一覧</h3>
         <ul>
           <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
+            <!-- memo を pre タグ内で表示 -->
             <pre>{{ memo }}</pre>
           </li>
         </ul>
@@ -194,21 +175,21 @@ const registerSocketEvent = () => {
 
 <style scoped>
 .login-user {
-  margin-top: 20px;
+  margin-top: 20px; /* この値を調整して、希望の間隔に設定します */
 }
 .chat-memo-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* 両コンテンツの間にスペースを追加 */
 }
 .chat-section {
-  width: 70%;
-  overflow: auto;
+  width: 70%; /* チャット画面の幅を設定 */
+  overflow: auto; /* 必要に応じてスクロールを有効にする */
 }
 
 .memo-section {
-  width: 30%;
-  overflow: auto;
-  margin-left: 10px;
+  width: 30%; /* メモ画面の幅を設定 */
+  overflow: auto; /* 必要に応じてスクロールを有効にする */
+  margin-left: 10px; /* チャット欄とメモ欄の間にマージンを追加 */
 }
 .link {
   text-decoration: none;
