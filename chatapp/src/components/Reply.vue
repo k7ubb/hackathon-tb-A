@@ -1,8 +1,9 @@
 <script setup>
 import { io } from 'socket.io-client';
-import { ref, reactive, computed, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted, inject} from 'vue';
 import { useStore } from 'vuex';
 
+const userName = inject("userName")
 const store = useStore();
 const message = computed(() => store.state.message);
 const user = computed(() => store.state.user);
@@ -22,7 +23,7 @@ const onPublish = () => {
   }
   socket.emit("publishReply", JSON.stringify({
     type: "message",
-    username: user.value,
+    username: userName.value,
     message: replyContent.value,
     unixtime: new Date().toLocaleString()
   }));
@@ -59,7 +60,7 @@ const registerSocketEvent = () => {
       <li v-for="(reply, index) in replyList.slice().reverse()" :key="index">
         <div>
           <span>{{ reply.unixtime }}</span>
-          <p>{{ reply.message }}</p>
+          <p>{{ reply.username }}さん: {{ reply.message }}</p>
         </div>
       </li>
     </ul>

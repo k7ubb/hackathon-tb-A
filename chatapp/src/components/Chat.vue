@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, reactive, onMounted, provide } from "vue"
+import { inject, ref, reactive, onMounted } from "vue"
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'
 import io from "socket.io-client"
@@ -143,8 +143,6 @@ const onReceivePublish = (data) => {
 // #endregion
 
 const onReply = (chat) => {
-  console.log("遷移します")
-  console.log(chat)
   store.commit('setMessage', chat.message);
   store.commit('setUser', chat.username);
   router.push({ name: "reply", params:{chatId: chat.unixtime}})
@@ -179,7 +177,7 @@ const registerSocketEvent = () => {
 
 <template>
   <div class="mx-auto my-5 px-4">
-    <h1 class="text-h3 font-weight-medium">Vue.js Chat チャットルーム</h1>
+    <h1 class="text-h3 font-weight-medium">ほうれんそう チャットルーム</h1>
     <div class="'input-section mt-10'">
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
       <div>
