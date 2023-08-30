@@ -21,4 +21,8 @@ export default (io, socket) => {
     lastUser = user
     io.sockets.emit("publishEvent", data)
   })
+
+  socket.on("publishReply", (data) => {
+    io.sockets.emit("newReply", data);
+  });
 }

@@ -1,5 +1,7 @@
 <script setup>
-import { inject, ref, reactive, onMounted } from "vue"
+import { inject, ref, reactive, onMounted, provide } from "vue"
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router'
 import io from "socket.io-client"
 import "../styles/chat.css"
 
@@ -11,6 +13,8 @@ const userName = inject("userName")
 // #endregion
 
 // #region local variable
+const router = useRouter()
+const store = useStore();
 const socket = io()
 // #endregion
 
@@ -21,6 +25,7 @@ const memoList = reactive([])
 
 const lastPublishTime = ref(0)
 const show_order = ref(true)
+const chat_type = null
 // #endregion
 
 // #region lifecycle
@@ -53,9 +58,9 @@ const onPublish = () => {
     return
   }
 
-  if(chat){
-    chat_type = "report_message";
-  }
+  // if(chat){
+  //   chat_type = "report_message";
+  // }
 
   socket.emit("publishEvent", JSON.stringify({
     type: "message",
@@ -91,7 +96,8 @@ const onConsultation = () => {
 
 // 確認ボタン
 const onConfirmation = () => {
-
+  chatContent.value = "ccccccccc";
+  chat_type = "consult_message";
 }
 
 
@@ -135,6 +141,14 @@ const onReceivePublish = (data) => {
   chatList.push(JSON.parse(data))
 }
 // #endregion
+
+const onReply = (chat) => {
+  console.log("遷移します")
+  console.log(chat)
+  store.commit('setMessage', chat.message);
+  store.commit('setUser', chat.username);
+  router.push({ name: "reply", params:{chatId: chat.unixtime}})
+}
 
 // #region local methods
 // イベント登録をまとめる
@@ -188,7 +202,10 @@ const registerSocketEvent = () => {
           <ul>
             <li class="item mt-4" v-for="(chat, i) in show_order? chatList.slice().reverse() : chatList.slice()" :key="i" :class="{ 'my-message': (chat.type === 'message' && chat.username === userName) }">
               <!-- chat を pre タグ内で表示 -->
-              <pre class="{ chat.type }" v-if="chat.type=='message'">{{ chat.username + "さん :" + chat.message +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]"}}</pre>
+              <div class="{ chat.type }" v-if="chat.type=='message'">
+                <pre>{{ chat.username + "さん :" + chat.message +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]"}}</pre>
+                <button class="button-normal" @click="onReply(chat)">返信</button>
+              </div>
               <pre class="{ chat.type }"  v-else>{{ chat.message }}</pre>
             </li>
           </ul>
