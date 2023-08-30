@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router"
 import Chat from "../components/Chat.vue"
 import Login from "../components/Login.vue"
+import Reply from "../components/Reply.vue"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -20,6 +21,12 @@ const router = createRouter({
           next({ name:"login" })
         }
       },
+    },
+    {
+      path: '/chat/reply/:chatId',
+      name: 'reply',
+      component: Reply,
+      props: route => ({ chatId: route.params.chatId, message: route.params.message })
     }
   ],
 })

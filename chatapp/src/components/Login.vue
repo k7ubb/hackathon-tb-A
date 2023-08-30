@@ -34,7 +34,7 @@ const onEnter = () => {
     message: userName.value + "さんが入室しました",
     unixtime: Date.now()
   }))
-  
+
   // チャット画面へ遷移
   router.push({ name: "chat" })
 }
