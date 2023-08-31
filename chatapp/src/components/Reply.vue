@@ -21,17 +21,20 @@ const onPublish = () => {
     alert("返信内容を入力してください。");
     return;
   }
-  socket.emit("publishReply", JSON.stringify({
+
+  const reply = {
     type: "message",
     username: userName.value,
     message: replyContent.value,
     unixtime: new Date().toLocaleString()
-  }));
+  }
+  store.commit('addReply', reply);
+  socket.emit("publishReply", JSON.stringify(reply));
   replyContent.value = "";
 };
 
 const onReceivePublish = (data) => {
-  replyList.push(JSON.parse(data));
+  store.state.replyList.push(JSON.parse(data));
 };
 
 const registerSocketEvent = () => {
@@ -57,7 +60,7 @@ const registerSocketEvent = () => {
 
     <!-- 返信リスト -->
     <ul>
-      <li v-for="(reply, index) in replyList.slice().reverse()" :key="index">
+      <li v-for="(reply, index) in store.state.replyList.slice().reverse()" :key="index">
         <div>
           <span>{{ reply.unixtime }}</span>
           <p>{{ reply.username }}さん: {{ reply.message }}</p>
@@ -65,6 +68,6 @@ const registerSocketEvent = () => {
       </li>
     </ul>
 
-    <router-link to="/chat">前のページ</router-link>
+    <router-link :to ="{name: 'chat'}">前のページ</router-link>
   </div>
 </template>
