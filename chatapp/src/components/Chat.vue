@@ -71,7 +71,7 @@ const onPublish = () => {
     unixtime: Date.now()}
 
   socket.emit("publishEvent", JSON.stringify(json_chat));
-  store.commit('addChat', json_chat);  // Vuexにchatを追加
+  store.commit('addChat', json_chat);
 
   lastPublishTime.value = currentTime
   // 入力欄を初期化
