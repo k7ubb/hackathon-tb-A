@@ -7,6 +7,7 @@ import "../styles/chat.css"
 
 // constants
 const publishInterval = 5
+const validCharaLength = 30 // 文字数制限
 
 // #region global state
 const userName = inject("userName")
@@ -19,13 +20,13 @@ const socket = io()
 // #endregion
 
 // #region reactive variable
-const chatContent = ref("")
+const chatContent = inject("chatContent")
 const chatList = reactive([])
 const memoList = reactive([])
 
 const lastPublishTime = ref(0)
 const show_order = ref(true)
-const chat_type = null
+const chat_type = inject("chat_type")
 // #endregion
 
 
@@ -50,16 +51,37 @@ const onPublish = () => {
     if(chatContent.value.trim() === ""){
       throw new Error('メッセージを入力してください。')
     }
+    if(chatContent.value.length > validCharaLength){
+      throw new Error('文字数上限を超えています。'+chatContent.value.length+"/"+validCharaLength)
+    }
   }
   catch(e) {
     alert(e.message)
     return
   }
 
+  // 報告・連絡・相談それぞれの機能→これから追加
+  if(chat_type.value === "report_message"){
+    // 報告ボタン
+    alert("報告")
+  }
+  else if(chat_type.value === "contact_message"){
+    // 連絡ボタン
+    alert("連絡")
+  }
+  else if(chat_type.value === "consult_message"){
+    // 相談ボタン
+    alert("相談")
+  }
+  else if(chat_type.value === "confirm_message"){
+    // 確認ボタン
+    alert("確認")
+  }
+
 
   socket.emit("publishEvent", JSON.stringify({
     type: "message",
-    message_type: chat_type,
+    message_type: chat_type.value,
     username: userName.value,
     message: chatContent.value,
     unixtime: Date.now()
@@ -69,33 +91,27 @@ const onPublish = () => {
 
   // 入力欄を初期化
   chatContent.value = ''
-  onReport();
+  onOptions("report_message");
 }
 
-// 報告ボタン
-const onReport = () => {
-  chatContent.value = "aaaaaaa";
-  chat_type = "report_message";
-}
 
-// 連絡ボタン
-const onContact = () => {
-  chatContent.value = "bbbbbbbb";
-  chat_type = "contact_message";
+// ほうれんそう選択時の処理
+const onOptions = (chatType) => {
+  chat_type.value = chatType;
+  if(chatType === "report_message"){
+    // 報告ボタン
+    chatContent.value = "- 進捗・結果：\n";
+  }else if(chatType === "contact_message"){
+    // 連絡ボタン
+    chatContent.value = "- 現状：\n";
+  }else if(chatType === "consult_message"){
+    // 相談ボタン
+    chatContent.value = "- 現状の問題点：\n- 考えられる原因：";
+  }else if(chatType === "confirm_message"){
+    // 確認ボタン
+    chatContent.value = "ccccccccc";
+  }
 }
-
-// 相談ボタン
-const onConsultation = () => {
-  chatContent.value = "ccccccccc";
-  chat_type = "consult_message";
-}
-
-// 確認ボタン
-const onConfirmation = () => {
-  chatContent.value = "ccccccccc";
-  chat_type = "confirm_message";
-}
-
 
 // メモを画面上に表示する
 const onMemo = () => {
@@ -177,10 +193,10 @@ const registerSocketEvent = () => {
     <div class="'input-section mt-10'">
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
       <div>
-        <button class="button-normal" @click="onReport">報告</button>
-        <button class="button-normal" @click="onContact">連絡</button>
-        <button class="button-normal" @click="onConsultation">相談</button>
-        <button class="button-normal" @click="onConfirmation">確認</button>
+        <input type="radio" name="options" @click="onOptions('report_message')" checked>報告
+        <input type="radio" name="options" @click="onOptions('contact_message')">連絡
+        <input type="radio" name="options" @click="onOptions('consult_message')">相談
+        <input type="radio" name="options" @click="onOptions('confirm_message')">確認
       </div>
       <!-- Enter キーが押されたときに投稿可能 -->
       <textarea @keydown.enter.exact="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
@@ -197,7 +213,7 @@ const registerSocketEvent = () => {
             <li class="item mt-4" v-for="(chat, i) in show_order? chatList.slice().reverse() : chatList.slice()" :key="i" :class="{ 'my-message': (chat.type === 'message' && chat.username === userName) }">
               <!-- chat を pre タグ内で表示 -->
               <div class="{ chat.type }" v-if="chat.type=='message'">
-                <pre>{{ chat.username + "さん :" + chat.message +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]"}}</pre>
+                <pre>{{ chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]\n" + chat.message }}</pre>
                 <button class="button-normal" @click="onReply(chat)">返信</button>
               </div>
               <pre class="{ chat.type }"  v-else>{{ chat.message }}</pre>

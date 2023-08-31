@@ -6,6 +6,8 @@ import "../styles/login.css"
 
 // #region global state
 const userName = inject("userName")
+const chatContent = inject("chatContent")
+const chat_type = inject("chat_type")
 
 // #endregion
 
@@ -34,6 +36,10 @@ const onEnter = () => {
     message: userName.value + "さんが入室しました",
     unixtime: Date.now()
   }))
+
+  // chatContentの初期値を「報告」に設定
+  chatContent.value = "aaaaaaa";
+  chat_type.value = "report_message";
 
   // チャット画面へ遷移
   router.push({ name: "chat" })
