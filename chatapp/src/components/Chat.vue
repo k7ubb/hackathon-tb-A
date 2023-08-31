@@ -20,7 +20,7 @@ const socket = io()
 // #endregion
 
 // #region reactive variable
-const chatContent = inject("chatContent")
+const chatContent = ref("")
 const chatList = reactive([])
 const memoList = reactive([])
 
@@ -41,7 +41,6 @@ onMounted(() => {
 const onPublish = () => {
   const currentTime = Date.now()
   event.preventDefault()
-
   try{
     // 任意時間で連投できないようにする
     if(currentTime - lastPublishTime.value < publishInterval){
@@ -60,35 +59,21 @@ const onPublish = () => {
     return
   }
 
-  // 報告・連絡・相談それぞれの機能→これから追加
-  if(chat_type.value === "report_message"){
-    // 報告ボタン
-    alert("報告")
-  }
-  else if(chat_type.value === "contact_message"){
-    // 連絡ボタン
-    alert("連絡")
-  }
-  else if(chat_type.value === "consult_message"){
-    // 相談ボタン
-    alert("相談")
-  }
-  else if(chat_type.value === "confirm_message"){
-    // 確認ボタン
-    alert("確認")
-  }
+  // if(chat){
+  //   chat_type = "report_message";
+  // }
 
-
-  socket.emit("publishEvent", JSON.stringify({
+  const json_chat = {
     type: "message",
     message_type: chat_type.value,
     username: userName.value,
     message: chatContent.value,
-    unixtime: Date.now()
-  }))
+    unixtime: Date.now()}
+
+  socket.emit("publishEvent", JSON.stringify(json_chat));
+  store.commit('addChat', json_chat);  // Vuexにchatを追加
 
   lastPublishTime.value = currentTime
-
   // 入力欄を初期化
   chatContent.value = ''
   onOptions("report_message");
@@ -140,17 +125,17 @@ const onExit = () => {
 // #region socket event handler
 // サーバから受信した入室メッセージ画面上に表示する
 const onReceiveEnter = (data) => {
-  chatList.push(JSON.parse(data))
+  store.state.chatList.push(JSON.parse(data))
 }
 
 // サーバから受信した退室メッセージを受け取り画面上に表示する
 const onReceiveExit = (data) => {
-  chatList.push(JSON.parse(data))
+  store.state.chatList.push(JSON.parse(data))
 }
 
 // サーバから受信した投稿メッセージを画面上に表示する
 const onReceivePublish = (data) => {
-  chatList.push(JSON.parse(data))
+  store.state.chatList.push(JSON.parse(data))
 }
 // #endregion
 
@@ -208,9 +193,9 @@ const registerSocketEvent = () => {
     </div>
     <div class="chat-memo-container mt-10">
       <div class="chat-section">
-        <div class="mt-5" v-if="chatList.length !== 0">
+        <div class="mt-5" v-if="store.state.chatList.length !== 0">
           <ul>
-            <li class="item mt-4" v-for="(chat, i) in show_order? chatList.slice().reverse() : chatList.slice()" :key="i" :class="{ 'my-message': (chat.type === 'message' && chat.username === userName) }">
+            <li class="item mt-4" v-for="(chat, i) in show_order? store.state.chatList.slice().reverse() : store.state.chatList.slice()" :key="i" :class="{ 'my-message': (chat.type === 'message' && chat.username === userName) }">
               <!-- chat を pre タグ内で表示 -->
               <div class="{ chat.type }" v-if="chat.type=='message'">
                 <pre>{{ chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]\n" + chat.message }}</pre>

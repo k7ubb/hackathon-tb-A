@@ -12,6 +12,7 @@ export default (io, socket) => {
   })
 
   // 投稿メッセージを送信する
+  // 投稿メッセージを送信する
   socket.on("publishEvent", (data) => {
     const user = JSON.parse(data).username
     if (user === lastUser) {

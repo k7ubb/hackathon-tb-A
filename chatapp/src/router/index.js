@@ -15,7 +15,7 @@ const router = createRouter({
       name: "chat",
       component: Chat,
       beforeEnter: (to, from, next) => {
-        if(from.name === "login"){
+        if(from.name === "login" || from.name === "reply"){
           next()
         } else {
           next({ name:"login" })
