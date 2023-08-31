@@ -28,6 +28,7 @@ const show_order = ref(true)
 const chat_type = null
 // #endregion
 
+
 // #region lifecycle
 onMounted(() => {
   registerSocketEvent()
@@ -49,18 +50,12 @@ const onPublish = () => {
     if(chatContent.value.trim() === ""){
       throw new Error('メッセージを入力してください。')
     }
-    if(chatContent.value.includes('\n')){
-      throw new Error('不正な改行があります。')
-    }
   }
   catch(e) {
     alert(e.message)
     return
   }
 
-  // if(chat){
-  //   chat_type = "report_message";
-  // }
 
   socket.emit("publishEvent", JSON.stringify({
     type: "message",
@@ -74,6 +69,7 @@ const onPublish = () => {
 
   // 入力欄を初期化
   chatContent.value = ''
+  onReport();
 }
 
 // 報告ボタン
@@ -97,7 +93,7 @@ const onConsultation = () => {
 // 確認ボタン
 const onConfirmation = () => {
   chatContent.value = "ccccccccc";
-  chat_type = "consult_message";
+  chat_type = "confirm_message";
 }
 
 
