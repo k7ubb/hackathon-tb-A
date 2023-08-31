@@ -20,7 +20,7 @@ const socket = io()
 // #endregion
 
 // #region reactive variable
-const chatContent = ref("")
+const chatContent = inject("chatContent")
 const chatList = reactive([])
 const memoList = reactive([])
 
@@ -59,9 +59,22 @@ const onPublish = () => {
     return
   }
 
-  // if(chat){
-  //   chat_type = "report_message";
-  // }
+   if(chat_type.value === "report_message"){
+    // 報告ボタン
+    alert("報告")
+  }
+  else if(chat_type.value === "contact_message"){
+    // 連絡ボタン
+    alert("連絡")
+  }
+  else if(chat_type.value === "consult_message"){
+    // 相談ボタン
+    alert("相談")
+  }
+  else if(chat_type.value === "confirm_message"){
+    // 確認ボタン
+    alert("確認")
+  }
 
   const json_chat = {
     type: "message",
@@ -211,7 +224,7 @@ const registerSocketEvent = () => {
         <ul>
           <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
             <!-- memo を pre タグ内で表示 -->
-            <pre>{{ memo }}</pre>
+            <pre>{{ memo.message }}</pre>
           </li>
         </ul>
       </div>
