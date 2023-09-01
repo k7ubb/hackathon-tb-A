@@ -27,6 +27,9 @@ const memoList = reactive([])
 const lastPublishTime = ref(0)
 const show_order = ref(true)
 const chat_type = inject("chat_type")
+
+const valid_date = ref(null)
+const isConsultVisible = ref(false)
 // #endregion
 
 
@@ -76,12 +79,18 @@ const onPublish = () => {
     // alert("確認")
   }
 
+  if(isConsultVisible.value===false){
+    valid_date.value = null
+  }
+
   const json_chat = {
     type: "message",
     message_type: chat_type.value,
     username: userName.value,
     message: chatContent.value,
-    unixtime: Date.now()}
+    unixtime: Date.now(),
+    valid_date: valid_date.value
+  }
 
   socket.emit("publishEvent", JSON.stringify(json_chat));
   store.commit('addChat', json_chat);
@@ -99,15 +108,19 @@ const onOptions = (chatType) => {
   if(chatType === "report_message"){
     // 報告ボタン
     chatContent.value = "- 進捗・結果：\n";
+    isConsultVisible.value = false
   }else if(chatType === "contact_message"){
     // 連絡ボタン
     chatContent.value = "- 現状：\n";
+    isConsultVisible.value = false
   }else if(chatType === "consult_message"){
     // 相談ボタン
     chatContent.value = "- 現状の問題点：\n- 考えられる原因：";
+    isConsultVisible.value = true
   }else if(chatType === "confirm_message"){
     // 確認ボタン
     chatContent.value = "ccccccccc";
+    isConsultVisible.value = false
   }
 }
 
@@ -190,11 +203,16 @@ const registerSocketEvent = () => {
     <h1 class="text-h3 font-weight-medium">ほうれんそう チャットルーム</h1>
     <div class="'input-section mt-10'">
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
-      <div>
-        <input type="radio" name="options" @click="onOptions('report_message')" checked>報告
-        <input type="radio" name="options" @click="onOptions('contact_message')">連絡
-        <input type="radio" name="options" @click="onOptions('consult_message')">相談
-        <input type="radio" name="options" @click="onOptions('confirm_message')">確認
+      <div class="flex">
+        <div>
+          <input type="radio" name="options" @click="onOptions('report_message')" checked>報告
+          <input type="radio" name="options" @click="onOptions('contact_message')">連絡
+          <input type="radio" name="options" @click="onOptions('consult_message')">相談
+          <input type="radio" name="options" @click="onOptions('confirm_message')">確認
+        </div>
+        <div class="inputdate">
+          <p class="consult-option" v-if="isConsultVisible"> 回答期限:<input type="datetime-local" step="300" v-model="valid_date"></p>
+        </div>
       </div>
       <!-- Enter キーが押されたときに投稿可能 -->
       <textarea @keydown.enter.exact="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
@@ -221,7 +239,8 @@ const registerSocketEvent = () => {
                   <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName) }">
                     <pre>{{ chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
                     <pre id="messageContent">{{ chat.message }}</pre>
-                    <button class="button-normal" @click="onReply(chat)">返信</button>
+                    <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
+                    
                   </div>
                 </div>
               </div>
