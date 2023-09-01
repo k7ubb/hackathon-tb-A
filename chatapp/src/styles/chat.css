@@ -58,7 +58,7 @@ label{
   transform: scale(1.05);
 }
 
-/* 投稿欄のアイコンとメッセージを並べる */
+/* 横並び用 */
 .flex {
   display: flex;
 }
@@ -69,4 +69,15 @@ label{
   margin-right: 10px;
   border: 1px solid;
   border-radius: 50%;
+}
+
+.inputdate {
+  margin-left: 0 0 0 auto;
+  padding-left: 20px;
+  border: #000;
+}
+
+.notes {
+  color: #CC0000;
+  margin-left: 2em;
 }
