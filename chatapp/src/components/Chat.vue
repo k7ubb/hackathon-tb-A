@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, reactive, onMounted } from "vue"
+import { inject, ref, reactive, onMounted, onUnmounted } from "vue"
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'
 import io from "socket.io-client"
@@ -174,27 +174,28 @@ const onReply = (chat) => {
 // #region local methods
 // イベント登録をまとめる
 const registerSocketEvent = () => {
-  // 入室イベントを受け取ったら実行
-  socket.on("enterEvent", (data) => {
-    onReceiveEnter(data)
-  })
+  const handleEnterEvent = (data) => {
+    store.commit('addChat', JSON.parse(data));
+  };
 
-  // 退室イベントを受け取ったら実行
-  socket.on("exitEvent", (data) => {
-    onReceiveExit(data)
-  })
+  const handleExitEvent = (data) => {
+    store.commit('addChat', JSON.parse(data));
+  };
 
-  // 投稿イベントを受け取ったら実行
-  socket.on("publishEvent", (data) => {
-    onReceivePublish(data)
-  })
+  const handlePublishEvent = (data) => {
+    store.commit('addChat', JSON.parse(data));
+  };
 
-  // エラーの実行
-  // 現状， 連続投稿の場合の処理に使用
-  socket.on("error", (data) => {
-    alert(data) // エラーメッセージをアラートとして表示
-  })
-}
+  socket.on("enterEvent", handleEnterEvent);
+  socket.on("exitEvent", handleExitEvent);
+  socket.on("publishEvent", handlePublishEvent);
+
+  onUnmounted(() => {
+    socket.off("enterEvent", handleEnterEvent);
+    socket.off("exitEvent", handleExitEvent);
+    socket.off("publishEvent", handlePublishEvent);
+  });
+};
 // #endregion
 </script>
 
@@ -240,7 +241,7 @@ const registerSocketEvent = () => {
                     <pre>{{ chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
                     <pre id="messageContent">{{ chat.message }}</pre>
                     <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
-                    
+
                   </div>
                 </div>
               </div>
