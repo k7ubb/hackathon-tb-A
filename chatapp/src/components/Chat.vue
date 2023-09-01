@@ -7,7 +7,7 @@ import "../styles/chat.css"
 
 // constants
 const publishInterval = 5
-const validCharaLength = 30 // 文字数制限
+const validCharaLength = 300 // 文字数制限
 
 // #region global state
 const userName = inject("userName")
@@ -59,21 +59,21 @@ const onPublish = () => {
     return
   }
 
-   if(chat_type.value === "report_message"){
+  if(chat_type.value === "report_message"){
     // 報告ボタン
-    alert("報告")
+    // alert("報告")
   }
   else if(chat_type.value === "contact_message"){
     // 連絡ボタン
-    alert("連絡")
+    // alert("連絡")
   }
   else if(chat_type.value === "consult_message"){
     // 相談ボタン
-    alert("相談")
+    // alert("相談")
   }
   else if(chat_type.value === "confirm_message"){
     // 確認ボタン
-    alert("確認")
+    // alert("確認")
   }
 
   const json_chat = {
@@ -208,11 +208,22 @@ const registerSocketEvent = () => {
       <div class="chat-section">
         <div class="mt-5" v-if="store.state.chatList.length !== 0">
           <ul>
-            <li class="item mt-4" v-for="(chat, i) in show_order? store.state.chatList.slice().reverse() : store.state.chatList.slice()" :key="i" :class="{ 'my-message': (chat.type === 'message' && chat.username === userName) }">
+            <li class="item mt-4" v-for="(chat, i) in show_order? store.state.chatList.slice().reverse() : store.state.chatList.slice()" :key="i">
               <!-- chat を pre タグ内で表示 -->
               <div class="{ chat.type }" v-if="chat.type=='message'">
-                <pre>{{ chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]\n" + chat.message }}</pre>
-                <button class="button-normal" @click="onReply(chat)">返信</button>
+                <div class="flex">
+                  <div class="item1">
+                    <div class="optionIcon" v-if="chat.message_type==='report_message'">報告</div>
+                    <div class="optionIcon" v-else-if="chat.message_type==='contact_message'">連絡</div>
+                    <div class="optionIcon" v-else-if="chat.message_type==='consult_message'">相談</div>
+                    <div class="optionIcon" v-else-if="chat.message_type==='confirm_message'">確認</div>
+                  </div>
+                  <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName) }">
+                    <pre>{{ chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
+                    <pre id="messageContent">{{ chat.message }}</pre>
+                    <button class="button-normal" @click="onReply(chat)">返信</button>
+                  </div>
+                </div>
               </div>
               <pre class="{ chat.type }"  v-else>{{ chat.message }}</pre>
             </li>

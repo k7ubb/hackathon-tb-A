@@ -57,3 +57,16 @@ label{
   background-color: #e0e0e0;
   transform: scale(1.05);
 }
+
+/* 投稿欄のアイコンとメッセージを並べる */
+.flex {
+  display: flex;
+}
+
+/* 投稿欄のアイコン */
+.optionIcon {
+  padding: 5px;
+  margin-right: 10px;
+  border: 1px solid;
+  border-radius: 50%;
+}
