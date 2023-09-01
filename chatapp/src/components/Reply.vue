@@ -1,73 +1,87 @@
 <script setup>
-import { io } from 'socket.io-client';
-import { ref, reactive, computed, onMounted, inject} from 'vue';
+import { ref, onMounted, computed, inject, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router';
+import io from "socket.io-client";
+
+const store = useStore();
+const router = useRouter();
+const route = useRoute();
+const socket = io();
 
 const userName = inject("userName")
-const store = useStore();
+
+const chatId = route.params.chatId;
+// const message = route.params.message;
 const message = computed(() => store.state.message);
 const user = computed(() => store.state.user);
 
-const replyContent = ref("");
-const replyList = reactive([]);
-const socket = io();
+const replyContent = ref('');
 
+// #region lifecycle
 onMounted(() => {
   registerSocketEvent();
 });
+// #endregion
 
-const onPublish = () => {
-  if (replyContent.value.trim() === "") {
-    alert("返信内容を入力してください。");
-    return;
-  }
-
-  const reply = {
-    type: "message",
+// #region browser event handler
+const onPublishReply = () => {
+  const json_reply = {
+    type: "reply",
+    parentChatId: chatId,
     username: userName.value,
     message: replyContent.value,
-    unixtime: new Date().toLocaleString()
-  }
-  store.commit('addReply', reply);
-  socket.emit("publishReply", JSON.stringify(reply));
-  replyContent.value = "";
+    unixtime: Date.now()
+  };
+
+  socket.emit("publishReplyEvent", JSON.stringify(json_reply));
+  store.commit('addReply', json_reply);
+
+  // Clear the input field
+  replyContent.value = '';
 };
 
-const onReceivePublish = (data) => {
-  store.state.replyList.push(JSON.parse(data));
-};
+// #endregion
 
+// #region socket event handler
 const registerSocketEvent = () => {
-  socket.on("newReply", (data) => {
-    onReceivePublish(data);
+  const handlePublishReplyEvent = (data) => {
+    const newReply = JSON.parse(data);
+    if (newReply.parentChatId === chatId) {
+      store.commit('addReply', newReply);
+    }
+  };
+
+  socket.on("publishReplyEvent", handlePublishReplyEvent);
+
+  onUnmounted(() => {
+    socket.off("publishReplyEvent", handlePublishReplyEvent);
   });
 };
+// #endregion
 </script>
 
-
 <template>
-  <div>
-    <h1>返信用ページ</h1>
-    <h2 v-if="message !== null">{{ message }}</h2>
-    <p v-if="user !== null">相談者: {{ user }}</p>
-    <h2 v-else>ページ間のデータの受け渡しができませんでした</h2>
-
-    <!-- 返信入力欄 -->
-    <div>
-      <textarea v-model="replyContent" placeholder="返信を入力..."></textarea>
-      <button class="button-normal" @click="onPublish" >返信</button>
+  <div class="mx-auto my-5 px-4">
+    <h1 class="text-h3 font-weight-medium">返信</h1>
+    <div class="input-section mt-10">
+      <p>Replying to: {{ message }}</p>
+      <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
+      <div class="mt-5">
+        <button class="button-normal" @click="onPublishReply">返信</button>
+      </div>
     </div>
-
-    <!-- 返信リスト -->
-    <ul>
-      <li v-for="(reply, index) in store.state.replyList.slice().reverse()" :key="index">
-        <div>
-          <span>{{ reply.unixtime }}</span>
-          <p>{{ reply.username }}さん: {{ reply.message }}</p>
-        </div>
-      </li>
-    </ul>
-
-    <router-link :to ="{name: 'chat'}">前のページ</router-link>
+    <div class="reply-section mt-10">
+      <h3>返信</h3>
+      <ul>
+        <li v-for="(reply, i) in store.state.replyList.filter(r => r.parentChatId === chatId).slice().reverse()" :key="i">
+          <pre>{{ reply.username + "さん " +"["+new Date(reply.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
+          <pre>{{ reply.message }}</pre>
+        </li>
+      </ul>
+    </div>
+    <router-link to="/chat" class="link">
+      <button type="button" class="button-normal button-exit">戻る</button>
+    </router-link>
   </div>
 </template>
