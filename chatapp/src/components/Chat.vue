@@ -96,13 +96,13 @@ const onPublish = () => {
   store.commit('addChat', json_chat);
 
   lastPublishTime.value = currentTime
-<<<<<<< Updated upstream
+ 
   // 入力欄を初期化
   chatContent.value = ''
   onOptions("report_message");
-=======
+
   
->>>>>>> Stashed changes
+
 }
 
 
@@ -220,12 +220,9 @@ const registerSocketEvent = () => {
         </div>
       </div>
       <!-- Enter キーが押されたときに投稿可能 -->
-<<<<<<< Updated upstream
+
       <textarea @keydown.enter.exact="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
-=======
-      <textarea  @keydown.enter="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatCt" rows="4" class="area"></textarea>
-      
->>>>>>> Stashed changes
+
       <div class="mt-5">
           <button class="button-normal" @click="onPublish">投稿</button>
           <button class="button-normal util-ml-8px" @click="onMemo">メモ</button>
