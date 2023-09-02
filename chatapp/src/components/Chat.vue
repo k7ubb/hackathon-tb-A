@@ -28,6 +28,11 @@ const lastPublishTime = ref(0)
 const show_order = ref(true)
 const chat_type = inject("chat_type")
 
+//連絡の機能で使用する変数
+const contactValidCharaLength = 100
+const isContactVisible = ref(false)
+
+// 相談の機能で使用する変数
 const valid_date = ref(null)
 const isConsultVisible = ref(false)
 // #endregion
@@ -69,6 +74,10 @@ const onPublish = () => {
   else if(chat_type.value === "contact_message"){
     // 連絡ボタン
     // alert("連絡")
+    if(chatContent.value.length>contactValidCharaLength){
+      alert("「連絡」の文字数は"+contactValidCharaLength+"以下です。現在文字数 : "+chatContent.value.length)
+      return
+    }
   }
   else if(chat_type.value === "consult_message"){
     // 相談ボタン
@@ -113,18 +122,22 @@ const onOptions = (chatType) => {
     // 報告ボタン
     chatContent.value = "- 進捗・結果：\n";
     isConsultVisible.value = false
+    isContactVisible.value = false
   }else if(chatType === "contact_message"){
     // 連絡ボタン
     chatContent.value = "- 現状：\n";
     isConsultVisible.value = false
+    isContactVisible.value = true
   }else if(chatType === "consult_message"){
     // 相談ボタン
     chatContent.value = "- 現状の問題点：\n- 考えられる原因：";
     isConsultVisible.value = true
+    isContactVisible.value = false
   }else if(chatType === "confirm_message"){
     // 確認ボタン
     chatContent.value = "ccccccccc";
     isConsultVisible.value = false
+    isContactVisible.value = false
   }
 }
 
@@ -205,7 +218,7 @@ const registerSocketEvent = () => {
 
 <template>
   <div class="mx-auto my-5 px-4">
-    <h1 class="text-h3 font-weight-medium">ほうれんそう チャットルーム</h1>
+    <h1 class="text-h3 font-weight-medium">報連相 チャットルーム</h1>
     <div class="'input-section mt-10'">
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
       <div class="flex">
@@ -215,9 +228,8 @@ const registerSocketEvent = () => {
           <input type="radio" name="options" class="radiobutton" id="consult" @click="onOptions('consult_message')"><label for="consult">相談</label>
           <input type="radio" name="options" class="radiobutton" id="confirm" @click="onOptions('confirm_message')"><label for="confirm">確認</label>
         </div>
-        <div class="inputdate">
-          <p class="consult-option" v-if="isConsultVisible"> 回答期限:<input type="datetime-local" step="300" v-model="valid_date"></p>
-        </div>
+        <div class="display-by-function consult-option" v-if="isConsultVisible">回答期限:<input type="datetime-local" step="300" v-model="valid_date"></div>
+        <div class="display-by-function contact-option" :class="{ 'red': (chatContent.length>contactValidCharaLength)}" v-else-if="isContactVisible">文字数：{{chatContent.length}}/{{contactValidCharaLength}}</div>
       </div>
       <!-- Enter キーが押されたときに投稿可能 -->
 
@@ -246,7 +258,7 @@ const registerSocketEvent = () => {
                   <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName), 'others-message':  (chat.type === 'message' && chat.username !== userName)}">
                     <pre>{{ chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
                     <pre id="messageContent">{{ chat.message }}</pre>
-                    <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
+                    <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option red notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
 
                   </div>
                 </div>
