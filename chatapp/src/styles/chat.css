@@ -115,15 +115,19 @@ label{
   border-radius: 50%;
 }
 
-.inputdate {
+.display-by-function {
   margin-left: 0 0 0 auto;
   padding-left: 20px;
   border: #000;
 }
 
 .notes {
-  color: #CC0000;
   margin-left: 2em;
+}
+
+/* 強調させたい→赤*/
+.red {
+  color: #CC0000;
 }
 
 label {
