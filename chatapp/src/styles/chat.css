@@ -38,13 +38,57 @@
   margin-top: 8px;
 }
 
-.my-message {
-  font-weight: bold;
+/* 吹き出し(自分のメッセージ) */
+.my-message #messageContent{
+  /* font-weight: bold;
   color: #333333;
   background-color: #f0f0f0;
   border-radius: 10px;
   padding: 10px;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); */
+
+  display: inline-block;
+  position: relative; 
+  margin: 0 0 10px 0;
+  padding: 10px;
+  max-width: 800px;
+  border-radius: 12px;
+  background: #97ebac;
+}
+
+.my-message #messageContent::after{
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 3px; 
+  left: -19px;
+  border: 8px solid transparent;
+  border-right: 18px solid #97ebac;
+  -webkit-transform: rotate(35deg);
+  transform: rotate(35deg);
+}
+
+/* 吹き出し(他人のメッセージ) */
+.others-message #messageContent {
+  display: inline-block;
+  position: relative; 
+  margin: 0 0 10px 0;
+  padding: 10px;
+  max-width: 800px;
+  border-radius: 12px;
+  background: #edf1ee;
+}
+
+.others-message #messageContent::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 3px; 
+  left: -19px;
+  border: 8px solid transparent;
+  border-right: 18px solid #edf1ee;
+  -webkit-transform: rotate(35deg);
+  transform: rotate(35deg);
 }
 
 /* 表示順切り替えのチェックボックスが隣とくっつくので、仮の処理 */
@@ -80,4 +124,9 @@ label{
 .notes {
   color: #CC0000;
   margin-left: 2em;
+}
+
+label {
+  margin: 0 5px 0 0;
+  padding: 0 0 0 0;
 }
