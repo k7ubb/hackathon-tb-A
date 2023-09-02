@@ -125,3 +125,8 @@ label{
   color: #CC0000;
   margin-left: 2em;
 }
+
+label {
+  margin: 0 5px 0 0;
+  padding: 0 0 0 0;
+}

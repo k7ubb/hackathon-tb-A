@@ -206,10 +206,10 @@ const registerSocketEvent = () => {
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
       <div class="flex">
         <div>
-          <input type="radio" name="options" @click="onOptions('report_message')" checked>報告
-          <input type="radio" name="options" @click="onOptions('contact_message')">連絡
-          <input type="radio" name="options" @click="onOptions('consult_message')">相談
-          <input type="radio" name="options" @click="onOptions('confirm_message')">確認
+          <input type="radio" name="options" class="radiobutton" id="report" @click="onOptions('report_message')" checked><label for="report">報告</label>
+          <input type="radio" name="options" class="radiobutton" id="contact" @click="onOptions('contact_message')"><label for="contact">連絡</label>
+          <input type="radio" name="options" class="radiobutton" id="consult" @click="onOptions('consult_message')"><label for="consult">相談</label>
+          <input type="radio" name="options" class="radiobutton" id="confirm" @click="onOptions('confirm_message')"><label for="confirm">確認</label>
         </div>
         <div class="inputdate">
           <p class="consult-option" v-if="isConsultVisible"> 回答期限:<input type="datetime-local" step="300" v-model="valid_date"></p>
