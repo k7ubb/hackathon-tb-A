@@ -210,10 +210,10 @@ const registerSocketEvent = () => {
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
       <div class="flex">
         <div>
-          <input type="radio" name="options" @click="onOptions('report_message')" checked>報告
-          <input type="radio" name="options" @click="onOptions('contact_message')">連絡
-          <input type="radio" name="options" @click="onOptions('consult_message')">相談
-          <input type="radio" name="options" @click="onOptions('confirm_message')">確認
+          <input type="radio" name="options" class="radiobutton" id="report" @click="onOptions('report_message')" checked><label for="report">報告</label>
+          <input type="radio" name="options" class="radiobutton" id="contact" @click="onOptions('contact_message')"><label for="contact">連絡</label>
+          <input type="radio" name="options" class="radiobutton" id="consult" @click="onOptions('consult_message')"><label for="consult">相談</label>
+          <input type="radio" name="options" class="radiobutton" id="confirm" @click="onOptions('confirm_message')"><label for="confirm">確認</label>
         </div>
         <div class="inputdate">
           <p class="consult-option" v-if="isConsultVisible"> 回答期限:<input type="datetime-local" step="300" v-model="valid_date"></p>
@@ -246,7 +246,7 @@ const registerSocketEvent = () => {
                     <div class="optionIcon" v-else-if="chat.message_type==='consult_message'">相談</div>
                     <div class="optionIcon" v-else-if="chat.message_type==='confirm_message'">確認</div>
                   </div>
-                  <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName) }">
+                  <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName), 'others-message':  (chat.type === 'message' && chat.username !== userName)}">
                     <pre>{{ chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
                     <pre id="messageContent">{{ chat.message }}</pre>
                     <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
