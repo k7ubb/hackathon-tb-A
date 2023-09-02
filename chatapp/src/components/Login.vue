@@ -1,3 +1,4 @@
+
 <script setup>
 import { inject, ref } from "vue"
 import { useRouter } from "vue-router"
@@ -35,21 +36,49 @@ const onEnter = () => {
 </script>
 
 <template>
-  <div class="mx-auto my-5 px-4">
-    <h1 class="text-h3 font-weight-medium">Vue.js Chat サンプル</h1>
-    <div class="mt-10">
-      <p>ユーザー名</p>
-      <input type="text" v-model="userName" class="user-name-text" />
+  <div class="user-name-container">
+    <div class="mx-auto my-5 px-4">
+      <h1 class="text-h3 font-weight-medium">コミュニケーションラボ</h1>
+      <div class="mt-10">
+        <p>ユーザー名</p>
+        <input type="text" v-model="userName" class="user-name-text" />
+      </div>
+      <button type="button" @click="onEnter" class="button-normal">入室する</button>
     </div>
-    <button type="button" @click="onEnter" class="button-normal">入室する</button>
   </div>
 </template>
 
 <style scoped>
-.user-name-text {
-  width: 200px;
-  border: 1px solid #888;
-  margin-bottom: 16px;
-}
-</style>
+  .user-name-container {
+    border-radius: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* 画面の高さいっぱいに要素を配置 */
+    background-color: white;
+  }
 
+  .user-name-text {
+    border-radius: 10px;
+    width: 400px;
+    border: 1px solid #090909;
+    padding: 1em;
+    background-color: white;
+  }
+
+  input {
+    width: 100%; /* 幅を100%に変更 */
+    padding: 1em;
+    font: inherit;
+  }
+
+  button {
+    border-radius: 10px;
+    color: black;
+    background-color: blue;
+    padding: 1em;
+    width: 400px;
+    margin-top: 1em; /* ボタンの上側のマージンを追加 */
+  }
+</style>
