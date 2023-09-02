@@ -237,7 +237,7 @@ const registerSocketEvent = () => {
                     <div class="optionIcon" v-else-if="chat.message_type==='consult_message'">相談</div>
                     <div class="optionIcon" v-else-if="chat.message_type==='confirm_message'">確認</div>
                   </div>
-                  <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName) }">
+                  <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName), 'others-message':  (chat.type === 'message' && chat.username !== userName)}">
                     <pre>{{ chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
                     <pre id="messageContent">{{ chat.message }}</pre>
                     <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
