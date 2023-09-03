@@ -303,6 +303,8 @@ const registerSocketEvent = () => {
           </ul>
         </div>
       </div>
+      
+      <!-- メモと返信表示欄 -->
       <div class="memo-section">
         <div class="flex">
           <h3 @click="memoDisplayOn">メモ一覧</h3>
