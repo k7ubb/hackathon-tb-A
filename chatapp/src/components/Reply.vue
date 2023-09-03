@@ -34,11 +34,9 @@ const onPublishReply = () => {
     contentID: contentID.value, // 返信先ID
     username: userName.value,
     message: replyContent.value,
-    unixtime: Date.now()
   };
 
   socket.emit("publishReplyEvent", JSON.stringify(json_reply));
-  store.commit('addReply', json_reply);
 
   // Clear the input field
   replyContent.value = '';

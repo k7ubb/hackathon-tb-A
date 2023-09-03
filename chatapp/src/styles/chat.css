@@ -100,10 +100,29 @@ label{
 
 /* 投稿欄のアイコン */
 .optionIcon {
-  padding: 5px;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
   margin-right: 10px;
   border: 1px solid;
   border-radius: 50%;
+}
+
+.optionIcon.report::before{
+  content: "報告";
+}
+
+.optionIcon.contact::before{
+  content: "連絡";
+}
+
+.optionIcon.consult::before{
+  content: "相談";
+}
+
+.optionIcon.confirm::before{
+  content: "確認";
 }
 
 .display-by-function {

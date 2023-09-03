@@ -1,47 +1,43 @@
-let lastUser=null
-let connectedUsers = [];
+let lastUser = ""
+let chat_count = 0
+let connectedUsers = []
 
 export default (io, socket) => {
-  socket.emit("onlineUsers", JSON.stringify(connectedUsers));
+  socket.emit("onlineUsers", JSON.stringify(connectedUsers))
 
-  socket.on("enterEvent", (data) => {
-    const user = JSON.parse(data).username;
-    console.log(user)
-    if (!connectedUsers.includes(user)) {
-      connectedUsers.push(user);
-    }
-    console.log(connectedUsers)
-    io.sockets.emit("onlineUsers", JSON.stringify(connectedUsers));
+  for(let event of ["enterEvent", "exitEvent", "publishEvent", "publishReplyEvent"]){
+    socket.on(event, (data_json) => {
+      const data = JSON.parse(data_json)
+      const user = data.username
 
-    socket.broadcast.emit("enterEvent", data)
-  })
+      switch(event) {
+        case "enterEvent":
+          if (connectedUsers.includes(user)) {
+            socket.emit("error", "その名前は既に使われています。他の名前で入室してください")
+            return
+          }
+          connectedUsers.push(user);
+          break
 
-  socket.on("exitEvent", (data) => {
-    const user = JSON.parse(data).username;
-    const index = connectedUsers.indexOf(user);
-    if (index > -1) {
-      connectedUsers.splice(index, 1);
-    }
-    io.sockets.emit("onlineUsers", JSON.stringify(connectedUsers));
-    socket.broadcast.emit("exitEvent", data);
-  });
+        case "exitEvent":
+          connectedUsers = connectedUsers.filter((x) => x != user)
+          break
 
-  // 投稿メッセージを送信する
-  socket.on("publishEvent", (data) => {
-    const user = JSON.parse(data).username
+        case "publishEvent":
+          /* デバッグ用に連続投稿可能にしています */
+          if (0 && user === lastUser) {
+            socket.emit("error", "連続して投稿することはできません。")
+            return
+          }
+          lastUser = user
+          break
+      }
+      
+      io.sockets.emit("onlineUsers", JSON.stringify(connectedUsers))
 
-    if (user === lastUser ) {
-      socket.emit("error", "連続して投稿することはできません。");
-      lastUser = user
-      return;
-    }
-
-    lastUser = user
-    io.sockets.emit("publishEvent", data)
-  })
-
-  socket.on('publishReplyEvent', (data) => {
-    const newReply = JSON.parse(data);
-    io.emit('publishReplyEvent', JSON.stringify(newReply));
-  });
+      data.chatID = ++chat_count
+      data.unixtime = Date.now()
+      io.sockets.emit(event, JSON.stringify(data))
+    })
+  }
 }
