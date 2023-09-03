@@ -43,6 +43,7 @@ const isMemoDisplayOn = ref(false)
 // 返信表示欄
 const replyMessageName = ref('')
 const replyMessageID = ref('')
+const replyMessageContent = ref('')
 // #endregion
 
 
@@ -165,9 +166,10 @@ const onMemo = () => {
 }
 
 // 返信欄の表示→投稿欄の特定の投稿が押されたとき
-const replyDisplayOn = (contributor, chat_number) => {
+const replyDisplayOn = (contributor, chat_number, content) => {
   replyMessageName.value = contributor;
   replyMessageID.value = chat_number;
+  replyMessageContent.value = content
   isMemoDisplayOn.value = false;
 }
 
@@ -289,7 +291,7 @@ const registerSocketEvent = () => {
                   </div>
                   <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName), 'others-message':  (chat.type === 'message' && chat.username !== userName), 'mentioned': (chat.type === 'message' && chat.targetUser === userName)}">
                     <pre>{{chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
-                    <pre id="messageContent" @click="replyDisplayOn(chat.username, chat.chatID)">{{ chat.message }}</pre>
+                    <pre id="messageContent" @click="replyDisplayOn(chat.username, chat.chatID, chat.message)">{{ chat.message }}</pre>
                     <span v-if="chat.targetUser !== userName && chat.targetUser !== null"> ({{ chat.targetUser }}へメンションされています)</span>
                     <span v-else-if="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
                     <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
@@ -306,6 +308,7 @@ const registerSocketEvent = () => {
           <h3 @click="memoDisplayOn">メモ一覧</h3>
           <h3>返信</h3>
         </div>
+        <!-- メモ一覧 -->
         <div v-if="isMemoDisplayOn">
           <ul>
             <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
@@ -314,7 +317,10 @@ const registerSocketEvent = () => {
             </li>
           </ul>
         </div>
+        <!-- 返信の表示 -->
         <div v-else>
+          <pre>{{replyMessageName}}</pre>
+          <pre class="messageContent b-color">{{replyMessageContent}}</pre>
           <ul>
             <li v-for="(reply, i) in store.state.replyList" :key="i">
               <div v-if="reply.chatname===replyMessageName && reply.contentID===replyMessageID">
