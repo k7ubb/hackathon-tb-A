@@ -27,6 +27,7 @@ const memoList = reactive([])
 const lastPublishTime = ref(0)
 const show_order = ref(true)
 const chat_type = inject("chat_type")
+const chat_id = inject("chat_id")
 
 //連絡の機能で使用する変数
 const contactValidCharaLength = 100
@@ -35,6 +36,13 @@ const isContactVisible = ref(false)
 // 相談の機能で使用する変数
 const valid_date = ref(null)
 const isConsultVisible = ref(false)
+
+// 返信表示とメモ表示の切り替え
+const isMemoDisplayOn = ref(false)
+
+// 返信表示欄
+const replyMessageName = ref('')
+const replyMessageID = ref('')
 // #endregion
 
 
@@ -92,7 +100,10 @@ const onPublish = () => {
     valid_date.value = null
   }
 
+  chat_id.value += 1;
+
   const json_chat = {
+    chatID: chat_id.value,
     type: "message",
     message_type: chat_type.value,
     username: userName.value,
@@ -152,6 +163,17 @@ const onMemo = () => {
   chatContent.value = ''
 }
 
+// 返信欄の表示→投稿欄の特定の投稿が押されたとき
+const replyDisplayOn = (contributor, chat_number) => {
+  replyMessageName.value = contributor;
+  replyMessageID.value = chat_number;
+  isMemoDisplayOn.value = false;
+}
+
+const memoDisplayOn = () =>{
+  isMemoDisplayOn.value = true;
+}
+
 // 退室メッセージをサーバに送信する
 const onExit = () => {
   socket.emit("exitEvent", JSON.stringify({
@@ -183,6 +205,7 @@ const onReceivePublish = (data) => {
 const onReply = (chat) => {
   store.commit('setMessage', chat.message);
   store.commit('setUser', chat.username);
+  store.commit('setID', chat.chatID);
   router.push({ name: "reply", params:{chatId: chat.unixtime}})
 }
 
@@ -226,6 +249,7 @@ const registerSocketEvent = () => {
 </script>
 
 <template>
+  <!-- 投稿入力欄 -->
   <div class="mx-auto my-5 px-4">
     <h1 class="text-h3 font-weight-medium">報連相 チャットルーム</h1>
     <div class="'input-section mt-10'">
@@ -259,6 +283,8 @@ const registerSocketEvent = () => {
           <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
       </div>
     </div>
+
+    <!-- 投稿表示欄 -->
     <div class="chat-memo-container mt-10">
       <div class="chat-section">
         <div class="mt-5" v-if="store.state.chatList.length !== 0">
@@ -274,8 +300,8 @@ const registerSocketEvent = () => {
                     <div class="optionIcon" v-else-if="chat.message_type==='confirm_message'">確認</div>
                   </div>
                   <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName), 'others-message':  (chat.type === 'message' && chat.username !== userName)}">
-                    <pre>{{ chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
-                    <pre id="messageContent">{{ chat.message }}</pre>
+                    <pre>{{chat.chatID + chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
+                    <pre id="messageContent" @click="replyDisplayOn(chat.username, chat.chatID)">{{ chat.message }}</pre>
                     <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
 
                   </div>
@@ -287,13 +313,29 @@ const registerSocketEvent = () => {
         </div>
       </div>
       <div class="memo-section">
-        <h3>メモ一覧</h3>
-        <ul>
-          <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
-            <!-- memo を pre タグ内で表示 -->
-            <pre>{{ memo.message }}</pre>
-          </li>
-        </ul>
+        <div class="flex">
+          <h3 @click="memoDisplayOn">メモ一覧</h3>
+          <h3>返信</h3>
+        </div>
+        <div v-if="isMemoDisplayOn">
+          <ul>
+            <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
+              <!-- memo を pre タグ内で表示 -->
+              <pre>{{ memo.message }}</pre>
+            </li>
+          </ul>
+        </div>
+        <div v-else>
+          <ul>
+            <li v-for="(reply, i) in store.state.replyList" :key="i">
+              <div v-if="reply.chatname===replyMessageName && reply.contentID===replyMessageID">
+                <pre>username: {{reply.username}}</pre>
+                <pre>{{reply.message}}</pre>
+              </div>
+            </li>
+          </ul>
+        </div>
+
       </div>
     </div>
     <router-link to="/" class="link">

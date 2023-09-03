@@ -125,7 +125,6 @@ label{
   margin-left: 2em;
 }
 
-<<<<<<< Updated upstream
 /* 強調させたい→赤*/
 .red {
   color: #CC0000;
@@ -135,7 +134,6 @@ label {
   margin: 0 5px 0 0;
   padding: 0 0 0 0;
 }
-=======
 .my-username {
   font-weight: bold;
   color: blue;
@@ -146,4 +144,8 @@ label {
   justify-content: space-between; /* Adjust as needed */
   /* justify-content: flex-start; 左寄せにする */
 }
->>>>>>> Stashed changes
+
+
+.border-bottom{
+  border-bottom: 2px #0bd solid;
+}
