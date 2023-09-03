@@ -68,7 +68,6 @@ const registerSocketEvent = () => {
   <div class="mx-auto my-5 px-4">
     <h1 class="text-h3 font-weight-medium">返信</h1>
     <div class="input-section mt-10">
-      <!-- <p>{{store.state.replyList[1].contentID + " " + store.state.replyList[1].chatname}}</p> -->
       <p>Replying to: {{ message }}</p>
       <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
       <div class="mt-5">
@@ -80,7 +79,7 @@ const registerSocketEvent = () => {
       <ul>
         <li v-for="(reply, i) in store.state.replyList.filter(r => r.parentChatId === chatId).slice().reverse()" :key="i">
           <div></div>
-          <pre>{{reply.contentID + " " + reply.parentChatId + " " + reply.username + "さん " +"["+new Date(reply.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
+          <pre>{{reply.username + "さん " +"["+new Date(reply.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
           <pre>{{ reply.message }}</pre>
         </li>
       </ul>
