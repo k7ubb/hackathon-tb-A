@@ -42,7 +42,6 @@ export default (io, socket) => {
 
   socket.on('publishReplyEvent', (data) => {
     const newReply = JSON.parse(data);
-    // Broadcast the new reply to all connected clients
     io.emit('publishReplyEvent', JSON.stringify(newReply));
   });
 }

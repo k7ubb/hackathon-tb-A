@@ -22,7 +22,6 @@ const socket = io()
 
 // #region reactive variable
 const chatContent = inject("chatContent")
-const chatList = reactive([])
 const memoList = reactive([])
 
 const lastPublishTime = ref(0)
@@ -187,23 +186,6 @@ const onExit = () => {
 }
 // #endregion
 
-// #region socket event handler
-// サーバから受信した入室メッセージ画面上に表示する
-const onReceiveEnter = (data) => {
-  store.state.chatList.push(JSON.parse(data))
-}
-
-// サーバから受信した退室メッセージを受け取り画面上に表示する
-const onReceiveExit = (data) => {
-  store.state.chatList.push(JSON.parse(data))
-}
-
-// サーバから受信した投稿メッセージを画面上に表示する
-const onReceivePublish = (data) => {
-  store.state.chatList.push(JSON.parse(data))
-}
-// #endregion
-
 const onReply = (chat) => {
   store.commit('setMessage', chat.message);
   store.commit('setUser', chat.username);
@@ -232,6 +214,9 @@ const registerSocketEvent = () => {
 
   const handleError = (data) => {
     alert(data)
+    if (store.state.chatList.length > 0) {
+      store.state.chatList.pop();
+    }
   }
 
   socket.on("enterEvent", handleEnterEvent);
@@ -305,8 +290,8 @@ const registerSocketEvent = () => {
                   <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName), 'others-message':  (chat.type === 'message' && chat.username !== userName), 'mentioned': (chat.type === 'message' && chat.targetUser === userName)}">
                     <pre>{{chat.chatID + chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
                     <pre id="messageContent" @click="replyDisplayOn(chat.username, chat.chatID)">{{ chat.message }}</pre>
-                    <span v-if="chat.targetUser !== userName"> ({{ chat.targetUser }}へメンションされています)</span>
-                    <span v-else="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
+                    <span v-if="chat.targetUser !== userName && chat.targetUser !== null"> ({{ chat.targetUser }}へメンションされています)</span>
+                    <span v-else-if="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
                     <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
                   </div>
                 </div>
