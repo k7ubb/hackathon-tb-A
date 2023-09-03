@@ -288,7 +288,7 @@ const registerSocketEvent = () => {
                     <div class="optionIcon" v-else-if="chat.message_type==='confirm_message'">確認</div>
                   </div>
                   <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName), 'others-message':  (chat.type === 'message' && chat.username !== userName), 'mentioned': (chat.type === 'message' && chat.targetUser === userName)}">
-                    <pre>{{chat.chatID + chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
+                    <pre>{{chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
                     <pre id="messageContent" @click="replyDisplayOn(chat.username, chat.chatID)">{{ chat.message }}</pre>
                     <span v-if="chat.targetUser !== userName && chat.targetUser !== null"> ({{ chat.targetUser }}へメンションされています)</span>
                     <span v-else-if="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
