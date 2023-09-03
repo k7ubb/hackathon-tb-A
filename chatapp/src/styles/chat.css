@@ -48,7 +48,7 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); */
 
   display: inline-block;
-  position: relative; 
+  position: relative;
   margin: 0 0 10px 0;
   padding: 10px;
   max-width: 800px;
@@ -60,7 +60,7 @@
   content: "";
   display: inline-block;
   position: absolute;
-  top: 3px; 
+  top: 3px;
   left: -19px;
   border: 8px solid transparent;
   border-right: 18px solid #97ebac;
@@ -71,7 +71,7 @@
 /* 吹き出し(他人のメッセージ) */
 .others-message #messageContent {
   display: inline-block;
-  position: relative; 
+  position: relative;
   margin: 0 0 10px 0;
   padding: 10px;
   max-width: 800px;
@@ -83,7 +83,7 @@
   content: "";
   display: inline-block;
   position: absolute;
-  top: 3px; 
+  top: 3px;
   left: -19px;
   border: 8px solid transparent;
   border-right: 18px solid #edf1ee;
@@ -125,6 +125,7 @@ label{
   margin-left: 2em;
 }
 
+<<<<<<< Updated upstream
 /* 強調させたい→赤*/
 .red {
   color: #CC0000;
@@ -134,3 +135,15 @@ label {
   margin: 0 5px 0 0;
   padding: 0 0 0 0;
 }
+=======
+.my-username {
+  font-weight: bold;
+  color: blue;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between; /* Adjust as needed */
+  /* justify-content: flex-start; 左寄せにする */
+}
+>>>>>>> Stashed changes
