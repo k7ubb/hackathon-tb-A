@@ -180,3 +180,8 @@ label {
   -webkit-transform: rotate(35deg);
   transform: rotate(35deg);
 }
+
+p, select.select {
+  height: 40px;  /* または適切な高さ */
+  line-height: 40px;  /* テキストを垂直方向に中央揃え */
+}
