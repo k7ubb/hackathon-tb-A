@@ -269,8 +269,8 @@ const registerSocketEvent = () => {
       </div>
       <!-- Enter キーが押されたときに投稿可能 -->
       <!-- オンラインユーザーの表示 -->
-      <div class="online-users">
-        <h3>メンションするオンラインユーザー</h3>
+      <div class="online-users flex">
+        <p>メンションするオンラインユーザー</p>
         <select v-model="selectedUser" class="select">
           <option disabled value="">選択してください</option>
           <option v-for="user in store.state.onlineUsers" :key="user" :value="user">
