@@ -149,3 +149,34 @@ label {
 .border-bottom{
   border-bottom: 2px #0bd solid;
 }
+
+.select {
+  width: 200px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  appearance: none;
+  background-color: #f9f9f9;
+}
+
+.mentioned #messageContent{
+  display: inline-block;
+  position: relative;
+  margin: 0 0 10px 0;
+  padding: 10px;
+  max-width: 800px;
+  border-radius: 12px;
+  background: #ddff00;
+}
+
+.mentioned #messageContent::after{
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 3px;
+  left: -19px;
+  border: 8px solid transparent;
+  border-right: 18px solid #ddff00;
+  -webkit-transform: rotate(35deg);
+  transform: rotate(35deg);
+}

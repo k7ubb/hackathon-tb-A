@@ -8,10 +8,11 @@ import "../styles/chat.css"
 // constants
 const publishInterval = 5
 const validCharaLength = 300 // 文字数制限
-
+const lastUser = ref(null)
 // #region global state
 const userName = inject("userName")
 // #endregion
+const selectedUser = ref(null)
 
 // #region local variable
 const router = useRouter()
@@ -109,7 +110,8 @@ const onPublish = () => {
     username: userName.value,
     message: chatContent.value,
     unixtime: Date.now(),
-    valid_date: valid_date.value
+    valid_date: valid_date.value,
+    targetUser: selectedUser.value,  // 選択されたユーザー
   }
 
   socket.emit("publishEvent", JSON.stringify(json_chat));
@@ -254,15 +256,7 @@ const registerSocketEvent = () => {
     <h1 class="text-h3 font-weight-medium">報連相 チャットルーム</h1>
     <div class="'input-section mt-10'">
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
-      <!-- オンラインユーザーの表示 -->
-        <div class="online-users">
-          <h3>オンラインユーザー</h3>
-          <ul>
-            <li v-for="user in store.state.onlineUsers" :key="user">
-              {{ user }}
-            </li>
-          </ul>
-        </div>
+
       <div class="flex">
         <div>
           <input type="radio" name="options" class="radiobutton" id="report" @click="onOptions('report_message')" checked><label for="report">報告</label>
@@ -274,7 +268,16 @@ const registerSocketEvent = () => {
         <div class="display-by-function contact-option" :class="{ 'red': (chatContent.length>contactValidCharaLength)}" v-else-if="isContactVisible">文字数：{{chatContent.length}}/{{contactValidCharaLength}}</div>
       </div>
       <!-- Enter キーが押されたときに投稿可能 -->
-
+      <!-- オンラインユーザーの表示 -->
+      <div class="online-users">
+        <h3>メンションするオンラインユーザー</h3>
+        <select v-model="selectedUser" class="select">
+          <option disabled value="">選択してください</option>
+          <option v-for="user in store.state.onlineUsers" :key="user" :value="user">
+            {{ user }}
+          </option>
+        </select>
+      </div>
       <textarea @keydown.enter.exact="onPublish" variant="outlined" placeholder="投稿文を入力してください " v-model="chatContent" rows="4" class="area"></textarea>
 
       <div class="mt-5">
@@ -299,15 +302,16 @@ const registerSocketEvent = () => {
                     <div class="optionIcon" v-else-if="chat.message_type==='consult_message'">相談</div>
                     <div class="optionIcon" v-else-if="chat.message_type==='confirm_message'">確認</div>
                   </div>
-                  <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName), 'others-message':  (chat.type === 'message' && chat.username !== userName)}">
+                  <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName), 'others-message':  (chat.type === 'message' && chat.username !== userName), 'mentioned': (chat.type === 'message' && chat.targetUser === userName)}">
                     <pre>{{chat.chatID + chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
                     <pre id="messageContent" @click="replyDisplayOn(chat.username, chat.chatID)">{{ chat.message }}</pre>
+                    <span v-if="chat.targetUser !== userName"> ({{ chat.targetUser }}へメンションされています)</span>
+                    <span v-else="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
                     <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
-
                   </div>
                 </div>
               </div>
-              <pre class="{ chat.type }"  v-else>{{ chat.message }}</pre>
+                <pre class="{ chat.type }"  v-else>{{ chat.message }}</pre>
             </li>
           </ul>
         </div>
