@@ -15,6 +15,7 @@ const chatId = route.params.chatId;
 // const message = route.params.message;
 const message = computed(() => store.state.message);
 const user = computed(() => store.state.user);
+const contentID = computed(() => store.state.chatID);
 
 const replyContent = ref('');
 
@@ -29,6 +30,8 @@ const onPublishReply = () => {
   const json_reply = {
     type: "reply",
     parentChatId: chatId,
+    chatname: user.value, // 返信先指名
+    contentID: contentID.value, // 返信先ID
     username: userName.value,
     message: replyContent.value,
     unixtime: Date.now()
@@ -65,6 +68,7 @@ const registerSocketEvent = () => {
   <div class="mx-auto my-5 px-4">
     <h1 class="text-h3 font-weight-medium">返信</h1>
     <div class="input-section mt-10">
+      <!-- <p>{{store.state.replyList[1].contentID + " " + store.state.replyList[1].chatname}}</p> -->
       <p>Replying to: {{ message }}</p>
       <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
       <div class="mt-5">
@@ -75,7 +79,8 @@ const registerSocketEvent = () => {
       <h3>返信</h3>
       <ul>
         <li v-for="(reply, i) in store.state.replyList.filter(r => r.parentChatId === chatId).slice().reverse()" :key="i">
-          <pre>{{ reply.username + "さん " +"["+new Date(reply.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
+          <div></div>
+          <pre>{{reply.contentID + " " + reply.parentChatId + " " + reply.username + "さん " +"["+new Date(reply.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
           <pre>{{ reply.message }}</pre>
         </li>
       </ul>

@@ -4,6 +4,7 @@ export default createStore({
   state: {
     message: null,
     user: null,
+    chatID: null,
     chatList: [],
     memoList: [],
     replyList: [],  // Initialize as an empty array
@@ -24,6 +25,9 @@ export default createStore({
     },
     setOnlineUsers(state, users) {
       state.onlineUsers = users;
+    },
+    setID(state, chatID){
+      state.chatID = chatID;
     },
     addChat(state, chat) {
     if (!state.chatList.some(existingChat => existingChat.unixtime === chat.unixtime)) {
