@@ -25,10 +25,17 @@ const onEnter = () => {
     alert("ユーザー名を入力してください。")
     return
   }
+
+  const data = {
+    type: "enter_message",
+    username: userName.value,
+    message: userName.value + "さんが入室しました",
+    unixtime: Date.now()
+  };
   // 入室メッセージを送信
-  socket.emit("enterEvent", userName.value+"さんが入室しました。")
+  // socket.emit("enterEvent", userName.value+"さんが入室しました。")
   // 全体で使用するnameに入力されたユーザー名を格納
-  
+  socket.emit("enterEvent", JSON.stringify(data));
   // チャット画面へ遷移
   router.push({ name: "chat" })
 }
@@ -82,3 +89,4 @@ const onEnter = () => {
     margin-top: 1em; /* ボタンの上側のマージンを追加 */
   }
 </style>
+

@@ -6,12 +6,14 @@ export default createStore({
     user: null,
     chatList: [],
     memoList: [],
-    replyList: []  // Initialize as an empty array
+    replyList: [],  // Initialize as an empty array
+    onlineUsers: []
   },
   getters: {
     getChatList: state => state.chatList,
     getMemoList: state => state.memoList,
-    getReplyList: state => state.replyList  // Add a getter for replyList
+    getReplyList: state => state.replyList,  // Add a getter for replyList
+    getonlineUsers: state => state.onlineUsers
   },
   mutations: {
     setMessage(state, message) {
@@ -19,6 +21,9 @@ export default createStore({
     },
     setUser(state, user){
       state.user = user;
+    },
+    setOnlineUsers(state, users) {
+      state.onlineUsers = users;
     },
     addChat(state, chat) {
     if (!state.chatList.some(existingChat => existingChat.unixtime === chat.unixtime)) {

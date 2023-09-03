@@ -105,12 +105,10 @@ const onPublish = () => {
   store.commit('addChat', json_chat);
 
   lastPublishTime.value = currentTime
- 
+
   // 入力欄を初期化
   chatContent.value = ''
   onOptions("report_message");
-
-  
 
 }
 
@@ -203,14 +201,25 @@ const registerSocketEvent = () => {
     store.commit('addChat', JSON.parse(data));
   };
 
+  const handleOnlineUsers = (data) => {
+    store.commit('setOnlineUsers', JSON.parse(data));
+  };
+
+  const handleError = (data) => {
+    alert(data)
+  }
+
   socket.on("enterEvent", handleEnterEvent);
   socket.on("exitEvent", handleExitEvent);
   socket.on("publishEvent", handlePublishEvent);
+  socket.on("error", handleError)
+  socket.on("onlineUsers", handleOnlineUsers);
 
   onUnmounted(() => {
     socket.off("enterEvent", handleEnterEvent);
     socket.off("exitEvent", handleExitEvent);
     socket.off("publishEvent", handlePublishEvent);
+    socket.off("onlineUsers", handleOnlineUsers);
   });
 };
 // #endregion
@@ -221,6 +230,15 @@ const registerSocketEvent = () => {
     <h1 class="text-h3 font-weight-medium">報連相 チャットルーム</h1>
     <div class="'input-section mt-10'">
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
+      <!-- オンラインユーザーの表示 -->
+        <div class="online-users">
+          <h3>オンラインユーザー</h3>
+          <ul>
+            <li v-for="user in store.state.onlineUsers" :key="user">
+              {{ user }}
+            </li>
+          </ul>
+        </div>
       <div class="flex">
         <div>
           <input type="radio" name="options" class="radiobutton" id="report" @click="onOptions('report_message')" checked><label for="report">報告</label>
@@ -258,7 +276,7 @@ const registerSocketEvent = () => {
                   <div class="item2"  :class="{ 'my-message': (chat.type === 'message' && chat.username === userName), 'others-message':  (chat.type === 'message' && chat.username !== userName)}">
                     <pre>{{ chat.username + "さん " +"["+new Date(chat.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
                     <pre id="messageContent">{{ chat.message }}</pre>
-                    <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option red notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
+                    <pre><button class="button-normal" @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.valid_date!=null">{{ "※回答期限："+chat.valid_date }}</span></pre>
 
                   </div>
                 </div>
