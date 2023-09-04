@@ -38,11 +38,13 @@
   margin-top: 8px;
 }
 
+
+/* 投稿表示欄 */
+
 /* (自分のメッセージ) */
 .my-message .messageContent{
   background: #97ebac;
 }
-
 .my-message .messageContent::after{
   border-right: 18px solid #97ebac;
 }
@@ -51,7 +53,6 @@
 .others-message .messageContent {
   background: #edf1ee;
 }
-
 .others-message .messageContent::after {
   border-right: 18px solid #edf1ee;
 }
@@ -88,10 +89,10 @@ label{
 }
 
 /* ホバー時の効果も見やすいものに調整 */
-.my-message:hover {
+/* .my-message:hover {
   background-color: #e0e0e0;
   transform: scale(1.05);
-}
+} */
 
 /* 横並び用 */
 .flex {
@@ -194,4 +195,9 @@ label {
 p, select.select {
   height: 40px;  /* または適切な高さ */
   line-height: 40px;  /* テキストを垂直方向に中央揃え */
+}
+
+/* 名前表示欄 */
+.user-name {
+  font-size: 3px;
 }

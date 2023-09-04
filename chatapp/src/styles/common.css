@@ -9,3 +9,7 @@ body {
   padding: 4px;
   /* white-space: pre-wrap;  */
 }
+
+.button-normal:hover{
+  background-color: azure;
+}

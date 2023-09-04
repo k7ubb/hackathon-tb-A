@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, reactive, onMounted, onUnmounted } from "vue"
+import { inject, ref, reactive, onMounted, onUnmounted, computed } from "vue"
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import io from "socket.io-client"
@@ -32,6 +32,23 @@ const isReplyShow = ref(false)      // 返信・メモ表示切替
 const replyMessageName = ref('')
 const replyMessageID = ref('')
 const replyMessageContent = ref('')
+
+const replyContent = ref('');
+
+const onPublishReply = () => {
+  const json_reply = {
+    type: "reply",
+    chatname: replyMessageName.value, // 返信先指名
+    contentID: replyMessageID.value, // 返信先ID
+    username: userName.value, // 自分の名前
+    message: replyContent.value,
+  };
+
+  socket.emit("publishReplyEvent", JSON.stringify(json_reply));
+
+  // Clear the input field
+  replyContent.value = '';
+};
 
 // #region lifecycle
 onMounted(() => {
@@ -165,17 +182,27 @@ const registerSocketEvent = () => {
     }
   }
 
+  const handlePublishReplyEvent = (data) => {
+    const newReply = JSON.parse(data);
+    store.commit('addReply', newReply);
+    // if (newReply.parentChatId === chat.unixtime) {
+    //   store.commit('addReply', newReply);
+    // }
+  };
+
   socket.on("enterEvent", handleEnterEvent)
   socket.on("exitEvent", handleExitEvent)
   socket.on("publishEvent", handlePublishEvent)
   socket.on("error", handleError)
   socket.on("onlineUsers", handleOnlineUsers)
+  socket.on("publishReplyEvent", handlePublishReplyEvent);
 
   onUnmounted(() => {
     socket.off("enterEvent", handleEnterEvent)
     socket.off("exitEvent", handleExitEvent)
     socket.off("publishEvent", handlePublishEvent)
     socket.off("onlineUsers", handleOnlineUsers)
+    socket.off("publishReplyEvent", handlePublishReplyEvent);
   })
 }
 // #endregion
@@ -229,7 +256,7 @@ const registerSocketEvent = () => {
                 <div class="flex">
                   <div class="optionIcon" :class="chat.message_type"></div>
                   <div :class="{ 'my-message': (chat.type === 'message' && chat.username === userName), 'others-message':  (chat.type === 'message' && chat.username !== userName), 'mentioned': (chat.type === 'message' && chat.targetUser === userName)}">
-                    <pre>{{`${chat.username}さん [${new Date(chat.unixtime).toLocaleString("jp-JP")}]` }}</pre>
+                    <pre class="user-name">{{`${chat.username}さん [${new Date(chat.unixtime).toLocaleString("jp-JP")}]` }}</pre>
                     <pre class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)">{{ chat.message }}</pre>
                     <span v-if="chat.targetUser !== userName && chat.targetUser !== null"> ({{ chat.targetUser }}へメンションされています)</span>
                     <span v-else-if="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
@@ -261,13 +288,21 @@ const registerSocketEvent = () => {
         <div class="flex">
           <button class="button-normal" @click="isReplyShow=false">メモ一覧を表示</button>
         </div>
+
         <div>
-          <pre>{{replyMessageName}}</pre>
+          <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
+          <div class="mt-5">
+            <button class="button-normal" @click="onPublishReply">返信</button>
+          </div>
+        </div>
+
+        <div>
+          <pre class="user-name">{{replyMessageName}}</pre>
           <pre class="messageContent b-color">{{replyMessageContent}}</pre>
           <ul>
-            <li v-for="(reply, i) in store.state.replyList" :key="i">
+            <li v-for="(reply, i) in store.state.replyList.slice().reverse()" :key="i" >
               <div v-if="reply.chatname===replyMessageName && reply.contentID===replyMessageID">
-                <pre>username: {{reply.username}}</pre>
+                <pre class="user-name">{{reply.username}}</pre>
                 <pre>{{reply.message}}</pre>
               </div>
             </li>
