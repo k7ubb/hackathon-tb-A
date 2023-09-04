@@ -24,8 +24,7 @@ export default (io, socket) => {
           break
 
         case "publishEvent":
-          /* デバッグ用に連続投稿可能にしています */
-          if (0 && user === lastUser) {
+          if (user === lastUser) {
             socket.emit("error", "連続して投稿することはできません。")
             return
           }

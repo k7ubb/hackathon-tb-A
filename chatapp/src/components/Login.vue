@@ -42,8 +42,7 @@ const onEnter = () => {
 }
 
 // #regin debug
-userName.value = "test" + Math.floor(Math.random()*100)
-//onEnter()
+//userName.value = "test" + Math.floor(Math.random()*100)
 // #endregion
 </script>
 
