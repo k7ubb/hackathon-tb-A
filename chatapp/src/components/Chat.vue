@@ -132,10 +132,9 @@ const onExit = () => {
 // #endregion
 
 const onReply = (chat) => {
-/*  store.commit('setMessage', chat.message)
+  store.commit('setMessage', chat.message)
   store.commit('setUser', chat.username)
   store.commit('setID', chat.chatID)
-*/
   router.push({ name: "reply", params:{chatId: chat.unixtime}})
 }
 
