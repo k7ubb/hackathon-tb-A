@@ -169,7 +169,7 @@ label {
   background-color: #f9f9f9;
 }
 
-.mentioned #messageContent{
+.mentioned .messageContent{
   display: inline-block;
   position: relative;
   margin: 0 0 10px 0;
@@ -179,7 +179,7 @@ label {
   background: #ddff00;
 }
 
-.mentioned #messageContent::after{
+.mentioned .messageContent::after{
   content: "";
   display: inline-block;
   position: absolute;
