@@ -87,11 +87,12 @@ textarea {
   content: "確認";
 }
 
-li{
+.chat li{
   overflow: hidden;
   margin-bottom: 32px;
 }
-.message{
+
+.chat .message{
   float: left;
   width: calc(100% - 60px);
 }
@@ -138,6 +139,14 @@ li{
 
 .message.others .messageContent::after {
   border-right: 18px solid #edf1ee;
+}
+
+.message.mentioned .messageContent {
+  background: #D8FF00;
+}
+
+.message.mentioned .messageContent::after {
+  border-right: 18px solid #D8FF00;
 }
 
 .notes {
