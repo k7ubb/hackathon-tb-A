@@ -19,13 +19,11 @@
     color:white;
   }
 
-  .login h1+div{
-    width: 400px;
-    margin: 0 auto;
-  }
   .login input[type="text"] {
     border-radius: 10px;
     width: 400px;
+    display: block;
+    margin: 0 auto;
     border: 1px solid #090909;
     padding: 1em;
     background-color: white;
