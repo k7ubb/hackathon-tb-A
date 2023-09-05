@@ -19,9 +19,18 @@ const inputUserName = ref("")
 // #endregion
 
 // #region local methods
-socket.on("error", (data) => {
-  alert(data)
-  router.push({ name: "login" })
+socket.on("login_deny", () => {
+  alert("このユーザ名はすでに使われています。")
+})
+
+socket.on("login_arrow", () => {
+  socket.emit("enterEvent", JSON.stringify({
+    type: "enter_message",
+    username: userName.value,
+    message: userName.value + "さんが入室しました",
+    unixtime: Date.now()
+  }))
+  router.push({ name: "chat" })
 })
 // #endregion
 
@@ -38,13 +47,7 @@ const onEnter = () => {
     return
   }
 
-  socket.emit("enterEvent", JSON.stringify({
-    type: "enter_message",
-    username: userName.value,
-    message: userName.value + "さんが入室しました",
-    unixtime: Date.now()
-  }))
-  router.push({ name: "chat" })
+  socket.emit("tryEnter", userName.value)
 }
 
 
@@ -58,10 +61,7 @@ const onEnter = () => {
   <div class="login">
     <div>
       <h1>コミュニケーションラボ</h1>
-      <div>
-        <p>ユーザー名</p>
-        <input type="text" v-model="userName" />
-      </div>
+      <input type="text" v-model="userName" />
       <button @click="onEnter">入室する</button>
     </div>
   </div>

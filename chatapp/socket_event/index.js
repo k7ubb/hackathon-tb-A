@@ -5,6 +5,11 @@ let connectedUsers = []
 export default (io, socket) => {
   socket.emit("onlineUsers", JSON.stringify(connectedUsers))
 
+  // ログイン前に、usernameが使用可能か確認する
+  socket.on("tryEnter", (username) =>{
+    socket.emit(connectedUsers.includes(username)? "login_deny" : "login_arrow")
+  })
+
   for(let event of ["enterEvent", "exitEvent", "publishEvent", "publishReplyEvent"]){
     socket.on(event, (data_json) => {
       const data = JSON.parse(data_json)
