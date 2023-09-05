@@ -34,6 +34,25 @@ const replyMessageID = ref('')
 const replyMessageContent = ref('')
 
 const replyContent = ref('');
+// const filteredReplyList = inject("filteringReplyList");
+
+const filteredReplyList = reactive([]);
+
+const filteringReplyList = () => {
+  filteredReplyList.splice(0);
+  store.state.replyList.forEach(currentValue => {
+    // alert(currentValue.chatname+"\n"+replyMessageName.value +"\n"+ currentValue.contentID+"\n"+replyMessageID.value)
+    if(currentValue.chatname===replyMessageName.value && currentValue.contentID===replyMessageID.value){
+      filteredReplyList.push({
+        username: currentValue.username,
+        replycontent: currentValue.message
+      })
+    }
+  });
+  // alert(filteredReplyList.username)
+
+
+}
 
 const onPublishReply = () => {
   const json_reply = {
@@ -136,6 +155,7 @@ const showReply = (contributor, chat_number, content) => {
   replyMessageID.value = chat_number
   replyMessageContent.value = content
   isReplyShow.value = true
+  filteringReplyList();
 }
 
 // 退室メッセージをサーバに送信する
@@ -188,6 +208,7 @@ const registerSocketEvent = () => {
     // if (newReply.parentChatId === chat.unixtime) {
     //   store.commit('addReply', newReply);
     // }
+   filteringReplyList();
   };
 
   socket.on("enterEvent", handleEnterEvent)
@@ -300,13 +321,12 @@ const registerSocketEvent = () => {
           <pre class="user-name">{{replyMessageName}}</pre>
           <pre class="messageContent b-color">{{replyMessageContent}}</pre>
           <ul>
-            <li v-for="(reply, i) in store.state.replyList.slice().reverse()" :key="i" >
-              <div v-if="reply.chatname===replyMessageName && reply.contentID===replyMessageID">
-                <pre class="user-name">{{reply.username}}</pre>
-                <pre>{{reply.message}}</pre>
-              </div>
+            <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
+              <div class="user-name">{{reply.username}}</div>
+              <div>{{reply.replycontent}}</div>
             </li>
           </ul>
+          <div class="border-bottom"></div>
         </div>
 
       </div>
