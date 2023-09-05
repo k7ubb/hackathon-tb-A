@@ -34,6 +34,42 @@ const replyMessageName = ref('')
 const replyMessageID = ref('')
 const replyMessageContent = ref('')
 
+const replyContent = ref('');
+// const filteredReplyList = inject("filteringReplyList");
+
+const filteredReplyList = reactive([]);
+
+const filteringReplyList = () => {
+  filteredReplyList.splice(0);
+  store.state.replyList.forEach(currentValue => {
+    // alert(currentValue.chatname+"\n"+replyMessageName.value +"\n"+ currentValue.contentID+"\n"+replyMessageID.value)
+    if(currentValue.chatname===replyMessageName.value && currentValue.contentID===replyMessageID.value){
+      filteredReplyList.push({
+        username: currentValue.username,
+        replycontent: currentValue.message
+      })
+    }
+  });
+  // alert(filteredReplyList.username)
+
+
+}
+
+const onPublishReply = () => {
+  const json_reply = {
+    type: "reply",
+    chatname: replyMessageName.value, // 返信先指名
+    contentID: replyMessageID.value, // 返信先ID
+    username: userName.value, // 自分の名前
+    message: replyContent.value,
+  };
+
+  socket.emit("publishReplyEvent", JSON.stringify(json_reply));
+
+  // Clear the input field
+  replyContent.value = '';
+};
+
 // #region lifecycle
 onMounted(() => {
   registerSocketEvent()
@@ -132,6 +168,7 @@ const showReply = (contributor, chat_number, content) => {
   replyMessageID.value = chat_number
   replyMessageContent.value = content
   isReplyShow.value = true
+  filteringReplyList();
 }
 
 // 退室メッセージをサーバに送信する
@@ -178,17 +215,28 @@ const registerSocketEvent = () => {
     }
   }
 
+  const handlePublishReplyEvent = (data) => {
+    const newReply = JSON.parse(data);
+    store.commit('addReply', newReply);
+    // if (newReply.parentChatId === chat.unixtime) {
+    //   store.commit('addReply', newReply);
+    // }
+   filteringReplyList();
+  };
+  
   socket.on("enterEvent", handleEnterEvent)
   socket.on("exitEvent", handleExitEvent)
   socket.on("publishEvent", handlePublishEvent)
   socket.on("error", handleError)
   socket.on("onlineUsers", handleOnlineUsers)
+  socket.on("publishReplyEvent", handlePublishReplyEvent);
 
   onUnmounted(() => {
     socket.off("enterEvent", handleEnterEvent)
     socket.off("exitEvent", handleExitEvent)
     socket.off("publishEvent", handlePublishEvent)
     socket.off("onlineUsers", handleOnlineUsers)
+    socket.off("publishReplyEvent", handlePublishReplyEvent);
   })
 }
 // #endregion
@@ -262,14 +310,18 @@ const registerSocketEvent = () => {
       <div class="memo reply" v-if="isReplyShow">
         <button @click="isReplyShow=false">メモ一覧を表示</button>
         <div>
+          <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
+          <div class="mt-5">
+            <button class="button-normal" @click="onPublishReply">返信</button>
+          </div>
+        </div>
+        <div>
           <pre>{{replyMessageName}}</pre>
           <pre class="messageContent">{{replyMessageContent}}</pre>
           <ul>
-            <li v-for="(reply, i) in store.state.replyList" :key="i">
-              <div v-if="reply.chatname===replyMessageName && reply.contentID===replyMessageID">
-                <pre>username: {{reply.username}}</pre>
-                <pre>{{reply.message}}</pre>
-              </div>
+            <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
+              <div class="user-name">{{reply.username}}</div>
+              <div>{{reply.replycontent}}</div>
             </li>
           </ul>
         </div>
