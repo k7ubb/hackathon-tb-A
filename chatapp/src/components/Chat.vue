@@ -239,6 +239,10 @@ const registerSocketEvent = () => {
     socket.off("publishReplyEvent", handlePublishReplyEvent);
   })
 }
+
+addEventListener("close", () => {
+  onExit()
+})
 // #endregion
 </script>
 
