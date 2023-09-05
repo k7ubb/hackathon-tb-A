@@ -28,8 +28,13 @@ socket.on("error", (data) => {
 // #region browser event handler
 // 入室メッセージをクライアントに送信する
 const onEnter = () => {
+  
   if(userName.value === ""){
     alert("ユーザー名を入力してください。")
+    return
+  }
+  if(userName.value.length>20){
+    alert("20文字以内で入力してください。")
     return
   }
 
@@ -41,6 +46,8 @@ const onEnter = () => {
   }))
   router.push({ name: "chat" })
 }
+
+
 
 // #regin debug
 //userName.value = "test" + Math.floor(Math.random()*100)
@@ -59,3 +66,5 @@ const onEnter = () => {
     </div>
   </div>
 </template>
+
+
