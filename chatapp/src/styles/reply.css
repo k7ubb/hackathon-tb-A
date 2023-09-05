@@ -1,9 +1,5 @@
 @media screen and (min-width:481px) {
-  .chat {
-    margin: 16px;
-  }
-  
-  .chat button{
+  .reply button{
     margin-right: 8px;
     padding: 4px;
     border: 1px solid #999 !important;
@@ -11,30 +7,30 @@
     background: #eeeeee !important;
   }
 
-  .chat .login-user {
+  .reply .login-user {
     margin-top: 20px;
   }
 
-  .chat .post-info {
+  .reply .post-info {
     overflow: hidden;
   }
 
-  .chat .post-info form {
+  .reply .post-info form {
     float: left;
     margin-right: 32px;
   }
 
-  .chat .post-info .length-count {
+  .reply .post-info .length-count {
     float: left;
     margin-right: 32px;
   }
 
-  .chat .post-info .consult-timelimit {
+  .reply .post-info .consult-timelimit {
     float: left;
     margin-right: 32px;
   }
 
-  .chat .online-users select{
+  .reply .online-users select{
     width: 200px;
     height: 30px;
     line-height: 30px;
@@ -53,55 +49,56 @@
     border-radius: 8px;
   }
 
-  .chat .chat-container{
+  .reply .chat-container{
     display: flex;
     margin-top: 32px;
     justify-content: space-between; /* 両コンテンツの間にスペースを追加 */
   }
 
-  .chat .chat-area{
+  .reply .chat{
     width: 70%; /* チャット画面の幅を設定 */
     overflow: auto; /* 必要に応じてスクロールを有効にする */
   }
 
-  .chat .optionIcon {
+  .reply .* 投稿欄のアイコン */
+  .optionIcon {
     float: left;
     width: 50px;
     height: 40px;
     text-align: center;
     line-height: 40px;
     margin-right: 10px;
-    border: 1px solid #000 !important;
+    border: 1px solid;
     border-radius: 50%;
   }
 
-  .chat .optionIcon.report::before{
+  .reply .optionIcon.report::before{
     content: "報告";
   }
 
-  .chat .optionIcon.contact::before{
+  .reply .optionIcon.contact::before{
     content: "連絡";
   }
 
-  .chat .optionIcon.consult::before{
+  .reply .optionIcon.consult::before{
     content: "相談";
   }
 
-  .chat .optionIcon.confirm::before{
+  .reply .optionIcon.confirm::before{
     content: "確認";
   }
 
-  .chat .chat-area li{
+  .reply .chat li{
     overflow: hidden;
     margin-bottom: 32px;
   }
 
-  .chat .chat-area .message{
+  .reply .chat .message{
     float: left;
     width: calc(100% - 60px);
   }
 
-  .chat .messageContent{
+  .reply .messageContent{
     display: inline-block;
     position: relative;
     margin: 0 0 10px 0;
@@ -110,7 +107,7 @@
     border-radius: 12px;
   }
 
-  .chat .messageContent::after{
+  .reply .messageContent::after{
     content: "";
     display: inline-block;
     position: absolute;
@@ -121,7 +118,7 @@
     transform: rotate(35deg);
   }
 
-  .chat .enter_message, .leave_message{
+  .reply .enter_message, .leave_message{
     padding: 10px;
     margin-left: 50px;
     width: 200px;
@@ -129,40 +126,40 @@
     border-radius: 12px;
   }
 
-  .chat .message.mine .messageContent{
+  .reply .message.mine .messageContent{
     background: #97ebac;
   }
 
-  .chat .message.mine .messageContent::after{
+  .reply .message.mine .messageContent::after{
     border-right: 18px solid #97ebac;
   }
 
-  .chat .message.others .messageContent {
+  .reply .message.others .messageContent {
     background: #edf1ee;
   }
 
-  .chat .message.others .messageContent::after {
+  .reply .message.others .messageContent::after {
     border-right: 18px solid #edf1ee;
   }
 
-  .chat .message.mentioned .messageContent {
+  .reply .message.mentioned .messageContent {
     background: #D8FF00;
   }
 
-  .chat .message.mentioned .messageContent::after {
+  .reply .message.mentioned .messageContent::after {
     border-right: 18px solid #D8FF00;
   }
 
-  .chat .notes {
+  .reply .notes {
     margin-left: 2em;
   }
 
-  .chat .my-username {
+  .reply .my-username {
     font-weight: bold;
     color: blue;
   }
 
-  .chat .mentioned .messageContent{
+  .reply .mentioned .messageContent{
     display: inline-block;
     position: relative;
     margin: 0 0 10px 0;
@@ -172,7 +169,7 @@
     background: #ddff00;
   }
 
-  .chat .mentioned .messageContent::after{
+  .reply .mentioned .messageContent::after{
     content: "";
     display: inline-block;
     position: absolute;
@@ -184,25 +181,29 @@
     transform: rotate(35deg);
   }
 
-  .chat .memo{
+  .reply .memo{
     width: 30%; /* メモ画面の幅を設定 */
     overflow: auto; /* 必要に応じてスクロールを有効にする */
     margin-left: 10px; /* チャット欄とメモ欄の間にマージンを追加 */
   }
 
-  .chat .memo.reply{
+  .reply .memo.reply{
     margin: -8px;
     padding: 8px;
     border-radius: 16px;
     background: #eee;
   }
 
-  .chat .memo.reply .messageContent{
+  .reply .memo.reply .messageContent{
     background: #97ebac;
   }
 
-  .chat .memo.reply .messageContent::after{
+  .reply .memo.reply .messageContent::after{
     border-right: 18px solid #97ebac;
   }
 
+  .reply .button-exit {
+    color: #000;
+    margin-top: 8px;
+  }
 }

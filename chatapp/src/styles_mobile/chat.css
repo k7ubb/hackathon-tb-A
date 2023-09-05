@@ -1,8 +1,8 @@
-@media screen and (min-width:481px) {
+@media screen and (max-width:480px) {
   .chat {
     margin: 16px;
   }
-  
+
   .chat button{
     margin-right: 8px;
     padding: 4px;
@@ -205,4 +205,8 @@
     border-right: 18px solid #97ebac;
   }
 
+  .chat .button-exit {
+    color: #000;
+    margin-top: 8px;
+  }
 }

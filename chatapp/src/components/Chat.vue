@@ -4,6 +4,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import io from "socket.io-client"
 import "../styles/chat.css"
+import "../styles_mobile/chat.css"
 
 // #region global state
 const userName = inject("userName")       // ユーザ名
@@ -207,64 +208,65 @@ const registerSocketEvent = () => {
           </select>
         </p>
       </div>
+      <textarea @keydown.enter.exact="onPublish" placeholder="投稿文を入力してください " v-model="chatContent"></textarea>
+      <div class="submit">
+        <button @click="onPublish">投稿</button>
+        <button @click="onMemo">メモ</button>
+        <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
+      </div>
     </div>
-    <textarea @keydown.enter.exact="onPublish" placeholder="投稿文を入力してください " v-model="chatContent"></textarea>
-    <div class="submit">
-      <button @click="onPublish">投稿</button>
-      <button @click="onMemo">メモ</button>
-      <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
-    </div>
-  </div>
 
-  <div class="chat-container">
-    <div class="chat">
-      <ul>
-        <li v-for="(chat, i) in show_order? store.state.chatList.slice().reverse() : store.state.chatList.slice()" :key="i">
-          <div :class="chat.type" v-if="chat.type=='message'">
-            <div class="optionIcon" :class="chat.message_type"></div>
-            <div class="message" :class="{ 'mine': (chat.type === 'message' && chat.username === userName), 'others':  (chat.type === 'message' && chat.username !== userName), 'mentioned': (chat.type === 'message' && chat.targetUser === userName)}">
-              <pre>{{`${chat.username}さん [${new Date(chat.unixtime).toLocaleString("jp-JP")}]` }}</pre>
-              <pre class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)">{{ chat.message }}</pre>
-              <span v-if="chat.targetUser !== userName && chat.targetUser !== null"> ({{ chat.targetUser }}へメンションされています)</span>
-              <span v-else-if="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
-              <pre><button @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.consult_timelimit!=null">{{ "※回答期限："+chat.consult_timelimit }}</span></pre>
+    <div class="chat-container">
+      <div class="chat-area">
+        <ul>
+          <li v-for="(chat, i) in show_order? store.state.chatList.slice().reverse() : store.state.chatList.slice()" :key="i">
+            <div :class="chat.type" v-if="chat.type=='message'">
+              <div class="optionIcon" :class="chat.message_type"></div>
+              <div class="message" :class="{ 'mine': (chat.type === 'message' && chat.username === userName), 'others':  (chat.type === 'message' && chat.username !== userName), 'mentioned': (chat.type === 'message' && chat.targetUser === userName)}">
+                <pre>{{`${chat.username}さん [${new Date(chat.unixtime).toLocaleString("jp-JP")}]` }}</pre>
+                <pre class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)">{{ chat.message }}</pre>
+                <span v-if="chat.targetUser !== userName && chat.targetUser !== null"> ({{ chat.targetUser }}へメンションされています)</span>
+                <span v-else-if="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
+                <pre><button @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.consult_timelimit!=null">{{ "※回答期限："+chat.consult_timelimit }}</span></pre>
+              </div>
             </div>
-          </div>
-          <pre :class="chat.type" v-if="chat.type=='enter_message'">{{ chat.message }}</pre>
-          <pre :class="chat.type" v-if="chat.type=='leave_message'">{{ chat.message }}</pre>
-        </li>
-      </ul>
-    </div>
+            <pre :class="chat.type" v-if="chat.type=='enter_message'">{{ chat.message }}</pre>
+            <pre :class="chat.type" v-if="chat.type=='leave_message'">{{ chat.message }}</pre>
+          </li>
+        </ul>
+      </div>
       
-    <div class="memo" v-if="!isReplyShow">
-      <h3>メモ一覧</h3>
-      <div>
-        <ul>
-          <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
-            <pre>{{ memo.message }}</pre>
-          </li>
-        </ul>
+      <div class="memo" v-if="!isReplyShow">
+        <h3>メモ一覧</h3>
+        <div>
+          <ul>
+            <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
+              <pre>{{ memo.message }}</pre>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="memo reply" v-if="isReplyShow">
+        <button @click="isReplyShow=false">メモ一覧を表示</button>
+        <div>
+          <pre>{{replyMessageName}}</pre>
+          <pre class="messageContent">{{replyMessageContent}}</pre>
+          <ul>
+            <li v-for="(reply, i) in store.state.replyList" :key="i">
+              <div v-if="reply.chatname===replyMessageName && reply.contentID===replyMessageID">
+                <pre>username: {{reply.username}}</pre>
+                <pre>{{reply.message}}</pre>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
-    <div class="memo reply" v-if="isReplyShow">
-      <button @click="isReplyShow=false">メモ一覧を表示</button>
-      <div>
-        <pre>{{replyMessageName}}</pre>
-        <pre class="messageContent">{{replyMessageContent}}</pre>
-        <ul>
-          <li v-for="(reply, i) in store.state.replyList" :key="i">
-            <div v-if="reply.chatname===replyMessageName && reply.contentID===replyMessageID">
-              <pre>username: {{reply.username}}</pre>
-              <pre>{{reply.message}}</pre>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <router-link to="/">
+      <button type="button" @click="onExit">退室する</button>
+    </router-link>
   </div>
 
-  <router-link to="/">
-    <button type="button" class="button-exit" @click="onExit">退室する</button>
-  </router-link>
 </template>

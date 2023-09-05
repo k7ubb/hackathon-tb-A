@@ -3,6 +3,8 @@ import { ref, onMounted, computed, inject, onUnmounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router';
 import io from "socket.io-client";
+import "../styles/reply.css"
+import "../styles_mobile/reply.css"
 
 const store = useStore();
 const router = useRouter();
@@ -63,7 +65,7 @@ const registerSocketEvent = () => {
 </script>
 
 <template>
-  <div class="mx-auto my-5 px-4">
+  <div class="reply">
     <h1 class="text-h3 font-weight-medium">返信</h1>
     <div class="input-section mt-10">
       <p>Replying to: {{ message }}</p>

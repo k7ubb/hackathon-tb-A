@@ -1,4 +1,4 @@
-@media screen and (min-width:481px) {
+@media screen and (max-width:480px) {
   .login {
     border-radius: 0px;
     display: flex;
