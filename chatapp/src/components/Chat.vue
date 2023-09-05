@@ -35,14 +35,12 @@ const replyMessageID = ref('')
 const replyMessageContent = ref('')
 
 const replyContent = ref('');
-// const filteredReplyList = inject("filteringReplyList");
 
 const filteredReplyList = reactive([]);
 
 const filteringReplyList = () => {
   filteredReplyList.splice(0);
   store.state.replyList.forEach(currentValue => {
-    // alert(currentValue.chatname+"\n"+replyMessageName.value +"\n"+ currentValue.contentID+"\n"+replyMessageID.value)
     if(currentValue.chatname===replyMessageName.value && currentValue.contentID===replyMessageID.value){
       filteredReplyList.push({
         username: currentValue.username,
@@ -50,9 +48,6 @@ const filteringReplyList = () => {
       })
     }
   });
-  // alert(filteredReplyList.username)
-
-
 }
 
 const onPublishReply = () => {
@@ -155,9 +150,6 @@ const onMessageTypeChange = () => {
     case "consult": // 相談
       chatContent.value = "現状の問題点: \n考えられる原因: "
       break
-    case "confirm": // 確認 
-      chatContent.value = "ccccccccc"
-      break
   }
 }
 onMessageTypeChange()
@@ -218,9 +210,6 @@ const registerSocketEvent = () => {
   const handlePublishReplyEvent = (data) => {
     const newReply = JSON.parse(data);
     store.commit('addReply', newReply);
-    // if (newReply.parentChatId === chat.unixtime) {
-    //   store.commit('addReply', newReply);
-    // }
    filteringReplyList();
   };
   
@@ -259,7 +248,6 @@ addEventListener("close", () => {
           <label><input type="radio" v-model="chatType" value="report">報告</label>
           <label><input type="radio" v-model="chatType" value="contact">連絡</label>
           <label><input type="radio" v-model="chatType" value="consult">相談</label>
-          <label><input type="radio" v-model="chatType" value="confirm">確認</label>
         </form>
         <div class="length-count" :class="{ 'red': (chatContent.length > maxLength())}">文字数：{{chatContent.length + "/" + maxLength()}}</div>
         <div class="consult-timelimit" v-if="chatType == 'consult'">回答期限:<input type="datetime-local" step="300" v-model="consult_timelimit"></div>
