@@ -237,7 +237,7 @@ addEventListener("close", () => {
 
 <template>
   <div class="chat">
-    <h1>報連相 チャットルーム</h1>
+    <h1>コミュニケーションラボ</h1>
     <div class="info">
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
     </div>
@@ -245,9 +245,9 @@ addEventListener("close", () => {
     <div class="post">
       <div class="post-info">
         <form @change="onMessageTypeChange">
-          <label><input type="radio" v-model="chatType" value="report">報告</label>
-          <label><input type="radio" v-model="chatType" value="contact">連絡</label>
-          <label><input type="radio" v-model="chatType" value="consult">相談</label>
+          <label><input type="radio" v-model="chatType" value="report">報告 </label>
+          <label><input type="radio" v-model="chatType" value="contact">連絡 </label>
+          <label><input type="radio" v-model="chatType" value="consult">相談 </label>
         </form>
         <div class="length-count" :class="{ 'red': (chatContent.length > maxLength())}">文字数：{{chatContent.length + "/" + maxLength()}}</div>
         <div class="consult-timelimit" v-if="chatType == 'consult'">回答期限:<input type="datetime-local" step="300" v-model="consult_timelimit"></div>
@@ -264,8 +264,8 @@ addEventListener("close", () => {
       <div class="submit">
         <button @click="onPublish">投稿</button>
         <button @click="onMemo">メモ</button>
-        <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
       </div>
+      <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
     </div>
 
     <div class="chat-container">

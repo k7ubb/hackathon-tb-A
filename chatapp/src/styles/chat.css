@@ -2,8 +2,15 @@
   .chat {
     margin: 16px;
   }
-  
-  .chat button{
+  .chat h1{/*報連相チャットルーム*/
+    text-align: center;
+    padding: 0.2em 1em;/* 上下の余白を小さく */
+    margin: 0.7em 0; /* 上下の余白を小さく */
+    letter-spacing: 20px; /* 文字間隔を2pxに設定*/
+    font-weight: bold;
+    border: solid 3px #000000;
+  }
+  .chat button{/*投稿　メモボタン*/
     margin-right: 8px;
     padding: 4px;
     border: 1px solid #999 !important;
@@ -11,12 +18,41 @@
     background: #eeeeee !important;
   }
 
-  .chat .login-user {
-    margin-top: 20px;
+  .chat .login-user {/*ログインユーザー：○○さん*/
+    text-align: center;
+
+    padding: 0.4em 1em;
+    margin: 0.5em 0;
+    font-weight: bold;
+    letter-spacing: 2px; /* 文字間隔を2pxに設定*/
+    color: #0a0a0af3;/*文字色*/
+    background: #FFF;
+    border: solid 1.5px #0a0a0af3;/*線*/
+    border-radius: 5px;/*角の丸み*/
+    width: 800px; /* 横幅を300pxに設定 */
+    margin: 0 auto; /* 水平方向に中央寄せ */
+    margin-bottom: 10px; /* 下に10pxのスペースを追加 */
   }
 
-  .chat .post-info {
+  .chat .post-info {/*報連相選択　文字数*/
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    padding: 0.5em 1em;
+    margin: 0.5em 0;
+    font-weight: bold;
+    color: #6091d3;/*文字色*/
+    font-size: 18px; /* フォントサイズを20pxに設定 */
+    letter-spacing: 2px; /* 文字間隔を2pxに設定*/
+    background: #FFF;
+    border: solid 3px #6091d3;/*線*/
+    border-radius: 10px;/*角の丸み*/
+    width: 800px; /* 横幅を300pxに設定 */
+    margin: 0 auto; /* 水平方向に中央寄せ */
+    margin-bottom: 10px; /* 下に10pxのスペースを追加 */
   }
 
   .chat .post-info form {
@@ -33,8 +69,22 @@
     float: left;
     margin-right: 32px;
   }
+  .chat .online-users{/*メンションするオンラインユーザー*/
+    text-align: center;
+    padding: 0.3em 1em;
+    margin: 0.5em 0;
+    font-weight: bold;
+    color: #0a0a0af3;/*文字色*/
+    background: #FFF;
+    border: solid 1.5px #0a0a0af3;/*線*/
+    border-radius: 5px;/*角の丸み*/
+    width: 800px; /* 横幅を300pxに設定 */
+    margin: 0 auto; /* 水平方向に中央寄せ */
+    margin-bottom: 10px; /* 下に10pxのスペースを追加 */
+  }
 
-  .chat .online-users select{
+  .chat .online-users select{/*メンションするオンラインユーザー　選択*/
+    text-align: center;
     width: 200px;
     height: 30px;
     line-height: 30px;
@@ -44,13 +94,31 @@
     background-color: #f9f9f9;
   } 
 
-  textarea {
+  textarea {/*横幅を500pxにしたいけど、上手くいかない*/
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     margin-top: 8px;
     padding: 8px;
-    width: 500px;
     height: 100px;
     border: 1px solid #999 !important;
     border-radius: 8px;
+    margin-bottom: 10px; /* 下に10pxのスペースを追加 */
+  }
+
+  .chat .submit{/*投稿　メモボタン*/
+    text-align: center;
+    width: 200em;
+    padding: 0.3em 1em;
+    margin: 0.5em 0;
+    font-weight: bold;
+    color: #0a0a0af3;/*文字色*/
+    background: #FFF;
+    border: solid 1.5px #0a0a0af3;/*線*/
+    border-radius: 5px;/*角の丸み*/
+    width: 800px; /* 横幅を300pxに設定 */
+    margin: 0 auto; /* 水平方向に中央寄せ */
+    margin-bottom: 20px; /* 下に10pxのスペースを追加 */
   }
 
   .chat .chat-container{
