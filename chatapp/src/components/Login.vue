@@ -61,7 +61,7 @@ const onEnter = () => {
   <div class="login">
     <div>
       <h1>コミュニケーションラボ</h1>
-      <input type="text" v-model="userName" />
+      <input type="text" v-model="userName" placeholder="ユーザー名" />
       <button @click="onEnter">入室する</button>
     </div>
   </div>
