@@ -59,6 +59,18 @@ const onPublish = () => {
     alert(e.message)
     return
   }
+  //投稿ボタンを押す前に、報連相の確認を表示する。
+  let type
+  if(chatType.value=="report"){
+    type="報告"
+  }
+  if(chatType.value=="contact"){
+    type="連絡"
+  }
+  if(chatType.value=="consult"){
+    type="相談"
+  }
+  if(!confirm(type+"です。\nよろしいですか？"))  return
 
   const json_chat = {
     type: "message",
