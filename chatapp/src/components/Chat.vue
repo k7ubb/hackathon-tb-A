@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, reactive, onMounted, onUnmounted, watch } from "vue"
+import { inject, ref, reactive, onMounted, onUnmounted, computed } from "vue"
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import io from "socket.io-client"
@@ -27,7 +27,8 @@ const memoList = reactive([])
 const show_order = ref(true)
 const consult_timelimit = ref(null) // 相談の解答期限
 const isReplyShow = ref(false)      // 返信・メモ表示切替
-const isSubDisplay = ref(false) // サブディスプレイの表示・非表示切替
+const mentionDropdown = ref(null);
+const mentionQuery = ref("");
 // #endregion
 
 // 返信表示欄
@@ -60,7 +61,6 @@ const onComfirmReply = (contributor, chat_number, content) => {
   replyContent.value = "確認しました。"
   onPublishReply()
   isReplyShow.value = true
-  isSubDisplay.value = true
 }
 const onPublishReply = () => {
   const json_reply = {
@@ -77,13 +77,41 @@ const onPublishReply = () => {
   replyContent.value = '';
 };
 
+// メンション機能
+// ----------------------------------
+
+// カーソル位置を取得する関数
+const dropdownStyle = reactive({ left: '0px', top: '0px' });  // 追加
+
+// カーソル位置に基づいてドロップダウンの位置を設定
+const setDropdownPosition = (event) => {
+  const cursorPosition = event.target.selectionStart;
+  const textArea = event.target;
+  const rect = textArea.getBoundingClientRect();
+  const lineHeight = parseInt(window.getComputedStyle(textArea)["line-height"]);
+  const lines = Math.floor(cursorPosition / textArea.cols);
+  const left = (cursorPosition % textArea.cols) * 10;  // 仮の文字幅
+
+  dropdownStyle.left = `${rect.left + left}px`;
+  dropdownStyle.top = `${rect.top + (lines * lineHeight)}px`;
+};
+
+const filteredOnlineUsers = computed(() => {
+  if (mentionQuery.value === "") return store.state.onlineUsers;
+  return store.state.onlineUsers.filter(user =>
+    user.toLowerCase().includes(mentionQuery.value.toLowerCase())
+  );
+});
 
 const onInput = (event) => {
-  if (chatContent.value.includes("@") && mentionedUser.value === null) {
+  const lastAt = chatContent.value.lastIndexOf("@");
+  // if (chatContent.value.includes("@") && mentionedUser.value === null) {
+  if (lastAt && mentionedUser.value === null) {
+    mentionQuery.value = chatContent.value.slice(lastAt + 1);
     showMentionDropdown.value = true;
-  } else {
+  } else if (!chatContent.value.includes("@") || (mentionedUser.value !== null && !chatContent.value.includes("@" + mentionedUser.value))) {
     showMentionDropdown.value = false;
-    mentionedUser.value = null
+    mentionedUser.value = null;  // メンションが消されたら、mentionedUserをリセット
   }
 };
 
@@ -107,7 +135,7 @@ onMounted(() => {
 // 投稿メッセージをサーバに送信する
 const onPublish = () => {
   event.preventDefault()
-
+  showMentionDropdown.value = false;
   try{
     if (Date.now() - lastPublishTime < publishInterval * 1000) {
       throw new Error(publishInterval + '秒に一度しか送信はできません．お待ち下さい')
@@ -149,8 +177,6 @@ const onPublish = () => {
   socket.emit("publishEvent", JSON.stringify(json_chat))
   lastPublishTime = Date.now()
 
-// onMessageTypeChangeの中で、テキストボックスは初期化される(テンプレートが入力される)ので、無効化
-// chatContent.value = ''
   chatType.value = "report"
   onMessageTypeChange()
 }
@@ -162,8 +188,6 @@ const onMemo = () => {
     username: userName.value,
     message: chatContent.value,
   })
-
-  isSubDisplay.value = true;
 
   // onMessageTypeChangeの中で、テキストボックスは初期化される(テンプレートが入力される)ので、無効化
   // chatContent.value = ''
@@ -194,7 +218,6 @@ const showReply = (contributor, chat_number, content) => {
   replyMessageID.value = chat_number
   replyMessageContent.value = content
   isReplyShow.value = true
-  isSubDisplay.value = true
   filteringReplyList();
 }
 
@@ -293,22 +316,22 @@ addEventListener("close", () => {
         </p>
       </div>
       <!-- メンション用のプルダウン -->
-      <div v-if="showMentionDropdown" class="mention-dropdown" style="position: absolute;">
+      <div ref="mentionDropdown" v-if="showMentionDropdown" class="mention-dropdown" :style="dropdownStyle">
         <ul>
-          <li v-for="user in store.state.onlineUsers" :key="user" @click="selectMention(user)">
+          <li v-for="user in filteredOnlineUsers" :key="user" @click="selectMention(user)">
             {{ user }}
           </li>
         </ul>
       </div>
-      <textarea @input="onInput($event)" @keydown.enter.exact="onPublish" placeholder="投稿文を入力してください " v-model="chatContent"></textarea>
+      <textarea @input="onInput($event); setDropdownPosition($event)" @keydown.enter.exact="onPublish" placeholder="投稿文を入力してください " v-model="chatContent"></textarea>
       <div class="submit">
         <button @click="onPublish">投稿</button>
         <button @click="onMemo">メモ</button>
       </div>
     </div>
     <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
-    <div class="chat-container" :class="{'both': (isSubDisplay)}">
-      <div class="chat-area" :class="{'main-only':(!isSubDisplay)}">
+    <div class="chat-container">
+      <div class="chat-area">
         <ul>
           <li v-for="(chat, i) in show_order? store.state.chatList.slice().reverse() : store.state.chatList.slice()" :key="i">
             <div :class="chat.type" v-if="chat.type=='message'">
@@ -330,45 +353,34 @@ addEventListener("close", () => {
         </ul>
       </div>
 
-      <div class="sub-display">
-        <div v-if="!isSubDisplay">
-          <button @click="isReplyShow=false, isSubDisplay=true"><img src="../images/button-left.png" alt="<<"></button>
+      <div class="memo" v-if="!isReplyShow">
+        <h3>メモ一覧</h3>
+        <div>
+          <ul>
+            <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
+              <pre>{{ memo.message }}</pre>
+            </li>
+          </ul>
         </div>
+      </div>
 
-        <div class="memo" v-if="(!isReplyShow) && isSubDisplay">
-          <div class="flex">
-            <button @click="isSubDisplay=false"><img src="../images/button-right.png" alt=">>"></button>
-            <h3>メモ一覧</h3>
-          </div>
-          <div>
-            <ul>
-              <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
-                <pre>{{ memo.message }}</pre>
-              </li>
-            </ul>
+      <div class="memo reply" v-if="isReplyShow">
+        <button @click="isReplyShow=false">メモ一覧を表示</button>
+        <div>
+          <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
+          <div class="mt-5">
+            <button class="button-normal" @click="onPublishReply">返信</button>
           </div>
         </div>
-
-        <div class="memo reply" v-if="isReplyShow && isSubDisplay">
-          <div class="flex">
-            <button @click="isSubDisplay=false"><img src="../images/button-right.png" alt=">>"></button>
-            <button @click="isReplyShow=false">メモ一覧を表示</button>
-          </div>
-          <div>
-            <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
-            <div class="mt-5">
-              <button class="button-normal" @click="onPublishReply">返信</button>
-            </div>
-          </div>
-          <div>
-            <pre>{{replyMessageName}}</pre>
-            <pre class="messageContent">{{replyMessageContent}}</pre>
-            <ul>
-              <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
-                <div class="user-name">{{reply.username}}</div>
-                <div>{{reply.replycontent}}</div>
-              </li>
-            </ul>
+        <div>
+          <pre>{{replyMessageName}}</pre>
+          <pre class="messageContent">{{replyMessageContent}}</pre>
+          <ul>
+            <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
+              <div class="user-name">{{reply.username}}</div>
+              <div>{{reply.replycontent}}</div>
+            </li>
+          </ul>
           </div>
         </div>
       </div>
@@ -377,6 +389,4 @@ addEventListener("close", () => {
     <router-link to="/">
       <button type="button" @click="onExit">退室する</button>
     </router-link>
-  </div>
-
 </template>
