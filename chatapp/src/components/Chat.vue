@@ -60,6 +60,7 @@ const onComfirmReply = (contributor, chat_number, content) => {
   replyContent.value = "確認しました。"
   onPublishReply()
   isReplyShow.value = true
+  isSubDisplay.value = true
 }
 const onPublishReply = () => {
   const json_reply = {
