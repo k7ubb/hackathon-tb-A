@@ -10,8 +10,8 @@
     font-weight: bold;
     color: #6594e0;/*文字色*/
     border-bottom: dashed 2px #6594e0;
-    
-    
+
+
   }
   .chat button{/*投稿　メモボタン*/
     margin-right: 8px;
@@ -50,7 +50,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    
+
     padding: 0.5em 1em;
     margin: 0.5em 0;
     font-weight: bold;
@@ -102,7 +102,7 @@
     border: 1px solid #ccc;
     appearance: none;
     background-color: #f9f9f9;
-  } 
+  }
   .post textarea {/*山口さんが教えてくれたところ*/
     width: 80%;
     padding: 8px 10px;
@@ -305,6 +305,36 @@
 
   .chat .memo.reply .messageContent::after{
     border-right: 18px solid #97ebac;
+  }
+  .button-container {
+    display: flex;
+  }
+  .mention-dropdown {
+    position: absolute;
+    z-index: 1000;
+    width: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+  }
+
+  .mention-dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mention-dropdown li {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .mention-dropdown li:hover {
+    background-color: #f2f2f2;
   }
 
 }

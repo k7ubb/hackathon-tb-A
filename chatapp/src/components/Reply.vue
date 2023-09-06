@@ -14,7 +14,6 @@ const socket = io();
 const userName = inject("userName")
 
 const chatId = route.params.chatId;
-// const message = route.params.message;
 const message = computed(() => store.state.message);
 const user = computed(() => store.state.user);
 const contentID = computed(() => store.state.chatID);

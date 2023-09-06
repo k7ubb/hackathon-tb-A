@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref, reactive, onMounted, onUnmounted } from "vue"
+import { inject, ref, reactive, onMounted, onUnmounted, watch } from "vue"
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import io from "socket.io-client"
@@ -36,6 +36,8 @@ const replyMessageContent = ref('')
 
 const replyContent = ref('');
 
+const showMentionDropdown = ref(false);
+
 const filteredReplyList = reactive([]);
 
 const filteringReplyList = () => {
@@ -50,7 +52,6 @@ const filteringReplyList = () => {
   });
 }
 
-// 確認返信ボタン
 const onComfirmReply = (contributor, chat_number, content) => {
   replyMessageName.value = contributor
   replyMessageID.value = chat_number
@@ -59,7 +60,6 @@ const onComfirmReply = (contributor, chat_number, content) => {
   onPublishReply()
   isReplyShow.value = true
 }
-
 const onPublishReply = () => {
   const json_reply = {
     type: "reply",
@@ -74,6 +74,26 @@ const onPublishReply = () => {
   // Clear the input field
   replyContent.value = '';
 };
+
+
+const onInput = (event) => {
+  if (chatContent.value.includes("@") && mentionedUser.value === null) {
+    showMentionDropdown.value = true;
+  } else {
+    showMentionDropdown.value = false;
+    mentionedUser.value = null
+  }
+};
+
+// プルダウンから選択したユーザー名をテキストエリアに挿入
+const selectMention = (username) => {
+  const currentContent = chatContent.value;
+  const atIndex = currentContent.lastIndexOf("@");
+  chatContent.value = `${currentContent.substring(0, atIndex)}@${username} `;
+  showMentionDropdown.value = false;  // Hide the dropdown
+  mentionedUser.value = username;
+};
+
 
 // #region lifecycle
 onMounted(() => {
@@ -212,9 +232,6 @@ const registerSocketEvent = () => {
 
   const handleError = (data) => {
     alert(data)
-    if (store.state.chatList.length > 0) {
-      store.state.chatList.pop()
-    }
   }
 
   const handlePublishReplyEvent = (data) => {
@@ -222,7 +239,7 @@ const registerSocketEvent = () => {
     store.commit('addReply', newReply);
    filteringReplyList();
   };
-  
+
   socket.on("enterEvent", handleEnterEvent)
   socket.on("exitEvent", handleExitEvent)
   socket.on("publishEvent", handlePublishEvent)
@@ -270,7 +287,15 @@ addEventListener("close", () => {
           </select>
         </p>
       </div>
-      <textarea @keydown.enter.exact="onPublish" placeholder="投稿文を入力してください " v-model="chatContent"></textarea>
+      <!-- メンション用のプルダウン -->
+      <div v-if="showMentionDropdown" class="mention-dropdown" style="position: absolute;">
+        <ul>
+          <li v-for="user in store.state.onlineUsers" :key="user" @click="selectMention(user)">
+            {{ user }}
+          </li>
+        </ul>
+      </div>
+      <textarea @input="onInput($event)" @keydown.enter.exact="onPublish" placeholder="投稿文を入力してください " v-model="chatContent"></textarea>
       <div class="submit">
         <button @click="onPublish">投稿</button>
         <button @click="onMemo">メモ</button>
@@ -288,8 +313,10 @@ addEventListener("close", () => {
                 <pre class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)">{{ chat.message }}</pre>
                 <span v-if="chat.targetUser !== userName && chat.targetUser !== null"> ({{ chat.targetUser }}へメンションされています)</span>
                 <span v-else-if="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
-                <pre><button @click="onComfirmReply(chat.username, chat.chatID, chat.message)">確認</button></pre>
-                <pre><button @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.consult_timelimit!=null">{{ "※回答期限："+chat.consult_timelimit }}</span></pre>
+                <div class="button-container">
+                  <pre><button @click="onComfirmReply(chat.username, chat.chatID, chat.message)">確認</button></pre>
+                  <pre><button @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.consult_timelimit!=null">{{ "※回答期限："+chat.consult_timelimit }}</span></pre>
+                </div>
               </div>
             </div>
             <pre :class="chat.type" v-if="chat.type=='enter_message'">{{ chat.message }}</pre>
@@ -297,7 +324,7 @@ addEventListener("close", () => {
           </li>
         </ul>
       </div>
-      
+
       <div class="memo" v-if="!isReplyShow">
         <h3>メモ一覧</h3>
         <div>
