@@ -265,9 +265,8 @@ addEventListener("close", () => {
         <button @click="onPublish">投稿</button>
         <button @click="onMemo">メモ</button>
       </div>
-      <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
     </div>
-
+    <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
     <div class="chat-container">
       <div class="chat-area">
         <ul>
