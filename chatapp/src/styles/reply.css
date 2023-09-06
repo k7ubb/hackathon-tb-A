@@ -1,3 +1,7 @@
+/*
+  Reply.vueは使わなそうなので、共通のスタイルをPC版とスマホ版の両方に適用する作業は行なってません
+*/
+
 @media screen and (min-width:481px) {
   .reply button{
     margin-right: 8px;

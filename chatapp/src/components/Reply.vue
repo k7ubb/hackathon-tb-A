@@ -4,7 +4,7 @@ import { useStore } from 'vuex';
 import { useRouter, useRoute } from 'vue-router';
 import io from "socket.io-client";
 import "../styles/reply.css"
-import "../styles_mobile/reply.css"
+import "../styles_responsive/reply.css"
 
 const store = useStore();
 const router = useRouter();

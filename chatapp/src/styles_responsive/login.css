@@ -1,0 +1,23 @@
+@media screen and (min-width:481px) {
+  /* PCだけに適用したいスタイル */
+}
+
+
+@media screen and (max-width:480px) {
+  /* スマホだけに適用したいスタイル */
+  .login {
+    padding-top: 45%;
+  }
+
+  .login h1{
+    font-size: 200%;
+  }
+
+  .login input[type="text"] {
+    width: 90%;
+  }
+
+  .login button {
+    width: 90%;
+  }
+}

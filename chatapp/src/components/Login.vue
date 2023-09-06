@@ -3,7 +3,7 @@ import { inject, ref } from "vue"
 import { useRouter } from "vue-router"
 import io from "socket.io-client"
 import "../styles/login.css"
-import "../styles_mobile/login.css"
+import "../styles_responsive/login.css"
 
 // #region global state
 const userName = inject("userName")

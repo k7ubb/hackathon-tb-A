@@ -4,7 +4,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import io from "socket.io-client"
 import "../styles/chat.css"
-import "../styles_mobile/chat.css"
+import "../styles_responsive/chat.css"
 
 // #region global state
 const userName = inject("userName")       // ユーザ名

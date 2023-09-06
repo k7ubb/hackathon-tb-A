@@ -1,417 +1,422 @@
-@media screen and (min-width:481px) {
-  .chat {
-    margin: 16px;
-  }
-  .chat h1{/*報連相チャットルーム*/
-    text-align: center;
-    padding: 0.2em 1em;/* 上下の余白を小さく */
-    margin: 0.2em 0; /* 上下の余白を小さく */
-    letter-spacing: 20px; /* 文字間隔を2pxに設定*/
-    font-weight: bold;
-    color: #6594e0;/*文字色*/
-    border-bottom: dashed 2px #6594e0;
+html, body, #app{
+  height: 100%;
+}
+
+.chat {
+  margin: 16px;
+}
+.chat h1{/*報連相チャットルーム*/
+  text-align: center;
+  padding: 0.2em 1em;/* 上下の余白を小さく */
+  margin: 0.2em 0; /* 上下の余白を小さく */
+  letter-spacing: 20px; /* 文字間隔を2pxに設定*/
+  font-weight: bold;
+  color: #6594e0;/*文字色*/
+  border-bottom: dashed 2px #6594e0;
 
 
-  }
-  .chat .submit button{/*投稿　メモボタン*/
-    margin-right: 8px;
-    padding: 4px;
-    border-radius: 8px;
-    background: #eeeeee !important;
-  }
-  .chat .post{
-    width: 90%;
-    padding: 2em 1em;
-    margin: 2em auto;
-    color: #00BCD4;
-    background: #e4fcff;/*背景色*/
-    border-top: solid 6px #1dc1d6;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.32);/*影*/
-  }
+}
+.chat .submit button{/*投稿　メモボタン*/
+  margin-right: 8px;
+  padding: 4px;
+  border-radius: 8px;
+  background: #eeeeee !important;
+}
+.chat .post{
+  width: 90%;
+  padding: 2em 1em;
+  margin: 2em auto;
+  color: #00BCD4;
+  background: #e4fcff;/*背景色*/
+  border-top: solid 6px #1dc1d6;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.32);/*影*/
+}
 
-  .chat .login-user {/*ログインユーザー：○○さん*/
-    text-align: center;
-    padding: 0.5em 1em;
-    margin: 0.2em 0;
-    font-weight: bold;
-    letter-spacing: 5px;
-    color: #0a0a0af3;
-    background: #FFF;
-    border-radius: 5px;
-    width: 90%;
-    margin: 0 auto;
-    margin-bottom: 20px;
-  }
+.chat .login-user {/*ログインユーザー：○○さん*/
+  text-align: center;
+  padding: 0.5em 1em;
+  margin: 0.2em 0;
+  font-weight: bold;
+  letter-spacing: 5px;
+  color: #0a0a0af3;
+  background: #FFF;
+  border-radius: 5px;
+  width: 90%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
 
-  .chat .post-info {/*報連相選択　文字数*/
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.chat .post-info {/*報連相選択　文字数*/
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-    padding: 0.5em 1em;
-    margin: 0.5em 0;
-    font-weight: bold;
-    color: #6091d3;/*文字色*/
-    font-size: 18px; /* フォントサイズを20pxに設定 */
-    letter-spacing: 2px; /* 文字間隔を2pxに設定*/
-    background: #FFF;
-    border: solid 3px #6091d3;/*線*/
-    border-radius: 10px;/*角の丸み*/
-    width: 80%;/*画面の大きさが変わっても見やすい*/
-    margin: 0 auto; /* 水平方向に中央寄せ */
-    margin-bottom: 5px; /* 下に10pxのスペースを追加 */
-  }
+  padding: 0.5em 1em;
+  margin: 0.5em 0;
+  font-weight: bold;
+  color: #6091d3;/*文字色*/
+  font-size: 18px; /* フォントサイズを20pxに設定 */
+  letter-spacing: 2px; /* 文字間隔を2pxに設定*/
+  background: #FFF;
+  border: solid 3px #6091d3;/*線*/
+  border-radius: 10px;/*角の丸み*/
+  width: 80%;/*画面の大きさが変わっても見やすい*/
+  margin: 0 auto; /* 水平方向に中央寄せ */
+  margin-bottom: 5px; /* 下に10pxのスペースを追加 */
+}
 
-  .chat .post-info form {
-    float: left;
-    margin-right: 32px;
-  }
+.chat .post-info form {
+  float: left;
+  margin-right: 32px;
+}
 
-  .chat .post-info .length-count {
-    float: left;
-    margin-right: 32px;
-  }
+.chat .post-info .length-count {
+  float: left;
+  margin-right: 32px;
+}
 
-  .chat .post-info .consult-timelimit {
-    float: left;
-    margin-right: 32px;
-  }
-  .chat .online-users{/*メンションするオンラインユーザー*/
-    text-align: center;
-    padding: 0.3em 1em;
-    margin: 0.5em 0;
-    font-weight: bold;
-    color: #0a0a0af3;/*文字色*/
-    background: #FFF;
-    border: solid 1.5px #0a0a0af3;/*線*/
-    border-radius: 5px;/*角の丸み*/
-    width: 80%;/*画面の大きさが変わっても見やすい*/
-    margin: 0 auto; /* 水平方向に中央寄せ */
-    margin-bottom: 5px; /* 下に10pxのスペースを追加 */
-  }
+.chat .post-info .consult-timelimit {
+  float: left;
+  margin-right: 32px;
+}
 
-  .chat .online-users select{/*メンションするオンラインユーザー　選択*/
-    text-align: center;
-    width: 20%;
-    height: 30px;
-    line-height: 30px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    appearance: none;
-    background-color: #f9f9f9;
-  }
-  .post textarea {/*山口さんが教えてくれたところ*/
-    width: 80%;
-    padding: 8px 10px;
-    border: 1px solid #d2d2d2;
-    border-radius: 5px;
-    background: #f7f7f7;
-    color: #333;
-    font-size: 1em;
-    line-height: 1.5;
-    margin-bottom: 5px; /* 下に10pxのスペースを追加 */
-  }
+.chat .online-users{/*メンションするオンラインユーザー*/
+  text-align: center;
+  padding: 0.3em 1em;
+  margin: 0.5em 0;
+  font-weight: bold;
+  color: #0a0a0af3;/*文字色*/
+  background: #FFF;
+  border: solid 1.5px #0a0a0af3;/*線*/
+  border-radius: 5px;/*角の丸み*/
+  width: 80%;/*画面の大きさが変わっても見やすい*/
+  margin: 0 auto; /* 水平方向に中央寄せ */
+  margin-bottom: 5px; /* 下に10pxのスペースを追加 */
+}
 
-  textarea {/*横幅を500pxにしたいけど、上手くいかない*/
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 8px;
-    padding: 8px;
-    height: 100px;
-    border: 1px solid #999 !important;
-    border-radius: 8px;
-    margin-bottom: 10px; /* 下に10pxのスペースを追加 */
-  }
+.chat .online-users select{/*メンションするオンラインユーザー　選択*/
+  text-align: center;
+  width: 20%;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  appearance: none;
+  background-color: #f9f9f9;
+}
 
-  .chat .submit{/*投稿　メモボタンの外枠*/
-    text-align: center;
-    width: 200em;
-    padding: 0.3em 1em;
-    margin: 0.5em 0;
-    font-weight: bold;
-    color: #0a0a0af3;/*文字色*/
-    background: #FFF;
-    border: solid 1.5px #0a0a0af3;/*線*/
-    border-radius: 5px;/*角の丸み*/
-    width: 80%;/*画面の大きさが変わっても見やすい*/
-    margin: 0 auto; /* 水平方向に中央寄せ */
-    margin-bottom: 5px; /* 下に10pxのスペースを追加 */
-  }
-  .post button {/*山口さんが教えてくれたところ*/
-    justify-content: center;
-    align-items: center;
-    width: 25%;
-    height: 30px;
-    padding: 5px 5px;
-    border: 1px solid #2589d0;
-    border-radius: 25px;
-    background-color: #fff;
-    color: #2589d0;
-    font-size: 15px;
-    margin: 5px 50px;
-  }
+.chat .post textarea {/*山口さんが教えてくれたところ*/
+  width: 80%;
+  padding: 8px 10px;
+  border: 1px solid #d2d2d2;
+  border-radius: 5px;
+  background: #f7f7f7;
+  color: #333;
+  font-size: 1em;
+  line-height: 1.5;
+  margin-bottom: 5px; /* 下に10pxのスペースを追加 */
+}
 
-  .chat .chat-container{
-    display: flex;
-    margin-top: 32px;
-    justify-content: space-between; /* 両コンテンツの間にスペースを追加 */
-  }
+.chat textarea {/*横幅を500pxにしたいけど、上手くいかない*/
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 8px;
+  padding: 8px;
+  height: 100px;
+  border: 1px solid #999 !important;
+  border-radius: 8px;
+  margin-bottom: 10px; /* 下に10pxのスペースを追加 */
+}
 
-  .chat .chat-area{
-    overflow: auto; /* 必要に応じてスクロールを有効にする */
-  }
+.chat .submit{/*投稿　メモボタンの外枠*/
+  text-align: center;
+  width: 200em;
+  padding: 0.3em 1em;
+  margin: 0.5em 0;
+  font-weight: bold;
+  color: #0a0a0af3;/*文字色*/
+  background: #FFF;
+  border: solid 1.5px #0a0a0af3;/*線*/
+  border-radius: 5px;/*角の丸み*/
+  width: 80%;/*画面の大きさが変わっても見やすい*/
+  margin: 0 auto; /* 水平方向に中央寄せ */
+  margin-bottom: 5px; /* 下に10pxのスペースを追加 */
+}
 
-  .chat .optionIcon {
-    float: left;
-    width: 50px;
-    height: 40px;
-    text-align: center;
-    line-height: 40px;
-    margin-right: 10px;
-    border: 1px solid #000 !important;
-    border-radius: 50%;
-  }
+.chat .post button {/*山口さんが教えてくれたところ*/
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+  height: 30px;
+  padding: 5px 5px;
+  border: 1px solid #2589d0;
+  border-radius: 25px;
+  background-color: #fff;
+  color: #2589d0;
+  font-size: 15px;
+  margin: 5px 50px;
+}
 
-  .chat .optionIcon.report::before{
-    content: "報告";
-  }
+.chat .chat-container{
+  display: flex;
+  margin-top: 32px;
+  justify-content: space-between; /* 両コンテンツの間にスペースを追加 */
+}
 
-  .chat .optionIcon.contact::before{
-    content: "連絡";
-  }
+.chat .chat-area{
+  overflow: auto; /* 必要に応じてスクロールを有効にする */
+}
 
-  .chat .optionIcon.consult::before{
-    content: "相談";
-  }
+.chat .optionIcon {
+  float: left;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  margin-right: 10px;
+  border: 1px solid #000 !important;
+  border-radius: 50%;
+}
 
-  .chat .optionIcon.confirm::before{
-    content: "確認";
-  }
+.chat .optionIcon.report::before{
+  content: "報告";
+}
 
-  .chat .chat-area li{
-    overflow: hidden;
-    margin-bottom: 32px;
-  }
+.chat .optionIcon.contact::before{
+  content: "連絡";
+}
 
-  .chat .chat-area .message{
-    float: left;
-    width: calc(100% - 60px);
-  }
+.chat .optionIcon.consult::before{
+  content: "相談";
+}
 
-  .chat .messageContent{
-    display: inline-block;
-    position: relative;
-    margin: 0 0 10px 0;
-    padding: 10px;
-    max-width: 800px;
-    border-radius: 12px;
-  }
+.chat .optionIcon.confirm::before{
+  content: "確認";
+}
 
-  .chat .messageContent::after{
-    content: "";
-    display: inline-block;
-    position: absolute;
-    top: 3px;
-    left: -19px;
-    border: 8px solid transparent;
-    -webkit-transform: rotate(35deg);
-    transform: rotate(35deg);
-  }
+.chat .chat-area li{
+  overflow: hidden;
+  margin-bottom: 32px;
+}
 
-  .chat .enter_message, .leave_message{
-    padding: 10px;
-    margin-left: 50px;
-    width: 200px;
-    border: 1px solid #000;
-    border-radius: 12px;
-  }
+.chat .chat-area .message{
+  float: left;
+  width: calc(100% - 60px);
+}
 
-  .chat .message.mine .messageContent{
-    background: #97ebac;
-  }
+.chat .messageContent{
+  display: inline-block;
+  position: relative;
+  margin: 0 0 10px 0;
+  padding: 10px;
+  max-width: 800px;
+  border-radius: 12px;
+}
 
-  .chat .message.mine .messageContent::after{
-    border-right: 18px solid #97ebac;
-  }
+.chat .messageContent::after{
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 3px;
+  left: -19px;
+  border: 8px solid transparent;
+  -webkit-transform: rotate(35deg);
+  transform: rotate(35deg);
+}
 
-  .chat .message.others .messageContent {
-    background: #edf1ee;
-  }
+.chat .enter_message, .leave_message{
+  padding: 10px;
+  margin-left: 50px;
+  width: 200px;
+  border: 1px solid #000;
+  border-radius: 12px;
+}
 
-  .chat .message.others .messageContent::after {
-    border-right: 18px solid #edf1ee;
-  }
+.chat .message.mine .messageContent{
+  background: #97ebac;
+}
 
-  .chat .message.mentioned .messageContent {
-    background: #D8FF00;
-  }
+.chat .message.mine .messageContent::after{
+  border-right: 18px solid #97ebac;
+}
 
-  .chat .message.mentioned .messageContent::after {
-    border-right: 18px solid #D8FF00;
-  }
+.chat .message.others .messageContent {
+  background: #edf1ee;
+}
 
-  .chat .notes {
-    margin-left: 2em;
-  }
+.chat .message.others .messageContent::after {
+  border-right: 18px solid #edf1ee;
+}
 
-  .chat .my-username {
-    font-weight: bold;
-    color: blue;
-  }
+.chat .message.mentioned .messageContent {
+  background: #D8FF00;
+}
 
-  .chat .mentioned .messageContent{
-    display: inline-block;
-    position: relative;
-    margin: 0 0 10px 0;
-    padding: 10px;
-    max-width: 800px;
-    border-radius: 12px;
-    background: #ddff00;
-  }
+.chat .message.mentioned .messageContent::after {
+  border-right: 18px solid #D8FF00;
+}
 
-  .chat .mentioned .messageContent::after{
-    content: "";
-    display: inline-block;
-    position: absolute;
-    top: 3px;
-    left: -19px;
-    border: 8px solid transparent;
-    border-right: 18px solid #ddff00;
-    -webkit-transform: rotate(35deg);
-    transform: rotate(35deg);
-  }
+.chat .notes {
+  margin-left: 2em;
+}
 
-  .chat .memo{
-    overflow: auto; /* 必要に応じてスクロールを有効にする */
-    margin-left: 10px; /* チャット欄とメモ欄の間にマージンを追加 */
-  }
+.chat .my-username {
+  font-weight: bold;
+  color: blue;
+}
 
-  .chat .memo.reply{
-    margin: -8px;
-    padding: 8px;
-    border-radius: 16px;
-    background: #eee;
-  }
+.chat .mentioned .messageContent{
+  display: inline-block;
+  position: relative;
+  margin: 0 0 10px 0;
+  padding: 10px;
+  max-width: 800px;
+  border-radius: 12px;
+  background: #ddff00;
+}
 
-  .chat .memo.reply .messageContent{
-    background: #97ebac;
-  }
+.chat .mentioned .messageContent::after{
+  content: "";
+  display: inline-block;
+  position: absolute;
+  top: 3px;
+  left: -19px;
+  border: 8px solid transparent;
+  border-right: 18px solid #ddff00;
+  -webkit-transform: rotate(35deg);
+  transform: rotate(35deg);
+}
 
-  .chat .memo.reply .messageContent::after{
-    border-right: 18px solid #97ebac;
-  }
-  .button-container {
-    display: flex;
-  }
-  .mention-dropdown {
-    position: absolute;
-    z-index: 1000;
-    width: 200px;
-    max-height: 300px;
-    overflow-y: auto;
-    background-color: #ffffff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-size: 16px;
-  }
+.chat .memo{
+  overflow: auto; /* 必要に応じてスクロールを有効にする */
+  margin-left: 10px; /* チャット欄とメモ欄の間にマージンを追加 */
+}
 
-  .mention-dropdown ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
+.chat .memo.reply{
+  margin: -8px;
+  padding: 8px;
+  border-radius: 16px;
+  background: #eee;
+}
 
-  .mention-dropdown li {
-    padding: 10px;
-    cursor: pointer;
-  }
+.chat .memo.reply .messageContent{
+  background: #97ebac;
+}
 
-  .mention-dropdown li:hover {
-    background-color: #f2f2f2;
-  }
+.chat .memo.reply .messageContent::after{
+  border-right: 18px solid #97ebac;
+}
 
-  /*******************************************/
-  /* 投稿表示欄、メモ・返信欄に関するデザイン */
-  /*******************************************/
+.chat .button-container {
+  display: flex;
+}
 
-  /*******************************************/
-  /* すべてに適用させるデザイン */
-  /*******************************************/
-  .flex {
-    display: flex;
-  }
+.chat .mention-dropdown {
+  position: absolute;
+  z-index: 1000;
+  width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+}
 
-    /* 確認・返信ボタン */
-    .button-container button {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 0 auto;
-      padding: .9em 2em;
-      border: none;
-      border-radius: 25px;
-      background-color: #2589d0;
-      color: #fff;
-      font-weight: 100;
-      font-size: 10px;
-      margin-right: 5px;
-    }
-    .button-container button:hover {
-        background-color: #1579c0;
-    }
-    .button-container button::after {
-        width: 1em;
-        height: 1em;
-        margin-left: 10px;
-        background: url('data:image/svg+xml;charset=utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22%23fff%22%3E%3Cpath%20d%3D%22M23.5%208.9c.2-.1.5%200%20.5.2v9.6c0%201.2-1%202.2-2.2%202.2H2.2C1%2021%200%2020%200%2018.8V9.2c0-.2.3-.4.5-.2%201%20.8%202.4%201.9%207.2%205.3%201%20.7%202.7%202.2%204.3%202.2%201.7%200%203.4-1.5%204.3-2.2%204.8-3.5%206.2-4.5%207.2-5.4zM12%2015c1.1%200%202.7-1.4%203.4-1.9%206.2-4.5%206.7-4.9%208.1-6%20.3-.3.5-.6.5-1v-.8C24%204%2023%203%2021.8%203H2.2C1%203%200%204%200%205.3v.9c0%20.3.2.6.4.8%201.4%201.1%201.9%201.5%208.1%206%20.8.6%202.4%202%203.5%202z%22%2F%3E%3C%2Fsvg%3E') no-repeat center;
-        content: '';
-    }
+.chat .mention-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
+.chat .mention-dropdown li {
+  padding: 10px;
+  cursor: pointer;
+}
 
-  /*******************************************/
-  /* 投稿表示欄100%の場合 */
-  /*******************************************/
-  .main-only {
-    width: 100%;
-    background-color: #00BCD4;
-  }
+.chat .mention-dropdown li:hover {
+  background-color: #f2f2f2;
+}
+
+/*******************************************/
+/* 投稿表示欄、メモ・返信欄に関するデザイン */
+/*******************************************/
+
+/*******************************************/
+/* すべてに適用させるデザイン */
+/*******************************************/
+.chat .flex {
+  display: flex;
+}
+
+/* 確認・返信ボタン */
+.chat .button-container button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: .9em 2em;
+  border: none;
+  border-radius: 25px;
+  background-color: #2589d0;
+  color: #fff;
+  font-weight: 100;
+  font-size: 10px;
+  margin-right: 5px;
+}
+
+.chat .button-container button:hover {
+  background-color: #1579c0;
+}
+
+.chat .button-container button::after {
+  width: 1em;
+  height: 1em;
+  margin-left: 10px;
+  background: url('data:image/svg+xml;charset=utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22%23fff%22%3E%3Cpath%20d%3D%22M23.5%208.9c.2-.1.5%200%20.5.2v9.6c0%201.2-1%202.2-2.2%202.2H2.2C1%2021%200%2020%200%2018.8V9.2c0-.2.3-.4.5-.2%201%20.8%202.4%201.9%207.2%205.3%201%20.7%202.7%202.2%204.3%202.2%201.7%200%203.4-1.5%204.3-2.2%204.8-3.5%206.2-4.5%207.2-5.4zM12%2015c1.1%200%202.7-1.4%203.4-1.9%206.2-4.5%206.7-4.9%208.1-6%20.3-.3.5-.6.5-1v-.8C24%204%2023%203%2021.8%203H2.2C1%203%200%204%200%205.3v.9c0%20.3.2.6.4.8%201.4%201.1%201.9%201.5%208.1%206%20.8.6%202.4%202%203.5%202z%22%2F%3E%3C%2Fsvg%3E') no-repeat center;
+  content: '';
+}
 
 
-  /*******************************************/
-  /* 投稿表示欄60%+メモ・返信欄40%の場合 */
-  /*******************************************/
-  .both .chat-area {
-    width: 60%;
-    background-color: #6594e0;
-  }
-
-  .both .sub-display {
-    width: 40%;
-    background-color: #97ebac;
-  }
-
-  .both .memo.reply textarea {
-    width: 100%;
-    height: 35px;
-    padding: 8px 10px;
-    border: 1px solid #d2d2d2;
-    border-radius: 3px;
-    background: #f7f7f7;
-    color: #333;
-    font-size: 1em;
-    line-height: 1.5;
-  }
-
-  .both .memo {
-    width: 100%;
-    background-color: #00BCD4;
-  }
+/*******************************************/
+/* 投稿表示欄100%の場合 */
+/*******************************************/
+.chat .main-only {
+  width: 100%;
+  background-color: #00BCD4;
+}
 
 
+/*******************************************/
+/* 投稿表示欄60%+メモ・返信欄40%の場合 */
+/*******************************************/
+.chat .both .chat-area {
+  width: 60%;
+  background-color: #6594e0;
+}
 
+.chat .both .sub-display {
+  width: 40%;
+  background-color: #97ebac;
+}
 
+.chat .both .memo.reply textarea {
+  width: 100%;
+  height: 35px;
+  padding: 8px 10px;
+  border: 1px solid #d2d2d2;
+  border-radius: 3px;
+  background: #f7f7f7;
+  color: #333;
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+.chat .both .memo {
+  width: 100%;
+  background-color: #00BCD4;
 }
