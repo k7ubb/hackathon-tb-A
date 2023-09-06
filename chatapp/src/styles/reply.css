@@ -4,9 +4,48 @@
     padding: 4px;
     border: 1px solid #999 !important;
     border-radius: 8px;
-    background: #eeeeee !important;
   }
-
+  .reply h1{/*コミュニケーションラボ*/
+    text-align: center;
+    padding: 0.2em 1em;/* 上下の余白を小さく */
+    margin: 0.2em 0; /* 上下の余白を小さく */
+    letter-spacing: 20px; /* 文字間隔を2pxに設定*/
+    font-weight: bold;
+    color: #6594e0;/*文字色*/
+    border-bottom: dashed 2px #6594e0;
+  }
+  .reply .reply-message{/*どこの文章に返信するか？*/
+    text-align: left;
+    padding: 0.5em 1em;
+    margin: 0.2em 0;
+    color: #0a0a0af3;
+    border: solid 1px #0a0a0af3;/*線*/
+    background: #FFF;
+    border-radius: 4px;
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+  .reply .reply-top{/*返信画面専用という文字*/
+    text-align: center;
+    padding: 0.5em;
+    background: #dffcdf;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.23);
+    width: 80%;
+    padding: 0.5em 1em;
+    margin: 0.5em auto;
+    font-size: 20px; 
+  }
+  .reply .input-section {/*影付きの囲い*/
+    text-align: center;
+    width: 80%;
+    padding: 2em 1em;
+    margin: 2em auto;
+    color: #000000;
+    background: #dffcdf;/*背景色*/
+    border-top: solid 6px #64f164;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.32);/*影*/
+  }
   .reply .login-user {
     margin-top: 20px;
   }
@@ -39,14 +78,42 @@
     appearance: none;
     background-color: #f9f9f9;
   } 
+  .reply  textarea {/*山口さんが教えてくれたところ*/
+    padding: 8px 10px;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    background: #f7f7f7;
+    color: #333;
+    font-size: 1em;
+    line-height: 1.5;
+    margin-bottom: 5px; /* 下に10pxのスペースを追加 */
+  }
 
   textarea {
+    display: block;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
     margin-top: 8px;
     padding: 8px;
-    width: 500px;
     height: 100px;
     border: 1px solid #999 !important;
     border-radius: 8px;
+    margin-bottom: 10px; /* 下に10pxのスペースを追加 */
+  }
+
+  .mt-5 .button-normal{
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    height: 40px;
+    padding: 5px 5px;
+    border: 5px solid #2589d0;
+    border-radius: 25px;
+    background-color: #fff;
+    color: #050505;
+    font-size: 20px;
+    margin: 5px 50px;
   }
 
   .reply .chat-container{
@@ -60,7 +127,7 @@
     overflow: auto; /* 必要に応じてスクロールを有効にする */
   }
 
-  .reply .* 投稿欄のアイコン */
+   /* .reply .* 投稿欄のアイコン */  */
   .optionIcon {
     float: left;
     width: 50px;

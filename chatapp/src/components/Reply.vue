@@ -65,10 +65,11 @@ const registerSocketEvent = () => {
 
 <template>
   <div class="reply">
-    <h1 class="text-h3 font-weight-medium">返信</h1>
+    <h1>コミュニケーションラボ</h1>
+    <p class="reply-top">返信専用画面</p>
     <div class="input-section mt-10">
-      <p>Replying to: {{ message }}</p>
-      <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
+      <p class="reply-message">{{ message }}</p>
+      <textarea v-model="replyContent" rows="4" class="area" placeholder="上記のメッセージに対しての返信文を入力"></textarea>
       <div class="mt-5">
         <button class="button-normal" @click="onPublishReply">返信</button>
       </div>
