@@ -27,6 +27,7 @@ const memoList = reactive([])
 const show_order = ref(true)
 const consult_timelimit = ref(null) // 相談の解答期限
 const isReplyShow = ref(false)      // 返信・メモ表示切替
+const isSubDisplay = ref(false) // サブディスプレイの表示・非表示切替
 // #endregion
 
 // 返信表示欄
@@ -161,6 +162,8 @@ const onMemo = () => {
     message: chatContent.value,
   })
 
+  isSubDisplay.value = true;
+
   // onMessageTypeChangeの中で、テキストボックスは初期化される(テンプレートが入力される)ので、無効化
   // chatContent.value = ''
   chatType.value = "report"
@@ -190,6 +193,7 @@ const showReply = (contributor, chat_number, content) => {
   replyMessageID.value = chat_number
   replyMessageContent.value = content
   isReplyShow.value = true
+  isSubDisplay.value = true
   filteringReplyList();
 }
 
@@ -302,8 +306,8 @@ addEventListener("close", () => {
       </div>
     </div>
     <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
-    <div class="chat-container">
-      <div class="chat-area">
+    <div class="chat-container" :class="{'both': (isSubDisplay)}">
+      <div class="chat-area" :class="{'main-only':(!isSubDisplay)}">
         <ul>
           <li v-for="(chat, i) in show_order? store.state.chatList.slice().reverse() : store.state.chatList.slice()" :key="i">
             <div :class="chat.type" v-if="chat.type=='message'">
@@ -325,34 +329,46 @@ addEventListener("close", () => {
         </ul>
       </div>
 
-      <div class="memo" v-if="!isReplyShow">
-        <h3>メモ一覧</h3>
-        <div>
-          <ul>
-            <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
-              <pre>{{ memo.message }}</pre>
-            </li>
-          </ul>
+      <div class="sub-display">
+        <div v-if="!isSubDisplay">
+          <button @click="isReplyShow=false, isSubDisplay=true"><img src="../images/button-left.png" alt="<<"></button>
         </div>
-      </div>
 
-      <div class="memo reply" v-if="isReplyShow">
-        <button @click="isReplyShow=false">メモ一覧を表示</button>
-        <div>
-          <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
-          <div class="mt-5">
-            <button class="button-normal" @click="onPublishReply">返信</button>
+        <div class="memo" v-if="(!isReplyShow) && isSubDisplay">
+          <div class="flex">
+            <button @click="isSubDisplay=false"><img src="../images/button-right.png" alt=">>"></button>
+            <h3>メモ一覧</h3>
+          </div>
+          <div>
+            <ul>
+              <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
+                <pre>{{ memo.message }}</pre>
+              </li>
+            </ul>
           </div>
         </div>
-        <div>
-          <pre>{{replyMessageName}}</pre>
-          <pre class="messageContent">{{replyMessageContent}}</pre>
-          <ul>
-            <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
-              <div class="user-name">{{reply.username}}</div>
-              <div>{{reply.replycontent}}</div>
-            </li>
-          </ul>
+
+        <div class="memo reply" v-if="isReplyShow && isSubDisplay">
+          <div class="flex">
+            <button @click="isSubDisplay=false"><img src="../images/button-right.png" alt=">>"></button>
+            <button @click="isReplyShow=false">メモ一覧を表示</button>
+          </div>
+          <div>
+            <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
+            <div class="mt-5">
+              <button class="button-normal" @click="onPublishReply">返信</button>
+            </div>
+          </div>
+          <div>
+            <pre>{{replyMessageName}}</pre>
+            <pre class="messageContent">{{replyMessageContent}}</pre>
+            <ul>
+              <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
+                <div class="user-name">{{reply.username}}</div>
+                <div>{{reply.replycontent}}</div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
