@@ -50,6 +50,16 @@ const filteringReplyList = () => {
   });
 }
 
+// 確認返信ボタン
+const onComfirmReply = (contributor, chat_number, content) => {
+  replyMessageName.value = contributor
+  replyMessageID.value = chat_number
+  replyMessageContent.value = content
+  replyContent.value = "確認しました。"
+  onPublishReply()
+  isReplyShow.value = true
+}
+
 const onPublishReply = () => {
   const json_reply = {
     type: "reply",
@@ -278,6 +288,7 @@ addEventListener("close", () => {
                 <pre class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)">{{ chat.message }}</pre>
                 <span v-if="chat.targetUser !== userName && chat.targetUser !== null"> ({{ chat.targetUser }}へメンションされています)</span>
                 <span v-else-if="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
+                <pre><button @click="onComfirmReply(chat.username, chat.chatID, chat.message)">確認</button></pre>
                 <pre><button @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.consult_timelimit!=null">{{ "※回答期限："+chat.consult_timelimit }}</span></pre>
               </div>
             </div>
