@@ -1,4 +1,3 @@
-let lastUser = ""
 let chat_count = 0
 let connectedUsers = []
 
@@ -28,13 +27,7 @@ export default (io, socket) => {
           connectedUsers = connectedUsers.filter((x) => x != user)
           break
 
-        case "publishEvent":
-          if (user === lastUser) {
-            socket.emit("error", "連続して投稿することはできません。")
-            return
-          }
-          lastUser = user
-          break
+
       }
       
       io.sockets.emit("onlineUsers", JSON.stringify(connectedUsers))

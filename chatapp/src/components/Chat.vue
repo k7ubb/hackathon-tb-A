@@ -348,9 +348,10 @@ addEventListener("close", () => {
                 <pre class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)">{{ chat.message }}</pre>
                 <span v-if="chat.targetUser !== userName && chat.targetUser !== null"> ({{ chat.targetUser }}へメンションされています)</span>
                 <span v-else-if="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
-                <div class="button-container">
+                <div class="button-container flex">
                   <pre><button @click="onComfirmReply(chat.username, chat.chatID, chat.message)">確認</button></pre>
-                  <pre><button @click="onReply(chat)">返信</button><span class="consult-option notes" v-if="chat.consult_timelimit!=null">{{ "※回答期限："+chat.consult_timelimit }}</span></pre>
+                  <pre v-if="chat.consult_timelimit==null"><button @click="onReply(chat)">返信</button></pre>
+                  <div class="consult-option notes" v-if="chat.consult_timelimit!=null">{{ "※回答期限："+chat.consult_timelimit }}</div>
                 </div>
               </div>
             </div>
