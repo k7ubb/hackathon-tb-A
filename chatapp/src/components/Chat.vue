@@ -14,15 +14,34 @@ const userName = inject("userName")       // ユーザ名
 const router = useRouter()
 const store = useStore()
 const socket = io()
-const publishInterval = 1                                       // 連続投稿時の最低待ち時間 [s]
-const maxLength = () => chatType.value == "contact"? 100 : 300  // 文字数制限 (相談 : それ以外)
+const messageTypeText = {report: "報告", contact: "連絡", consult: "相談"}
+const publishInterval = 1   // 連続投稿時の最低待ち時間 [s]
 let lastPublishTime = 0
+let mentionTo = null
+// #endregion
+
+// #region local function
+const maxLength = () => chatType.value == "contact"? 100 : 300  // 文字数制限 (相談 : それ以外)
+const lengthCountStr = () => `文字数：${chatContent.value.length} / ${maxLength()}`
+const messageTitle = (chat) => {
+  return chat.reportTo?
+    `${chat.username}さん → ${chat.reportTo}さん [${new Date(chat.unixtime).toLocaleString("jp-JP")}]` : 
+    `${chat.username}さん [${new Date(chat.unixtime).toLocaleString("jp-JP")}]`
+}
+const convertMessage = (message, mentionTo) => {
+  return message
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\n/g, "<br>")
+          .replace(/"([^"]+)"/g, '<strong>$1</strong>')
+          .replace(new RegExp(`@${mentionTo}`, "g"), `<span class="mention">@${mentionTo}</span>`)
+}
 // #endregion
 
 // #region reactive variable
 const chatType = ref("report")
 const chatContent = ref("")
-const mentionedUser = ref(null)
+const reportTo = ref(null)
 const memoList = reactive([])
 const show_order = ref(true)
 const consult_timelimit = ref(null) // 相談の解答期限
@@ -64,19 +83,16 @@ const onComfirmReply = (contributor, chat_number, content) => {
   onPublishReply()
   isReplyShow.value = true
 }
+
 const onPublishReply = () => {
-  const json_reply = {
+  socket.emit("publishReplyEvent", JSON.stringify({
     type: "reply",
     chatname: replyMessageName.value, // 返信先指名
     contentID: replyMessageID.value, // 返信先ID
     username: userName.value, // 自分の名前
     message: replyContent.value,
-  };
-
-  socket.emit("publishReplyEvent", JSON.stringify(json_reply));
-
-  // Clear the input field
-  replyContent.value = '';
+  }))
+  replyContent.value = ''
 };
 
 // メンション機能
@@ -107,13 +123,12 @@ const filteredOnlineUsers = computed(() => {
 
 const onInput = (event) => {
   const lastAt = chatContent.value.lastIndexOf("@");
-  // if (chatContent.value.includes("@") && mentionedUser.value === null) {
-  if (lastAt && mentionedUser.value === null) {
+  if (lastAt) {
     mentionQuery.value = chatContent.value.slice(lastAt + 1);
     showMentionDropdown.value = true;
-  } else if (!chatContent.value.includes("@") || (mentionedUser.value !== null && !chatContent.value.includes("@" + mentionedUser.value))) {
+  } else if (!chatContent.value.includes("@") || (mentionTo !== null && !chatContent.value.includes("@" + mentionTo))) {
     showMentionDropdown.value = false;
-    mentionedUser.value = null;  // メンションが消されたら、mentionedUserをリセット
+    mentionTo = null;  // メンションが消されたら、mentionToをリセット
   }
 };
 
@@ -123,7 +138,7 @@ const selectMention = (username) => {
   const atIndex = currentContent.lastIndexOf("@");
   chatContent.value = `${currentContent.substring(0, atIndex)}@${username} `;
   showMentionDropdown.value = false;  // Hide the dropdown
-  mentionedUser.value = username;
+  mentionTo = username;
 };
 
 
@@ -148,35 +163,34 @@ const onPublish = () => {
     if (chatContent.value.length > maxLength()) {
       throw new Error('文字数上限を超えています。')
     }
+    if (chatType.value == "report" && !reportTo.value) {
+      throw new Error('報告先のユーザーを指定してください。')
+    }
   } catch(e) {
     alert(e.message)
     return
   }
-  //投稿ボタンを押す前に、報連相の確認を表示する。
-  let type
-  if(chatType.value=="report"){
-    type="報告"
-  }
-  if(chatType.value=="contact"){
-    type="連絡"
-  }
-  if(chatType.value=="consult"){
-    type="相談"
-  }
-  if(!confirm(type+"です。\nよろしいですか？"))  return
 
-  const json_chat = {
+  //投稿ボタンを押す前に、報連相の確認を表示する。
+  if (!confirm(messageTypeText[chatType.value] + "です。\nよろしいですか？")) {
+    return
+  }
+
+  socket.emit("publishEvent", JSON.stringify({
     type: "message",
     message_type: chatType.value,
     username: userName.value,
-    message: chatContent.value,
+    message: convertMessage(chatContent.value, mentionTo),
     ...(chatType.value === "consult" && {
       consult_timelimit: consult_timelimit.value
     }),
-    targetUser: mentionedUser.value,             // 選択されたユーザー
-  }
-
-  socket.emit("publishEvent", JSON.stringify(json_chat))
+    ...(reportTo.value && {
+      reportTo: reportTo.value,
+    }),
+    ...(mentionTo && {
+      mentionTo: mentionTo,
+    }),
+  }))
   lastPublishTime = Date.now()
 
   chatType.value = "report"
@@ -190,19 +204,9 @@ const onMemo = () => {
     username: userName.value,
     message: chatContent.value,
   })
-
-  // onMessageTypeChangeの中で、テキストボックスは初期化される(テンプレートが入力される)ので、無効化
-  // chatContent.value = ''
   chatType.value = "report"
   onMessageTypeChange()
-  chatContent.value = ''
 }
-
-//半角のダブルクォーテーションで囲まれたテキストを太文字に変更
-const formatText = (text) => {  
-  const formattedText = text.replace(/"([^"]+)"/g, '<strong>$1</strong>');
-  return formattedText;
-};
 
 // ほうれんそう選択時の処理
 const onMessageTypeChange = () => {
@@ -227,7 +231,7 @@ const showReply = (contributor, chat_number, content) => {
   replyMessageContent.value = content
   isReplyShow.value = true
   isSubDisplay.value = true
-  filteringReplyList();
+  filteringReplyList()
 }
 
 // 退室メッセージをサーバに送信する
@@ -267,10 +271,6 @@ const registerSocketEvent = () => {
     store.commit('setOnlineUsers', JSON.parse(data))
   }
 
-  const handleError = (data) => {
-    alert(data)
-  }
-
   const handlePublishReplyEvent = (data) => {
     const newReply = JSON.parse(data);
     store.commit('addReply', newReply);
@@ -280,7 +280,6 @@ const registerSocketEvent = () => {
   socket.on("enterEvent", handleEnterEvent)
   socket.on("exitEvent", handleExitEvent)
   socket.on("publishEvent", handlePublishEvent)
-  socket.on("error", handleError)
   socket.on("onlineUsers", handleOnlineUsers)
   socket.on("publishReplyEvent", handlePublishReplyEvent);
 
@@ -293,7 +292,7 @@ const registerSocketEvent = () => {
   })
 }
 
-addEventListener("close", () => {
+addEventListener("beforeunload", () => {
   onExit()
 })
 // #endregion
@@ -313,12 +312,12 @@ addEventListener("close", () => {
           <label><input type="radio" v-model="chatType" value="contact">連絡 </label>
           <label><input type="radio" v-model="chatType" value="consult">相談 </label>
         </form>
-        <div class="length-count" :class="{ 'red': (chatContent.length > maxLength())}">文字数：{{chatContent.length + "/" + maxLength()}}</div>
-        <div class="consult-timelimit" v-if="chatType == 'consult'">回答期限:<input type="datetime-local" step="300" v-model="consult_timelimit"></div>
+        <div class="length-count" :class="{ 'red': (chatContent.length > maxLength())}">{{lengthCountStr()}}</div>
       </div>
-      <div class="online-users">
-        <p>メンションするオンラインユーザー
-          <select v-model="mentionedUser" class="select">
+      <div class="consult-timelimit" v-if="chatType == 'consult'">相談への回答期限: <input type="datetime-local" step="300" v-model="consult_timelimit"></div>
+      <div class="reportTo" v-if="chatType == 'report'">
+        <p>報告先のユーザー: 
+          <select v-model="reportTo" class="select">
             <option disabled value="">選択してください</option>
             <option v-for="user in store.state.onlineUsers" :key="user" :value="user">{{ user }}</option>
           </select>
@@ -327,9 +326,7 @@ addEventListener("close", () => {
       <!-- メンション用のプルダウン -->
       <div ref="mentionDropdown" v-if="showMentionDropdown" class="mention-dropdown" :style="dropdownStyle">
         <ul>
-          <li v-for="user in filteredOnlineUsers" :key="user" @click="selectMention(user)">
-            {{ user }}
-          </li>
+          <li v-for="user in filteredOnlineUsers" :key="user" @click="selectMention(user)">{{ user }}</li>
         </ul>
       </div>
       <textarea @input="onInput($event); setDropdownPosition($event)" @keydown.enter.exact="onPublish" placeholder="投稿文を入力してください " v-model="chatContent"></textarea>
@@ -338,22 +335,20 @@ addEventListener("close", () => {
         <button @click="onMemo">メモ</button>
       </div>
     </div>
+
     <div class="chat-container">
       <div v-if="isMainDisplay" class="chat-area" :class="{'main-only':(!isSubDisplay)}">
         <div class="flex">
           <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
-          <button v-if="isSubDisplay" @click="isSubDisplay=false"><img src="../images/big-icon.png" alt=""></button>
-          <button v-if="!isSubDisplay" @click="isSubDisplay=true"><img src="../images/small-icon.png" alt=""></button>
+          <button class="sizeChange" :class="{ 'small': isSubDisplay }" @click="isSubDisplay = !isSubDisplay"></button>
         </div>
         <ul>
           <li v-for="(chat, i) in show_order? store.state.chatList.slice().reverse() : store.state.chatList.slice()" :key="i">
             <div :class="chat.type" v-if="chat.type=='message'">
               <div class="optionIcon" :class="chat.message_type"></div>
-              <div class="message" :class="{ 'mine': (chat.type === 'message' && chat.username === userName), 'others':  (chat.type === 'message' && chat.username !== userName), 'mentioned': (chat.type === 'message' && chat.targetUser === userName)}">
-                <pre>{{`${chat.username}さん [${new Date(chat.unixtime).toLocaleString("jp-JP")}]` }}</pre>
-                <pre class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)" v-html="formatText(chat.message)"></pre>
-                <span v-if="chat.targetUser !== userName && chat.targetUser !== null"> ({{ chat.targetUser }}へメンションされています)</span>
-                <span v-else-if="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
+              <div class="message" :class="{ 'mine': (chat.type === 'message' && chat.username === userName), 'others':  (chat.type === 'message' && chat.mentionTo !== userName), 'mentioned': (chat.type === 'message' && chat.mentionTo === userName)}">
+                <p>{{messageTitle(chat)}}</p>
+                <p class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)" v-html="chat.message"></p>
                 <div class="button-container flex">
                   <pre><button @click="onComfirmReply(chat.username, chat.chatID, chat.message)">確認</button></pre>
                   <pre v-if="chat.consult_timelimit==null"><button @click="onReply(chat)">返信</button></pre>
@@ -365,7 +360,6 @@ addEventListener("close", () => {
             <pre :class="chat.type" v-if="chat.type=='leave_message'">{{ chat.message }}</pre>
           </li>
         </ul>
-
       </div>
 
       <div v-if="isSubDisplay" class="sub-display" :class="{'sub-only': !isMainDisplay}">
@@ -378,7 +372,7 @@ addEventListener("close", () => {
           <div class="personal-memoStyle">
             <ul>
               <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
-                <pre>{{ memo.message }}</pre>
+                <p v-html="memo.message"></p>
               </li>
             </ul>
           </div>
@@ -398,7 +392,7 @@ addEventListener("close", () => {
           </div>
           <div>
             <pre>{{replyMessageName}}</pre>
-            <pre class="messageContent">{{replyMessageContent}}</pre>
+            <p class="messageContent" v-html="replyMessageContent"></p>
             <ul>
               <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
                 <div class="user-name">{{reply.username}}</div>

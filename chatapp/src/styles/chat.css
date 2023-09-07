@@ -13,9 +13,8 @@ html, body, #app{
   font-weight: bold;
   color: #6594e0;/*文字色*/
   border-bottom: dashed 2px #6594e0;
-
-
 }
+
 .chat .submit button{/*投稿　メモボタン*/
   margin-right: 8px;
   padding: 4px;
@@ -82,7 +81,7 @@ html, body, #app{
   margin-right: 32px;
 }
 
-.chat .online-users{/*メンションするオンラインユーザー*/
+.chat .reportTo{/*メンションするオンラインユーザー*/
   text-align: center;
   padding: 0.3em 1em;
   margin: 0.5em 0;
@@ -96,7 +95,21 @@ html, body, #app{
   margin-bottom: 5px; /* 下に10pxのスペースを追加 */
 }
 
-.chat .online-users select{/*メンションするオンラインユーザー　選択*/
+.chat .consult-timelimit{
+  padding: 0.5em 1em;
+  margin: 0 auto 6px;
+  font-weight: bold;
+  color: #6091d3;/*文字色*/
+  font-size: 18px; /* フォントサイズを20pxに設定 */
+  letter-spacing: 2px; /* 文字間隔を2pxに設定*/
+  background: #FFF;
+  /* border: solid 3px #6091d3;線 */
+  /* border-radius: 10px;角の丸み */
+  width: 80%;/*画面の大きさが変わっても見やすい*/
+}
+
+
+.chat .reportTo select{/*メンションするオンラインユーザー　選択*/
   text-align: center;
   width: 20%;
   height: 30px;
@@ -234,6 +247,12 @@ html, body, #app{
   transform: rotate(35deg);
 }
 
+.chat .messageContent .mention{
+  color: #33f !important;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
 .chat .enter_message, .leave_message{
   padding: 10px;
   margin-left: 50px;
@@ -265,6 +284,14 @@ html, body, #app{
 .chat .message.mentioned .messageContent::after {
   border-right: 18px solid #D8FF00;
 }
+
+.chat .message.mentioned .messageContent::before {
+  content: "あなたにメンションされています";
+  display: block;
+  font: bold 12px sans-serif;
+  color: #f00;
+}
+
 
 .chat .notes {
   margin-left: 2em;
@@ -407,13 +434,20 @@ html, body, #app{
 }
 
 /* 最大化ボタンの右寄せ */
-.chat-area .flex button {
+.chat button.sizeChange {
   margin-top: 3px;
   margin-right: 3px;
   margin-left: auto;
+  width: 20px;
+  height: 20px;
+  background: url("../images/big-icon.png");
+  background-size: cover;
 }
 
-
+.chat button.sizeChange.small {
+  background: url("../images/small-icon.png");
+  background-size: cover;
+}
 
 /**** メモ・返信欄に関するデザイン ****/
 .sub-display {
