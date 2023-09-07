@@ -372,10 +372,10 @@ addEventListener("close", () => {
         <div class="memo" v-if="!isReplyShow">
           <div class="flex">
             <button class="big" v-if="isMainDisplay" @click="isMainDisplay=false"><img src="../images/big-icon.png" alt=""></button>
-            <h3>メモ一覧</h3>
+            <p class="user-memo">{{ userName }}さん専用メモ</p>
             <button class="small" v-if="!isMainDisplay" @click="isMainDisplay=true"><img src="../images/small-icon.png" alt=""></button>
           </div>
-          <div>
+          <div class="personal-memoStyle">
             <ul>
               <li v-for="(memo, i) in memoList.slice().reverse()" :key="i">
                 <pre>{{ memo.message }}</pre>
