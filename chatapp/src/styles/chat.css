@@ -1,11 +1,12 @@
-html, body, #app{
+html, body, #app {
   height: 100%;
 }
 
 .chat {
   margin: 16px;
 }
-.chat h1{/*報連相チャットルーム*/
+
+.chat h1 {/*コミュニケーションラボ*/
   text-align: center;
   padding: 0.2em 1em;/* 上下の余白を小さく */
   margin: 0.2em 0; /* 上下の余白を小さく */
@@ -13,22 +14,6 @@ html, body, #app{
   font-weight: bold;
   color: #6594e0;/*文字色*/
   border-bottom: dashed 2px #6594e0;
-}
-
-.chat .submit button{/*投稿　メモボタン*/
-  margin-right: 8px;
-  padding: 4px;
-  border-radius: 8px;
-  background: #eeeeee !important;
-}
-.chat .post{
-  width: 90%;
-  padding: 2em 1em;
-  margin: 2em auto;
-  color: #00BCD4;
-  background: #e4fcff;/*背景色*/
-  border-top: solid 6px #1dc1d6;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.32);/*影*/
 }
 
 .chat .login-user {/*ログインユーザー：○○さん*/
@@ -45,13 +30,31 @@ html, body, #app{
   margin-bottom: 20px;
 }
 
-.chat .post-info {/*報連相選択　文字数*/
+/* -------- 投稿送信部分 -------- */
+
+.chat .post {
+  width: 90%;
+  padding: 2em 1em;
+  margin: 2em auto;
+  color: #00BCD4;
+  background: #e4fcff;/*背景色*/
+  border-top: solid 6px #1dc1d6;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.32);/*影*/
+}
+
+.chat .post button {/*投稿　メモボタン*/
+  margin-right: 8px;
+  padding: 4px;
+  border-radius: 8px;
+  background: #eeeeee !important;
+}
+
+.chat .post .post-info {/*報連相選択　文字数*/
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   padding: 0.5em 1em;
   margin: 0.5em 0;
   font-weight: bold;
@@ -59,14 +62,12 @@ html, body, #app{
   font-size: 18px; /* フォントサイズを20pxに設定 */
   letter-spacing: 2px; /* 文字間隔を2pxに設定*/
   background: #FFF;
-  /* border: solid 3px #6091d3;線 */
-  /* border-radius: 10px;角の丸み */
   width: 80%;/*画面の大きさが変わっても見やすい*/
   margin: 0 auto; /* 水平方向に中央寄せ */
   margin-bottom: 5px; /* 下に10pxのスペースを追加 */
 }
 
-.chat .post-info form {
+.chat .post .post-info form {
   float: left;
   margin-right: 32px;
 }
@@ -81,21 +82,19 @@ html, body, #app{
   margin-right: 32px;
 }
 
-.chat .reportTo{/*メンションするオンラインユーザー*/
+.chat .post .reportTo {/*メンションするオンラインユーザー*/
   text-align: center;
   padding: 0.3em 1em;
   margin: 0.5em 0;
   font-weight: bold;
   color: #0a0a0af3;/*文字色*/
   background: #FFF;
-  /* border: solid 1.5px #0a0a0af3;線 */
-  /* border-radius: 5px;角の丸み */
   width: 80%;/*画面の大きさが変わっても見やすい*/
   margin: 0 auto; /* 水平方向に中央寄せ */
   margin-bottom: 5px; /* 下に10pxのスペースを追加 */
 }
 
-.chat .consult-timelimit{
+.chat .post .consult-timelimit{
   padding: 0.5em 1em;
   margin: 0 auto 6px;
   font-weight: bold;
@@ -103,13 +102,10 @@ html, body, #app{
   font-size: 18px; /* フォントサイズを20pxに設定 */
   letter-spacing: 2px; /* 文字間隔を2pxに設定*/
   background: #FFF;
-  /* border: solid 3px #6091d3;線 */
-  /* border-radius: 10px;角の丸み */
   width: 80%;/*画面の大きさが変わっても見やすい*/
 }
 
-
-.chat .reportTo select{/*メンションするオンラインユーザー　選択*/
+.chat .post .reportTo select{/*メンションするオンラインユーザー　選択*/
   text-align: center;
   width: 20%;
   height: 30px;
@@ -132,7 +128,7 @@ html, body, #app{
   margin-bottom: 5px; /* 下に10pxのスペースを追加 */
 }
 
-.chat textarea {/*横幅を500pxにしたいけど、上手くいかない*/
+.chat .post textarea {/*横幅を500pxにしたいけど、上手くいかない*/
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -144,7 +140,7 @@ html, body, #app{
   margin-bottom: 10px; /* 下に10pxのスペースを追加 */
 }
 
-.chat .submit{/*投稿　メモボタンの外枠*/
+.chat .post .submit {/*投稿　メモボタンの外枠*/
   text-align: center;
   width: 200em;
   padding: 0.3em 1em;
@@ -152,8 +148,6 @@ html, body, #app{
   font-weight: bold;
   color: #0a0a0af3;/*文字色*/
   background: #FFF;
-  /* border: solid 1.5px #0a0a0af3;線 */
-  /* border-radius: 5px;角の丸み */
   width: 80%;/*画面の大きさが変わっても見やすい*/
   margin: 0 auto; /* 水平方向に中央寄せ */
   margin-bottom: 5px; /* 下に10pxのスペースを追加 */
@@ -173,10 +167,11 @@ html, body, #app{
   margin: 5px 50px;
 }
 
-.chat .chat-container{
+/* -------- 投稿表示部分:全体 -------- */
+
+.chat .chat-container {
   display: flex;
   margin-top: 32px;
-
   width: 90%;
   padding: 2em 1em;
   margin: 2em auto;
@@ -186,11 +181,13 @@ html, body, #app{
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.32);/*影*/
 }
 
-.chat .chat-area{
+/* -------- 投稿表示部分:メイン -------- */
+
+.chat .chat-area {
   overflow: auto; /* 必要に応じてスクロールを有効にする */
 }
 
-.chat .optionIcon {
+.chat .chat-area .optionIcon {
   float: left;
   width: 50px;
   height: 40px;
@@ -201,21 +198,9 @@ html, body, #app{
   border-radius: 50%;
 }
 
-.chat .optionIcon.report::before{
-  content: "報告";
-}
-
-.chat .optionIcon.contact::before{
-  content: "連絡";
-}
-
-.chat .optionIcon.consult::before{
-  content: "相談";
-}
-
-.chat .optionIcon.confirm::before{
-  content: "確認";
-}
+.chat .chat-area .optionIcon.report::before{ content: "報告"; }
+.chat .chat-area .optionIcon.contact::before{ content: "連絡"; }
+.chat .chat-area .optionIcon.consult::before{ content: "相談"; }
 
 .chat .chat-area li{
   overflow: hidden;
@@ -227,7 +212,7 @@ html, body, #app{
   width: calc(100% - 60px);
 }
 
-.chat .messageContent{
+.chat .chat-area .message .messageContent{
   display: inline-block;
   position: relative;
   margin: 0 0 10px 0;
@@ -236,8 +221,7 @@ html, body, #app{
   border-radius: 12px;
 }
 
-.chat .messageContent::after{
-  content: "";
+.chat .chat-area .message .messageContent::after{
   display: inline-block;
   position: absolute;
   top: 3px;
@@ -247,43 +231,14 @@ html, body, #app{
   transform: rotate(35deg);
 }
 
-.chat .messageContent .mention{
-  color: #33f !important;
-  text-decoration: underline;
-  font-weight: bold;
-}
+.chat .chat-area .message.mine .messageContent{ background: #97ebac; }
+.chat .chat-area .message.mine .messageContent::after{ border-right: 18px solid #97ebac; }
 
-.chat .enter_message, .leave_message{
-  padding: 10px;
-  margin-left: 50px;
-  width: 200px;
-  border: 1px solid #000;
-  border-radius: 12px;
-}
+.chat .chat-area .message.others .messageContent{ background: #edf1ee; }
+.chat .chat-area .message.others .messageContent::after{ border-right: 18px solid #edf1ee; }
 
-.chat .message.mine .messageContent{
-  background: #97ebac;
-}
-
-.chat .message.mine .messageContent::after{
-  border-right: 18px solid #97ebac;
-}
-
-.chat .message.others .messageContent {
-  background: #edf1ee;
-}
-
-.chat .message.others .messageContent::after {
-  border-right: 18px solid #edf1ee;
-}
-
-.chat .message.mentioned .messageContent {
-  background: #D8FF00;
-}
-
-.chat .message.mentioned .messageContent::after {
-  border-right: 18px solid #D8FF00;
-}
+.chat .chat-area .message.mentioned .messageContent{ background: #D8FF00; }
+.chat .chat-area .message.mentioned .messageContent::after{ border-right: 18px solid #D8FF00; }
 
 .chat .message.mentioned .messageContent::before {
   content: "あなたにメンションされています";
@@ -292,38 +247,36 @@ html, body, #app{
   color: #f00;
 }
 
+.chat .chat-area .message .messageContent .mention{
+  color: #33f !important;
+  text-decoration: underline;
+  font-weight: bold;
+}
 
-.chat .notes {
+.chat .chat-area .message .notes {
   margin-left: 2em;
 }
 
-.chat .my-username {
-  font-weight: bold;
-  color: blue;
-}
-
-.chat .mentioned .messageContent{
-  display: inline-block;
-  position: relative;
-  margin: 0 0 10px 0;
+.chat .chat-area .enter_message,
+.chat .chat-area .leave_message{
   padding: 10px;
-  max-width: 800px;
+  margin-left: 50px;
+  width: 200px;
+  border: 1px solid #000;
   border-radius: 12px;
-  background: #ddff00;
 }
 
-.chat .mentioned .messageContent::after{
-  content: "";
-  display: inline-block;
-  position: absolute;
-  top: 3px;
-  left: -19px;
-  border: 8px solid transparent;
-  border-right: 18px solid #ddff00;
-  -webkit-transform: rotate(35deg);
-  transform: rotate(35deg);
+/**** メモに関するデザイン ****/
+.chat .sub-display {
+  border: 1px solid #00BCD4;
 }
-.chat .user-memo {/*○○さん専用メモ*/
+
+.chat .sub-display .memo{
+  overflow: auto; /* 必要に応じてスクロールを有効にする */
+  margin-left: 10px; /* チャット欄とメモ欄の間にマージンを追加 */
+}
+
+.chat .sub-display .user-memo {/*○○さん専用メモ*/
   text-align: center;
   padding: 0.5em 1em;
   margin: 0.2em 0;
@@ -336,19 +289,17 @@ html, body, #app{
   margin: 0 auto;
   margin-bottom: 10px;
 }
-.chat .personal-memoStyle{
+
+.chat .sub-display .personal-memoStyle{
   padding: 0.5em 1em;
   margin: 0em 0;
   background: #f4f4f4;
   border-left: solid 6px #5bb7ae;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.33);
 }
-.chat .memo{
-  overflow: auto; /* 必要に応じてスクロールを有効にする */
-  margin-left: 10px; /* チャット欄とメモ欄の間にマージンを追加 */
-}
 
-.chat .memo.reply{
+/**** 返信欄に関するデザイン ****/
+.chat .sub-display .memo.reply{
   margin: -8px;
   padding: 8px;
   border-radius: 16px;
@@ -449,10 +400,6 @@ html, body, #app{
   background-size: cover;
 }
 
-/**** メモ・返信欄に関するデザイン ****/
-.sub-display {
-  border: 1px solid #00BCD4;
-}
 
 /* 拡大ボタン */
 .memo .flex .big {
