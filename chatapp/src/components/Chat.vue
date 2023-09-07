@@ -198,6 +198,12 @@ const onMemo = () => {
   chatContent.value = ''
 }
 
+//半角のダブルクォーテーションで囲まれたテキストを太文字に変更
+const formatText = (text) => {  
+  const formattedText = text.replace(/"([^"]+)"/g, '<strong>$1</strong>');
+  return formattedText;
+};
+
 // ほうれんそう選択時の処理
 const onMessageTypeChange = () => {
   switch (chatType.value) {
@@ -345,7 +351,7 @@ addEventListener("close", () => {
               <div class="optionIcon" :class="chat.message_type"></div>
               <div class="message" :class="{ 'mine': (chat.type === 'message' && chat.username === userName), 'others':  (chat.type === 'message' && chat.username !== userName), 'mentioned': (chat.type === 'message' && chat.targetUser === userName)}">
                 <pre>{{`${chat.username}さん [${new Date(chat.unixtime).toLocaleString("jp-JP")}]` }}</pre>
-                <pre class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)">{{ chat.message }}</pre>
+                <pre class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)" v-html="formatText(chat.message)"></pre>
                 <span v-if="chat.targetUser !== userName && chat.targetUser !== null"> ({{ chat.targetUser }}へメンションされています)</span>
                 <span v-else-if="chat.targetUser === userName">（このメッセージはあなたへメンションされています）</span>
                 <div class="button-container flex">
