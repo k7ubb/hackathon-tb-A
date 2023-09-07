@@ -6,7 +6,7 @@ export default (io, socket) => {
 
   // ログイン前に、usernameが使用可能か確認する
   socket.on("tryEnter", (username) =>{
-    socket.emit(connectedUsers.includes(username)? "login_deny" : "login_arrow")
+    socket.emit(connectedUsers.includes(username)? "login_deny" : "login_allow")
   })
 
   for(let event of ["enterEvent", "exitEvent", "publishEvent", "publishReplyEvent"]){
@@ -26,8 +26,6 @@ export default (io, socket) => {
         case "exitEvent":
           connectedUsers = connectedUsers.filter((x) => x != user)
           break
-
-
       }
       
       io.sockets.emit("onlineUsers", JSON.stringify(connectedUsers))

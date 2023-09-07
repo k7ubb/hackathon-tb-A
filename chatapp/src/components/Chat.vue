@@ -175,7 +175,6 @@ const onPublish = () => {
   if (!confirm(messageTypeText[chatType.value] + "です。\nよろしいですか？")) {
     return
   }
-
   socket.emit("publishEvent", JSON.stringify({
     type: "message",
     message_type: chatType.value,
@@ -184,7 +183,7 @@ const onPublish = () => {
     ...(chatType.value === "consult" && {
       consult_timelimit: consult_timelimit.value
     }),
-    ...(reportTo.value && {
+    ...(chatType.value === "report"  && {
       reportTo: reportTo.value,
     }),
     ...(mentionTo && {
@@ -346,7 +345,7 @@ addEventListener("beforeunload", () => {
           <li v-for="(chat, i) in show_order? store.state.chatList.slice().reverse() : store.state.chatList.slice()" :key="i">
             <div :class="chat.type" v-if="chat.type=='message'">
               <div class="optionIcon" :class="chat.message_type"></div>
-              <div class="message" :class="{ 'mine': (chat.type === 'message' && chat.username === userName), 'others':  (chat.type === 'message' && chat.mentionTo !== userName), 'mentioned': (chat.type === 'message' && chat.mentionTo === userName)}">
+              <div class="message" :class="{ 'mine': chat.username === userName, 'mentioned': chat.mentionTo === userName, 'others':  (chat.mentionTo && chat.mentionTo !== userName)}">
                 <p>{{messageTitle(chat)}}</p>
                 <p class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)" v-html="chat.message"></p>
                 <div class="button-container flex">
