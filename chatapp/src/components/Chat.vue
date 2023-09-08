@@ -90,7 +90,7 @@ const onPublishReply = () => {
     chatname: replyMessageName.value, // 返信先指名
     contentID: replyMessageID.value, // 返信先ID
     username: userName.value, // 自分の名前
-    message: replyContent.value,
+    message: convertMessage(replyContent.value),
   }))
   replyContent.value = ''
 };
@@ -201,7 +201,7 @@ const onMemo = () => {
   memoList.push({
     type: "memo",
     username: userName.value,
-    message: chatContent.value,
+    message: convertMessage(chatContent.value),
   })
   chatType.value = "report"
   onMessageTypeChange()
@@ -397,7 +397,7 @@ addEventListener("beforeunload", () => {
             <ul>
               <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
                 <div class="user-name">{{reply.username}}</div>
-                <div class="content">{{reply.replycontent}}</div>
+                <div v-html="reply.replycontent" class="content"></div>
               </li>
             </ul>
             </div>
