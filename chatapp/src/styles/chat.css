@@ -296,12 +296,13 @@ html, body, #app {
   text-align: center;
   /* padding: 0.5em 1em; */
   /* margin: 0.2em 0; */
+  margin-right: 3px;
   font-weight: bold;
   letter-spacing: 5px;
   color: #0a0a0af3;
   background: #FFF;
   border-radius: 5px;
-  width: 90%;
+  width: 80%;
   margin: 0 auto;
   margin-bottom: 10px;
 }
@@ -312,6 +313,10 @@ html, body, #app {
   background: #f4f4f4;
   border-left: solid 6px #5bb7ae;
   box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.33);
+}
+
+.sub-display .memo .close {
+  margin: 0 3px 0 auto;
 }
 
 /**** 返信欄に関するデザイン ****/
@@ -406,7 +411,7 @@ html, body, #app {
 
 /* 最大化ボタンの右寄せ */
 .chat button.sizeChange {
-  margin-top: 3px;
+  margin-top: 0;
   margin-right: 3px;
   margin-left: auto;
   width: 20px;
@@ -445,6 +450,11 @@ html, body, #app {
   padding: 10px 0 0 10px;  
 }
 
+.sub-display .size-button {
+  margin-right: 0px;
+  margin-left: auto;
+}
+
 /**** 返信欄に関するデザイン ****/
 
 /* 「メモ一覧を表示」ボタン */
@@ -453,9 +463,9 @@ html, body, #app {
   justify-content: space-between;
   align-items: center;
   position: relative;
-  width: 150px;
+  width: 120px;
   height: 25px;
-  /* margin: 0 auto; */
+  margin: 3px auto 0 auto;
   /* padding: .9em 2em; */
   border: none;
   border-radius: 25px;
@@ -468,8 +478,8 @@ html, body, #app {
   position: absolute;
   right: calc(2em + 2.5px);
   transform: translateX(50%);
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background-color: #fff;
   content: '';
@@ -482,6 +492,17 @@ html, body, #app {
   border-top: 3px solid #2589d0;
   border-right: 3px solid #2589d0;
   content: '';
+}
+
+/* 最大化ボタン、閉じるボタン */
+.reply .big {
+  margin-right: -3px;
+  /* background-color: #00BCD4; */
+}
+
+.reply .close {
+  margin-left: 0;
+  background-color: #1579c0;
 }
 
 /* 返信欄のもとのメッセージ */
@@ -566,4 +587,9 @@ button img {
 .sub-display.sub-only {
   width: 100%;
   background-color: #cdebee;
+}
+
+/* メモ閉じるボタン　*/
+.sub-display .memo .small {
+  margin-right: 3px;
 }

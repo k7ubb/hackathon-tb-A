@@ -343,6 +343,7 @@ addEventListener("beforeunload", () => {
         <div class="flex">
           <label><input type="checkbox" v-model="show_order"> 新しいメッセージを上に表示</label>
           <button class="sizeChange" :class="{ 'small': isSubDisplay }" @click="isSubDisplay = !isSubDisplay"></button>
+          <button v-if="isSubDisplay" @click="isMainDisplay=false"><img src="../images/close.png" alt="x"></button>
         </div>
         <ul>
           <li v-for="(chat, i) in show_order? store.state.chatList.slice().reverse() : store.state.chatList.slice()" :key="i">
@@ -370,6 +371,7 @@ addEventListener("beforeunload", () => {
             <p class="user-memo">{{ userName }}さん専用メモ</p>
             <button class="big" v-if="isMainDisplay" @click="isMainDisplay=false"><img src="../images/big-icon.png" alt=""></button>
             <button class="small" v-if="!isMainDisplay" @click="isMainDisplay=true"><img src="../images/small-icon.png" alt=""></button>
+            <button class="close" v-if="isMainDisplay" @click="isSubDisplay=false"><img src="../images/close.png" alt="x"></button>
           </div>
           <div class="personal-memoStyle">
             <ul>
@@ -383,8 +385,11 @@ addEventListener("beforeunload", () => {
         <div class="memo reply" v-if="isReplyShow">
           <div class="flex">
             <button id="memo-show" @click="isReplyShow=false">メモ一覧を表示</button>
-            <button class="big" v-if="isMainDisplay" @click="isMainDisplay=false"><img src="../images/big-icon.png" alt=""></button>
-            <button class="small" v-if="!isMainDisplay" @click="isMainDisplay=true"><img src="../images/small-icon.png" alt=""></button>
+            <div class="size-button">
+              <button class="big" v-if="isMainDisplay" @click="isMainDisplay=false"><img src="../images/big-icon.png" alt=""></button>
+              <button class="small" v-if="!isMainDisplay" @click="isMainDisplay=true"><img src="../images/small-icon.png" alt=""></button>
+              <button v-if="isMainDisplay" @click="isSubDisplay=false"><img src="../images/close.png" alt="x"></button>
+            </div>
           </div>
           <div class="message-content">
             <pre>{{replyMessageName}}</pre>
