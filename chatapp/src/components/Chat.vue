@@ -90,7 +90,7 @@ const onPublishReply = () => {
     chatname: replyMessageName.value, // 返信先指名
     contentID: replyMessageID.value, // 返信先ID
     username: userName.value, // 自分の名前
-    message: replyContent.value,
+    message: convertMessage(replyContent.value),
   }))
   replyContent.value = ''
 };
@@ -395,7 +395,7 @@ addEventListener("beforeunload", () => {
             <ul>
               <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
                 <div class="user-name">{{reply.username}}</div>
-                <div>{{reply.replycontent}}</div>
+                <p v-html="reply.replycontent"></p>
               </li>
             </ul>
             </div>
