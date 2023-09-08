@@ -37,6 +37,7 @@ export default createStore({
    addReply(state, reply) {
     if (!state.replyList.some(existingReply => existingReply.unixtime === reply.unixtime)) {
       state.replyList.push(reply);
+      console.log("Current replyList in store:", state.replyList);
     }
   },
   },

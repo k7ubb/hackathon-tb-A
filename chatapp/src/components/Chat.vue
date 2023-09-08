@@ -25,7 +25,7 @@ const maxLength = () => chatType.value == "contact"? 100 : 300  // 文字数制�
 const lengthCountStr = () => `文字数：${chatContent.value.length} / ${maxLength()}`
 const messageTitle = (chat) => {
   return chat.reportTo?
-    `${chat.username}さん → ${chat.reportTo}さん [${new Date(chat.unixtime).toLocaleString("jp-JP")}]` : 
+    `${chat.username}さん → ${chat.reportTo}さん [${new Date(chat.unixtime).toLocaleString("jp-JP")}]` :
     `${chat.username}さん [${new Date(chat.unixtime).toLocaleString("jp-JP")}]`
 }
 const convertMessage = (message, mentionTo) => {
@@ -275,7 +275,8 @@ const registerSocketEvent = () => {
   const handlePublishReplyEvent = (data) => {
     const newReply = JSON.parse(data);
     store.commit('addReply', newReply);
-   filteringReplyList();
+    filteringReplyList();
+    console.log("Received reply in chat.vue:", newReply);
   };
 
   socket.on("enterEvent", handleEnterEvent)
@@ -317,7 +318,7 @@ addEventListener("beforeunload", () => {
       </div>
       <div class="consult-timelimit" v-if="chatType == 'consult'">相談への回答期限: <input type="datetime-local" step="300" v-model="consult_timelimit"></div>
       <div class="reportTo" v-if="chatType == 'report'">
-        <p>報告先のユーザー: 
+        <p>報告先のユーザー:
           <select v-model="reportTo" class="select">
             <option disabled value="">選択してください</option>
             <option v-for="user in store.state.onlineUsers" :key="user" :value="user">{{ user }}</option>
