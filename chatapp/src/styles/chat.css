@@ -239,6 +239,14 @@ html, body, #app {
   transform: rotate(35deg);
 }
 
+.chat-area .consult-option {
+  padding-top: 8px;
+  padding-left: 0;
+  margin-left: 0;
+  font-weight: 100;
+  font-size: small;
+}
+
 .chat .chat-area .message.mine .messageContent{ background: #97ebac; }
 .chat .chat-area .message.mine .messageContent::after{ border-right: 18px solid #97ebac; }
 
@@ -321,9 +329,7 @@ html, body, #app {
   border-right: 18px solid #97ebac;
 }
 
-.chat .button-container {
-  display: flex;
-}
+
 
 .chat .mention-dropdown {
   position: absolute;
@@ -369,6 +375,10 @@ html, body, #app {
 }
 
 /* 確認・返信ボタン */
+.chat .button-container {
+  display: flex;
+}
+
 .chat .button-container button {
   display: flex;
   justify-content: center;

@@ -39,6 +39,10 @@
     margin: 0 8px;
   }
 
-
+  .chat .button-container.responsive-flex {
+    display: block;
+    width: 12em;
+    background-color: aliceblue;
+  }
 
 }

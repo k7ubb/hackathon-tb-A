@@ -205,6 +205,8 @@ const onMemo = () => {
   })
   chatType.value = "report"
   onMessageTypeChange()
+  isSubDisplay.value = true;
+  isReplyShow.value = false;
 }
 
 // ほうれんそう選択時の処理
@@ -348,10 +350,10 @@ addEventListener("beforeunload", () => {
               <div class="message" :class="{ 'mine': chat.username === userName, 'mentioned': chat.mentionTo === userName, 'others':  (chat.mentionTo && chat.mentionTo !== userName)}">
                 <p>{{messageTitle(chat)}}</p>
                 <p class="messageContent" @click="showReply(chat.username, chat.chatID, chat.message)" v-html="chat.message"></p>
-                <div class="button-container flex">
-                  <pre><button @click="onComfirmReply(chat.username, chat.chatID, chat.message)">確認</button></pre>
-                  <pre v-if="chat.consult_timelimit==null"><button @click="onReply(chat)">返信</button></pre>
-                  <div class="consult-option notes" v-if="chat.consult_timelimit!=null">{{ "※回答期限："+chat.consult_timelimit }}</div>
+                <div class="button-container" :class="{'responsive-flex': chat.consult_timelimit!=null}">
+                  <pre><button @click="onReply(chat)">返信</button></pre>
+                  <pre v-if="chat.consult_timelimit==null"><button @click="onComfirmReply(chat.username, chat.chatID, chat.message), isSubDisplay=true">確認</button></pre>
+                  <div class="consult-option notes" v-if="chat.consult_timelimit!=null">{{ "※回答期限："+chat.consult_timelimit.replace(/(.*?)-/, "-").replace("T", " ").replace(/-(.*?)-/g, '$1/') }}</div>
                 </div>
               </div>
             </div>
