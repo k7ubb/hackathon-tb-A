@@ -201,7 +201,7 @@ const onMemo = () => {
   memoList.push({
     type: "memo",
     username: userName.value,
-    message: chatContent.value,
+    message: convertMessage(chatContent.value),
   })
   chatType.value = "report"
   onMessageTypeChange()
