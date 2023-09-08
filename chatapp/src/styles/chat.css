@@ -273,6 +273,7 @@ html, body, #app {
 /**** メモに関するデザイン ****/
 .chat .sub-display {
   border: 1px solid #00BCD4;
+  background-color: #e4fcff;
 }
 
 .chat .sub-display .memo{
@@ -357,6 +358,11 @@ html, body, #app {
 
 
 /**** 投稿欄に関するデザイン ****/
+
+.chat-container .chat-area {
+  background-color: #e4fcff;
+  padding: 5px;
+}
 
 /* 確認・返信ボタン */
 .chat .button-container button {
@@ -446,15 +452,29 @@ html, body, #app {
   content: '';
 }
 
+/* 返信欄のもとのメッセージ */
+.reply .message-content pre {
+  margin-left: 20px;
+}
+.reply .message-content div{
+  /* text-align: center; */
+  margin-left: 20px;
+  margin-right: 15px;
+}
+
 /* 返信ボタン */
+.reply .mt-5 {
+  margin: 0;
+  padding: 0;    
+}
 .reply .mt-5 button {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 9em;
   height: 3em;
-  margin: 0 auto;
-  padding: .9em 2em;
+  margin: 0 auto 0 5px;
+  /* padding: .9em 2em; */
   border: none;
   border-radius: 25px;
   background-color: #2589d0;
@@ -474,6 +494,22 @@ html, body, #app {
   content: '';
 }
 
+/* 返信メッセージ */
+.reply .reply-content ul {
+  list-style: none;
+}
+
+.reply .reply-content li {
+  margin: 5px 20px;
+}
+.reply .reply-content li .user-name {
+  font-size: small;
+  font-weight: 700;
+}
+.reply .reply-content li .content {
+  padding-left: 3px;
+  border-left: #00BCD4 solid;
+}
 
 /*******************************************/
 /* 投稿表示欄60%+メモ・返信欄40%の場合 */
@@ -495,6 +531,7 @@ button img {
 /*******************************************/
 /* メモ・返信欄100%の場合 */
 /*******************************************/
-.sub-only .memo{
+.sub-display.sub-only {
   width: 100%;
+  background-color: #cdebee;
 }

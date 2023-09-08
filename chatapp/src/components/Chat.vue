@@ -383,19 +383,21 @@ addEventListener("beforeunload", () => {
             <button class="big" v-if="isMainDisplay" @click="isMainDisplay=false"><img src="../images/big-icon.png" alt=""></button>
             <button class="small" v-if="!isMainDisplay" @click="isMainDisplay=true"><img src="../images/small-icon.png" alt=""></button>
           </div>
+          <div class="message-content">
+            <pre>{{replyMessageName}}</pre>
+            <div><p class="messageContent" v-html="replyMessageContent"></p></div>
+          </div>
           <div>
             <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
             <div class="mt-5">
               <button class="button-normal" @click="onPublishReply">返信</button>
             </div>
           </div>
-          <div>
-            <pre>{{replyMessageName}}</pre>
-            <p class="messageContent" v-html="replyMessageContent"></p>
+          <div class="reply-content">
             <ul>
               <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
                 <div class="user-name">{{reply.username}}</div>
-                <div>{{reply.replycontent}}</div>
+                <div class="content">{{reply.replycontent}}</div>
               </li>
             </ul>
             </div>

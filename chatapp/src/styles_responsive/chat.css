@@ -31,4 +31,14 @@
 
 @media screen and (max-width:480px) {
   /* スマホだけに適用したいスタイル */
+
+  /**** 返信欄 ****/
+  
+  .reply textarea {
+    width: 90%;
+    margin: 0 8px;
+  }
+
+
+
 }
