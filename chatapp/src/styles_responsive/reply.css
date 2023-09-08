@@ -6,9 +6,9 @@
   .reply button{
     margin-right: 8px;
     padding: 4px;
-    border: 1px solid #999 !important;
+    /* border: 1px solid #999 !important; */
     border-radius: 8px;
-    background: #eeeeee !important;
+    /* background: #eeeeee !important; */
   }
 
   .reply .login-user {

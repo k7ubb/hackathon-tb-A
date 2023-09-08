@@ -6,7 +6,7 @@
   .reply button{
     margin-right: 8px;
     padding: 4px;
-    border: 1px solid #999 !important;
+    /* border: 1px solid #999 !important; */
     border-radius: 8px;
   }
   .reply h1{/*コミュニケーションラボ*/

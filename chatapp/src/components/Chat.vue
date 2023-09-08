@@ -364,8 +364,8 @@ addEventListener("beforeunload", () => {
       <div v-if="isSubDisplay" class="sub-display" :class="{'sub-only': !isMainDisplay}">
         <div class="memo" v-if="!isReplyShow">
           <div class="flex">
-            <button class="big" v-if="isMainDisplay" @click="isMainDisplay=false"><img src="../images/big-icon.png" alt=""></button>
             <p class="user-memo">{{ userName }}さん専用メモ</p>
+            <button class="big" v-if="isMainDisplay" @click="isMainDisplay=false"><img src="../images/big-icon.png" alt=""></button>
             <button class="small" v-if="!isMainDisplay" @click="isMainDisplay=true"><img src="../images/small-icon.png" alt=""></button>
           </div>
           <div class="personal-memoStyle">
@@ -379,8 +379,8 @@ addEventListener("beforeunload", () => {
 
         <div class="memo reply" v-if="isReplyShow">
           <div class="flex">
-            <button class="big" v-if="isMainDisplay" @click="isMainDisplay=false"><img src="../images/big-icon.png" alt=""></button>
             <button id="memo-show" @click="isReplyShow=false">メモ一覧を表示</button>
+            <button class="big" v-if="isMainDisplay" @click="isMainDisplay=false"><img src="../images/big-icon.png" alt=""></button>
             <button class="small" v-if="!isMainDisplay" @click="isMainDisplay=true"><img src="../images/small-icon.png" alt=""></button>
           </div>
           <div>

@@ -167,10 +167,14 @@ html, body, #app {
   margin: 5px 50px;
 }
 
+
+/*******************************************/
+/* 投稿表示欄、メモ・返信欄に関するデザイン */
+/*******************************************/
+
 /* -------- 投稿表示部分:全体 -------- */
 
 .chat .chat-container {
-  display: flex;
   margin-top: 32px;
   width: 90%;
   padding: 2em 1em;
@@ -273,13 +277,12 @@ html, body, #app {
 
 .chat .sub-display .memo{
   overflow: auto; /* 必要に応じてスクロールを有効にする */
-  margin-left: 10px; /* チャット欄とメモ欄の間にマージンを追加 */
 }
 
 .chat .sub-display .user-memo {/*○○さん専用メモ*/
   text-align: center;
-  padding: 0.5em 1em;
-  margin: 0.2em 0;
+  /* padding: 0.5em 1em; */
+  /* margin: 0.2em 0; */
   font-weight: bold;
   letter-spacing: 5px;
   color: #0a0a0af3;
@@ -301,7 +304,7 @@ html, body, #app {
 /**** 返信欄に関するデザイン ****/
 .chat .sub-display .memo.reply{
   margin: -8px;
-  padding: 8px;
+  /* padding: 8px; */
   border-radius: 16px;
 }
 
@@ -344,9 +347,6 @@ html, body, #app {
   background-color: #f2f2f2;
 }
 
-/*******************************************/
-/* 投稿表示欄、メモ・返信欄に関するデザイン */
-/*******************************************/
 
 /*******************************************/
 /* 3パターンすべてに適用させるデザイン */
@@ -391,27 +391,20 @@ html, body, #app {
   margin-left: auto;
   width: 20px;
   height: 20px;
-  background: url("../images/big-icon.png");
-  background-size: cover;
-}
-
-.chat button.sizeChange.small {
   background: url("../images/small-icon.png");
   background-size: cover;
 }
 
-
-/* 拡大ボタン */
-.memo .flex .big {
-  margin-top: 3px;
-  margin-left: 3px;
-  margin-right: auto;
+.chat button.sizeChange.small {
+  background: url("../images/big-icon.png");
+  background-size: cover;
 }
-/* 縮小ボタン */
-.memo .flex .small {
-  margin-top: 3px;
-  margin-right: 0;
-  margin-left: auto;
+
+
+
+/**** メモ・返信欄に関するデザイン ****/
+.sub-display .memo {
+  padding: 10px 0 0 10px;  
 }
 
 /**** 返信欄に関するデザイン ****/
@@ -422,22 +415,23 @@ html, body, #app {
   justify-content: space-between;
   align-items: center;
   position: relative;
-  width: 250px;
-  margin: 0 auto;
-  padding: .9em 2em;
+  width: 150px;
+  height: 25px;
+  /* margin: 0 auto; */
+  /* padding: .9em 2em; */
   border: none;
   border-radius: 25px;
   background-color: #2589d0;
   color: #fff;
   font-weight: 600;
-  font-size: 1em;
+  font-size: 10px;
 }
 .reply #memo-show::before {
   position: absolute;
   right: calc(2em + 2.5px);
   transform: translateX(50%);
-  width: 35px;
-  height: 35px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background-color: #fff;
   content: '';
@@ -484,15 +478,6 @@ html, body, #app {
 /*******************************************/
 /* 投稿表示欄60%+メモ・返信欄40%の場合 */
 /*******************************************/
-.chat-area {
-  width: 60%;
-  border: 1px solid #00BCD4;
-}
-
-.sub-display {
-  width: 40%;
-  margin-left: 10px;
-}
 
 button img {
   width: 20px;
@@ -510,6 +495,6 @@ button img {
 /*******************************************/
 /* メモ・返信欄100%の場合 */
 /*******************************************/
-.sub-only {
+.sub-only .memo{
   width: 100%;
 }
