@@ -407,6 +407,6 @@ addEventListener("beforeunload", () => {
     </div>
 
     <router-link to="/">
-      <button type="button" @click="onExit">退室する</button>
+      <button type="button" class="exit-button" @click="onExit">退室する</button>
     </router-link>
 </template>
