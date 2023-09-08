@@ -38,7 +38,7 @@
     width: 80%;
     padding: 0.5em 1em;
     margin: 0.5em auto;
-    font-size: 20px; 
+    font-size: 20px;
   }
   .reply .input-section {/*影付きの囲い*/
     text-align: center;
@@ -81,7 +81,7 @@
     border: 1px solid #ccc;
     appearance: none;
     background-color: #f9f9f9;
-  } 
+  }
   .reply  textarea {/*山口さんが教えてくれたところ*/
     padding: 8px 10px;
     border: 1px solid #d2d2d2;
