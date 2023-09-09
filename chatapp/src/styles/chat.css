@@ -188,6 +188,15 @@ html, body, #app {
   border-top: solid 6px #088faa;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.32);/*影*/
 }
+.chat .chat-container .custom-enter{/* ○○さんが入室しました */
+  background-color: #fff9d8;
+  font-weight: bold; 
+}
+.chat .chat-container .custom-leave{/* ○○さんが退出しました */
+  background-color: #ffe8d8;
+  font-weight: bold; 
+}
+
 
 /* -------- 投稿表示部分:メイン -------- */
 
@@ -227,6 +236,7 @@ html, body, #app {
   padding: 10px;
   max-width: 800px;
   border-radius: 12px;
+  background-color: #ffffff;
 }
 
 .chat .chat-area .message .messageContent::after{

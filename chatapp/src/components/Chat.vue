@@ -359,8 +359,8 @@ addEventListener("beforeunload", () => {
                 </div>
               </div>
             </div>
-            <pre :class="chat.type" v-if="chat.type=='enter_message'">{{ chat.message }}</pre>
-            <pre :class="chat.type" v-if="chat.type=='leave_message'">{{ chat.message }}</pre>
+            <pre :class="['custom-enter', chat.type]" v-if="chat.type=='enter_message'">{{ chat.message }}</pre>
+            <pre :class="['custom-leave', chat.type]" v-if="chat.type=='leave_message'">{{ chat.message }}</pre>
           </li>
         </ul>
       </div>
@@ -395,20 +395,21 @@ addEventListener("beforeunload", () => {
             <pre>{{replyMessageName}}</pre>
             <div><p class="messageContent" v-html="replyMessageContent"></p></div>
           </div>
-          <div>
-            <textarea v-model="replyContent" rows="4" class="area" placeholder="Type your reply here..."></textarea>
-            <div class="mt-5">
-              <button class="button-normal" @click="onPublishReply">返信</button>
-            </div>
-          </div>
           <div class="reply-content">
             <ul>
-              <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
+              <li v-for="(reply, i) in filteredReplyList.slice()" :key="i">
                 <div class="user-name">{{reply.username}}</div>
                 <div v-html="reply.replycontent" class="content"></div>
               </li>
             </ul>
             </div>
+          <div>
+            <textarea v-model="replyContent" rows="4" class="area" placeholder="返信文を入力"></textarea>
+            <div class="mt-5">
+              <button class="button-normal" @click="onPublishReply">返信</button>
+            </div>
+          </div>
+          
           </div>
         </div>
       </div>
