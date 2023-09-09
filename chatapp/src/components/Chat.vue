@@ -16,6 +16,29 @@ const store = useStore()
 const socket = io()
 const messageTypeText = {report: "報告", contact: "連絡", consult: "相談"}
 const publishInterval = 1   // 連続投稿時の最低待ち時間 [s]
+const templeteMessage = {
+  report: `まず、誰に対しての「報告」かを選択してください。
+
+そして、中間報告か最終報告かを入力してください。（報告の段階）
+
+例
+△△についての中間報告
+投稿文～～～～～～～～～～～～～～～～
+`,
+
+  contact: `連絡は、簡潔に行うことが大切です。100文字以内で記入しましょう。
+
+例
+〇〇課長へ
+昨日、課長宛てにメールが届いていましたので、確認をよろしくお願いいたします。`,
+
+  consult: `回答期限を設定しましょう。
+
+例
+〇〇課長　9/14までに回答をよろしくお願いします。
+
+昨日の会議で、AとBの二つの案が出ましたが、どちらを優先して取り組む方が良いでしょうか？`
+}
 let lastPublishTime = 0
 let mentionTo = null
 // #endregion
@@ -211,17 +234,7 @@ const onMemo = () => {
 
 // ほうれんそう選択時の処理
 const onMessageTypeChange = () => {
-  switch (chatType.value) {
-    case "report":  // 報告
-      chatContent.value = "進捗・結果: \n"
-      break
-    case "contact": // 連絡
-      chatContent.value = "現状: \n"
-      break
-    case "consult": // 相談
-      chatContent.value = "現状の問題点: \n考えられる原因: "
-      break
-  }
+  chatContent.value = templeteMessage[chatType.value];
 }
 onMessageTypeChange()
 
