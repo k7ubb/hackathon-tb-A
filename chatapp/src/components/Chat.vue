@@ -240,7 +240,7 @@ const onExit = () => {
   socket.emit("exitEvent", JSON.stringify({
     type: "leave_message",
     username: userName.value,
-    message: userName.value + "さんが退室しました",
+    message: "退出："+userName.value + "さん",
   }))
 }
 // #endregion

@@ -27,7 +27,7 @@ socket.on("login_allow", () => {
   socket.emit("enterEvent", JSON.stringify({
     type: "enter_message",
     username: userName.value,
-    message: userName.value + "さんが入室しました",
+    message:  "入室："+userName.value+"さん",
     unixtime: Date.now()
   }))
   router.push({ name: "chat" })
