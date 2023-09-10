@@ -291,6 +291,11 @@ html, body, #app {
   border: 1px solid #000;
   border-radius: 12px;
 }
+.messageContent{
+  padding: 0.5em 1em;
+  margin: 2em 0;
+  border: solid 1px #000000;
+}
 
 /**** メモに関するデザイン ****/
 .chat .sub-display {
@@ -344,6 +349,13 @@ html, body, #app {
   border-right: 18px solid #97ebac;
 }
 
+.messageContent-forcus{
+  padding: 0.2em 0.5em;
+  margin: 0.5em 0;
+  background: #ffffff;
+  border: dashed 1.5px #000000;/*点線*/
+  border-radius: 16px;
+}
 
 
 .chat .mention-dropdown {

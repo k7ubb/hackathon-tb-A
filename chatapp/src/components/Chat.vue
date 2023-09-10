@@ -406,7 +406,7 @@ addEventListener("beforeunload", () => {
           </div>
           <div class="message-content">
             <pre>{{replyMessageName}}</pre>
-            <div><p class="messageContent" v-html="replyMessageContent"></p></div>
+            <div><p class="messageContent-forcus" v-html="replyMessageContent"></p></div>
           </div>
           <div class="reply-content">
             <ul>
