@@ -63,37 +63,54 @@ const registerSocketEvent = () => {
 </script>
 
 <template>
-  <div class="reply">
-    <h1>コミュニケーションラボ</h1>
-    <div class="info">
-      <p class="login-user">ログインユーザ：{{ userName }}さん</p>
-    </div>
+  <v-container>
+    <v-row justify="center">
+      <v-col cols="12" md="8">
+        <v-card>
+          <v-card-title>コミュニケーションラボ</v-card-title>
+          <v-card-subtitle class="mb-4">ログインユーザ：{{ userName }}さん</v-card-subtitle>
 
-    <div class="post">
-      <p class="reply-top">返信専用画面</p>
-      <div class="input-section mt-10">
-        <p class="reply-message" v-html="message"></p>
-        <textarea v-model="replyContent" rows="4" class="area" placeholder="上記のメッセージに対しての返信文を入力"></textarea>
-        <div class="mt-5">
-          <button class="button-normal" @click="onPublishReply">返信</button>
-        </div>
-      </div>
-    </div>
+          <v-divider></v-divider>
 
- <div class="reply-section mt-10">
-    <h3>返信</h3>
-    <ul>
-      <li v-for="(reply, i) in store.state.replyList.slice().reverse()" :key="i" class="reply-card">
-        <div class="reply-content">
-          <pre class="reply-header">{{reply.username + "さん " +"["+new Date(reply.unixtime).toLocaleString("jp-JP")+"]" }}</pre>
-          <pre class="reply-message">{{ reply.message }}</pre>
-        </div>
-      </li>
-    </ul>
-  </div>
+          <!-- 返信するメッセージの内容を表示 -->
+          <v-card-text class="mb-4">
+            <p class="reply-message" v-html="message"></p>
+            <!-- <v-subheader>返信するメッセージ:</v-subheader>
+            <p>{{ message }}</p> -->
+          </v-card-text>
 
-    <router-link to="/chat" class="link">
-      <button type="button" class="button-normal button-exit">戻る</button>
-    </router-link>
-  </div>
+          <v-card-text>
+            <v-textarea
+              v-model="replyContent"
+              label="上記のメッセージに対しての返信文を入力"
+              rows="4"
+            ></v-textarea>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn @click="onPublishReply" color="primary">返信</v-btn>
+          </v-card-actions>
+
+          <v-divider></v-divider>
+
+          <v-list two-line>
+            <v-list-item-group v-for="(reply, i) in store.state.replyList.slice().reverse()" :key="i">
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>{{reply.username + "さん " +"["+new Date(reply.unixtime).toLocaleString("jp-JP")+"]" }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ reply.message }}</v-list-item-subtitle>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+
+          <v-card-actions>
+            <router-link to="/chat">
+              <v-btn color="secondary">戻る</v-btn>
+            </router-link>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>

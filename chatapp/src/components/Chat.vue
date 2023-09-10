@@ -422,7 +422,7 @@ addEventListener("beforeunload", () => {
               <button class="button-normal" @click="onPublishReply">返信</button>
             </div>
           </div>
-          
+
           </div>
         </div>
       </div>
