@@ -50,11 +50,23 @@ const onEnter = () => {
 </script>
 
 <template>
-  <div class="login">
-    <div>
-      <h1>Communication Lab</h1>
-      <input @keydown.enter="onEnter" type="text" v-model="userName" placeholder="ユーザー名" />
-      <button @click="onEnter">入室する</button>
-    </div>
-  </div>
+  <v-container fluid fill-height class="d-flex justify-center align-center">
+    <v-row justify="center">
+      <v-col cols="12" sm="8" md="4">
+        <v-card class="elevation-12">
+          <img src="../images/CL_logo_login_2.png" alt="CL Logo" class="cl-logo">
+          <v-card-text>
+            <v-text-field
+              v-model="userName"
+              label="ユーザー名"
+              @keydown.enter="onEnter"
+            ></v-text-field>
+          </v-card-text>
+          <v-card-actions class="justify-center">
+            <v-btn @click="onEnter">入室する</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>

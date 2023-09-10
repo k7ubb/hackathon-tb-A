@@ -1,4 +1,4 @@
-html, body, #app{
+/* html, body, #app{
   height: 100%;
 }
 
@@ -48,4 +48,31 @@ html, body, #app{
 .login button:hover {
 	color: #fff;
 	opacity: 0.7;
+} */
+
+/* 全体のスタイリング */
+.v-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 画面の高さを100%に設定 */
+}
+
+/* ロゴのスタイリングをリセット */
+.cl-logo{
+   width: 500px !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 auto 20px !important; /* ロゴを中央に配置し、下に20pxの余白を追加 */
+}
+/* カードのスタイリングを調整 */
+.v-card {
+  text-align: center; /* カード内のテキストを中央揃えにする */
+  padding: 20px; /* カードの内側の余白を設定 */
+  position: relative; /* カードの位置を相対的に設定 */
+}
+
+/* ボタンのスタイリング */
+.v-btn {
+    width: 100%; /* ボタンの幅を100%に設定 */
 }
