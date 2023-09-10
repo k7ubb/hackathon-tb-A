@@ -46,6 +46,10 @@ const onPublishReply = () => {
 
 // #endregion
 
+const filteredReplies = computed(() => {
+  return store.state.replyList.filter(reply => reply.contentID === contentID.value);
+});
+
 // #region socket event handler
 const registerSocketEvent = () => {
   const handlePublishReplyEvent = (data) => {
@@ -67,7 +71,7 @@ const registerSocketEvent = () => {
     <v-row justify="center">
       <v-col cols="12" md="8">
         <v-card>
-          <v-card-title>コミュニケーションラボ</v-card-title>
+          <v-card-title>Communication Lab</v-card-title>
           <v-card-subtitle class="mb-4">ログインユーザ：{{ userName }}さん</v-card-subtitle>
 
           <v-divider></v-divider>
@@ -92,7 +96,7 @@ const registerSocketEvent = () => {
           <v-divider></v-divider>
 
           <v-list two-line>
-            <v-list-item-group v-for="(reply, i) in store.state.replyList.slice().reverse()" :key="i">
+            <v-list-item-group v-for="(reply, i) in filteredReplies.slice().reverse()" :key="i">
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title>{{reply.username + "さん " +"["+new Date(reply.unixtime).toLocaleString("jp-JP")+"]" }}</v-list-item-title>

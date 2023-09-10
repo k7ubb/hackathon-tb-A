@@ -35,7 +35,7 @@ const templeteMessage = {
   consult: `回答期限を設定しましょう。
 
 例
-〇〇課長　9/14までに回答をよろしくお願いします。
+〇〇課長 9/14までに回答をよろしくお願いします。
 
 昨日の会議で、AとBの二つの案が出ましたが、どちらを優先して取り組む方が良いでしょうか？`
 }
@@ -410,7 +410,7 @@ addEventListener("beforeunload", () => {
           </div>
           <div class="reply-content">
             <ul>
-              <li v-for="(reply, i) in filteredReplyList.slice()" :key="i">
+              <li v-for="(reply, i) in filteredReplyList.slice().reverse()" :key="i">
                 <div class="user-name">{{reply.username}}</div>
                 <div v-html="reply.replycontent" class="content"></div>
               </li>
