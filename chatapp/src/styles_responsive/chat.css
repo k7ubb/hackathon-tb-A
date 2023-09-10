@@ -36,6 +36,10 @@
     margin: 0em 0; /* 上下の余白を小さく */
     letter-spacing: 0px; /* 文字間隔を2pxに設定*/
   }
+  .chat .chat-area .message{
+    float: left;
+    width: 100%;
+  }
   .chat .post {
     width: 100%;
   }
