@@ -60,7 +60,7 @@
 
 /* ロゴのスタイリングをリセット */
 .cl-logo{
-   width: 500px !important;
+    width: 100% !important;
     height: auto !important;
     display: block !important;
     margin: 0 auto 20px !important; /* ロゴを中央に配置し、下に20pxの余白を追加 */
