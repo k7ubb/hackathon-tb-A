@@ -314,8 +314,14 @@ addEventListener("beforeunload", () => {
 </script>
 
 <template>
+      <!-- ロゴとテキストの配置 -->
+  <div class="logo-container">
+      <img src="../images/CL_logo.png" alt="CL Logo" class="cl-logo">
+      <img src="../images/CL_logo_text.png" alt="CL Logo Text" class="cl-logo-text">
+  </div>
+
   <div class="chat">
-    <h1>コミュニケーションラボ</h1>
+    <h1>Communication Lab</h1>
     <div class="info">
       <p class="login-user">ログインユーザ：{{ userName }}さん</p>
     </div>

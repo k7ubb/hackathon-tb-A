@@ -64,22 +64,24 @@ const registerSocketEvent = () => {
 
 <template>
   <v-container>
+    <!-- ロゴとテキストの配置 -->
+    <v-row class="mb-4">
+      <v-col class="text-right">
+        <img src="../images/CL_logo.png" alt="CL Logo" class="cl-logo">
+        <img src="../images/CL_logo_text.png" alt="CL Logo Text" class="cl-logo-text">
+      </v-col>
+    </v-row>
+
     <v-row justify="center">
       <v-col cols="12" md="8">
         <v-card>
-          <v-card-title>コミュニケーションラボ</v-card-title>
+          <v-card-title>Communication Lab</v-card-title>
           <v-card-subtitle class="mb-4">ログインユーザ：{{ userName }}さん</v-card-subtitle>
 
           <v-divider></v-divider>
 
-          <!-- 返信するメッセージの内容を表示 -->
-          <v-card-text class="mb-4">
-            <p class="reply-message" v-html="message"></p>
-            <!-- <v-subheader>返信するメッセージ:</v-subheader>
-            <p>{{ message }}</p> -->
-          </v-card-text>
-
           <v-card-text>
+            <p class="reply-message" v-html="message"></p>
             <v-textarea
               v-model="replyContent"
               label="上記のメッセージに対しての返信文を入力"

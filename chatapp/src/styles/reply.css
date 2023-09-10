@@ -277,4 +277,16 @@
     color: #000;
     margin-top: 8px;
   }
+
+  /* ロゴとテキストのスタイル */
+.cl-logo {
+  width: 40px;
+  height: auto;
+  margin-right: 5px;
+}
+
+.cl-logo-text {
+  width: 100px;
+  height: auto;
+}
 }

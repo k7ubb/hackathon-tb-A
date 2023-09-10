@@ -52,7 +52,7 @@ const onEnter = () => {
 <template>
   <div class="login">
     <div>
-      <h1>コミュニケーションラボ</h1>
+      <h1>Communication Lab</h1>
       <input @keydown.enter="onEnter" type="text" v-model="userName" placeholder="ユーザー名" />
       <button @click="onEnter">入室する</button>
     </div>
