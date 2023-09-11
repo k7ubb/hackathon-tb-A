@@ -344,7 +344,7 @@ addEventListener("beforeunload", () => {
           <li v-for="user in filteredOnlineUsers" :key="user" @click="selectMention(user)">{{ user }}</li>
         </ul>
       </div>
-      <textarea @input="onInput($event); setDropdownPosition($event)" @keydown.enter.exact="onPublish" placeholder="投稿文を入力してください " v-model="chatContent"></textarea>
+      <textarea @input="onInput($event); setDropdownPosition($event)" @keydown.enter.shift="onPublish" placeholder="投稿文を入力してください " v-model="chatContent"></textarea>
       <div class="submit">
         <button @click="onPublish">投稿</button>
         <button @click="onMemo">メモ</button>
